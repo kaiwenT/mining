@@ -62,7 +62,7 @@
 	<!-- 配置扫描器 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- 扫描com.hust.dao这个包以及它的子包下的所有映射接口类 -->
-		<property name="basePackage" value="com.hust.dao" />
+		<property name="basePackage" value="com.hust.mining.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
