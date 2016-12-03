@@ -225,7 +225,7 @@ $(document)
                                 onClickResultListItem);
                         $changeableArea.on("click", "#checkTopicDetail",
                                 onClickCheckTopicDetail);
-                        $changeableArea.on("click", "#checkTopicCensus",
+                        $changeableArea.on("click", ".topic-detail-result__result-list__item__message-wrapper",
                                 onClickShowTopicCensus);
                         $changeableArea
                                 .on(
@@ -289,7 +289,7 @@ $(document)
 //                                issueId : '7276f3f6-f8ab-4672-9cba-becd8d15cfe1',
                                 issueId : issueId,
                             },
-                            beforSend : function(){
+                            beforeSend : function(){
                                 $waitingMask.show();
                             },
                             success : function(data){
@@ -568,7 +568,7 @@ $(document)
                         var $iconSpan = utilCreateInfoSpan('>>',
                                 infoMessageClass.icon, false);
                         var $childSpan = utilCreateInfoSpan(str,
-                                infoMessageClass.child, true);
+                                infoMessageClass.child, false);
                         infoMessageClass.target.append($iconSpan).append(
                                 $childSpan);
                     }
