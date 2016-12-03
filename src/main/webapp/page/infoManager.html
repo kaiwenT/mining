@@ -117,9 +117,9 @@
 			<!-- 当前位置 -->
 			<div class="col-md-12 content-wrapper__content__info">
 				<span class="content-wrapper__content__info__message">当前位置:</span>
-				<span class="content-wrapper__content__info__child"><a href="">话题管理</a></span>
+				<span class="content-wrapper__content__info__child">话题管理</span>
 				<span class="content-wrapper__content__info__icon">>></span>
-				<span class="content-wrapper__content__info__child"><a href="">自有话题</a></span>
+				<span class="content-wrapper__content__info__child">自有话题</span>
 			</div>
 			<!-- 搜索栏 -->
 			<div class="col-md-12 content-wrapper__changeable">
@@ -128,29 +128,29 @@
 						<label class="content-wrapper__content__search__label">
 							话题名称：
 						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" name="searchTopicName" value="">
+						<input class="content-wrapper__content__search__label__input" type="text" id="searchTopicName" value="">
 						<label class="content-wrapper__content__search__label">
 							创建起始时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchStartTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchStartTime" value="">
 						<label class="content-wrapper__content__search__label">
 							创建终止时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchEndTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchEndTime" value="">
 						<label class="content-wrapper__content__search__label">
 							创建人：
 						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" name="searchCreatePersonName" value="">
+						<input class="content-wrapper__content__search__label__input" type="text" id="searchCreatePersonName" value="">
 						<label class="content-wrapper__content__search__label">
 							修改起始时间：
 						</label>
 						<input class="content-wrapper__content__search__label__input form_datetime"
-							   type="text" name="searchModifyStartTime" value="">
+							   type="text" id="searchModifyStartTime" value="">
 						<label class="content-wrapper__content__search__label">
 							修改终止时间：
 						</label>
 						<input class="content-wrapper__content__search__label__input form_datetime"
-							   type="text" name="searchModifyEndTime" value="">
+							   type="text" id="searchModifyEndTime" value="">
 					</form>
 					<button type="button" class="btn btn-primary" id="searchSubmit">搜索</button>
 				</div>
@@ -176,7 +176,7 @@
 				<!-- 搜索结果end -->
 			</div>
 
-			<!-- another area -->
+			<!-- 聚类统计结果区域 -->
 			<div class="col-md-12 content-wrapper__content__result-census" style="display: none">
 				<div class="content-wrapper__content__result-census__unit-list-wrapper">
 					<ul class="content-wrapper__content__result-census__unit-list-wrapper__ul nav nav-tabs" role="tablist">
@@ -226,6 +226,8 @@
 </div>
 <!-- class wrapper end -->
 
+<!-- handlebar templates -->
+
 <script id="paginationTemplate" type="text/x-handlebars-template">
 	{{#each resultList}}
 	<tr class="result-list" data-issue-id="{{this.issueId}}">
@@ -254,11 +256,11 @@
 		</div>
 		<div class="content-wrapper__topic-intor__buttons">
 			<div id="checkTopicDetail" class="btn btn-primary">
-				查看话题详情
+				查看话题聚类结果
 			</div>
-			<div id="checkTopicCensus" class="btn btn-primary">
-				查看话题统计结果
-			</div>
+			<!--<div id="checkTopicCensus" class="btn btn-primary">-->
+				<!--查看话题统计结果-->
+			<!--</div>-->
 		</div>
 		<div  class="content-wrapper__topic-intor__files">
 			文件列表：
@@ -306,7 +308,66 @@
 		</div>
 	</div>
 </script>
-
+<!-- template for show topic detail result -->
+<script id="topicDetailResult" type="text/x-handlebars-template">
+	<div class="topic-detail-result__top-message">
+		<span class="topic-detail-result__top-message__item">话题名称:{{topicName}}</span>
+		<span class="topic-detail-result__top-message__item">创建人:{{author}}</span>
+		<span class="topic-detail-result__top-message__item">创建时间:{{createTime}}</span>
+		<span class="topic-detail-result__top-message__item">最后修改人:{{modifier}}</span>
+		<span class="topic-detail-result__top-message__item">最后修改时间:{{modifyTime}}</span>
+	</div>
+	<div class="topic-detail-result__result-list">
+		<div class="topic-detail-result__result-list__no-file-message" style="display: none">
+			没有文件
+		</div>
+		{{#each topicDetialList}}
+		<div class="topic-detail-result__result-list__item">
+			<div class="topic-detail-result__result-list__item__checkbox">
+				<input data-file-id="{{this.fileId}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
+			</div>
+			<div class="topic-detail-result__result-list__item__message-wrapper">
+				<div class="topic-detail-result__result-list__item__message-wrapper__title">
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						标题:{{this.title}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						网站:{{this.sourceSite}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						发布时间:{{this.pubTime}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						数量:{{this.numbers}}
+					</span>
+				</div>
+				<div class="topic-detail-result__result-list__item__message-wrapper__numbers">
+					<!--TODO: don't know the data structure yet-->
+					{{#each this.sourceMedia}}
+					<span class="topic-detail-result__result-list__item__message-wrapper__numbers__item">
+						{{this.title}}:{{this.number}}
+					</span>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+	<div class="topic-detail-result__operations">
+		<div class="topic-detail-result__operations__checkbox">
+			<input class="topic-detail-result__operations__checkbox__delete" type="checkbox">全选
+		</div>
+		<div class="topic-detail-result__operations__checkbox__btns">
+			<div class="topic-detail-result__operations__checkbox__btns__delete btn btn-danger">
+				删除
+			</div>
+			<div class="topic-detail-result__operations__checkbox__btns__combine btn btn-success">
+				合并
+			</div>
+		</div>
+	</div>
+</script>
+<!-- template for topic cesus details -->
 <script id="showTopicCensusDetail" type="text/x-handlebars-template">
 	<div class="topic-census-detial">
 		<table class="topic-census-detial__table table table-hover">
@@ -335,7 +396,7 @@
 		</table>
 	</div>
 </script>
-
+<!-- templates for census result, the way of display aren't same -->
 <script id="showTopicCensusResult" type="text/x-handlebars-template">
 	<div>
 		统计结果
@@ -358,6 +419,11 @@
 	<div>
 		柱状图
 	</div>
+</script>
+<!-- 自有话题template结束 -->
+<!-- 创建话题 -->
+<script id="createTopic" type="text/x-handlebars-template">
+
 </script>
 </body>
 </html>

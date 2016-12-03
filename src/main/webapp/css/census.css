@@ -39,7 +39,11 @@
 }
 
 .topic-detail-result__result-list__item__message-wrapper {
-	margin: 10px 0 10px 35px;
+	padding: 10px 0 10px 35px;
+}
+.topic-detail-result__result-list__item__message-wrapper:hover {
+	background-color: #eee;
+	cursor: pointer;
 }
 .topic-detail-result__result-list__item__message-wrapper__title {
 	margin-bottom: 10px;
