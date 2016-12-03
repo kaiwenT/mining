@@ -1,0 +1,21 @@
+.content-wrapper__content__result-census__unit-list-wrapper {
+	margin-top: 12px;
+}
+
+.topic-census-detial {
+	margin-top: 8px;
+	border: 2px solid #eee;
+	border-radius: 6px;
+	max-height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.topic-census-detial__table {
+	margin-bottom: 0;
+}
+.topic-census-detial__table__thead {
+	background-color: #eee;
+}
+.topic-census-detial__table__delete-all-btn {
+	
+}
