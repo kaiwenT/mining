@@ -1,0 +1,40 @@
+.content-wrapper__topic-intro-wrapper {
+	clear: both;
+	overflow: hidden;
+}
+
+.content-wrapper__topic-intor__item,
+.content-wrapper__topic-intor__files
+{
+	padding: 8px 30px 8px 8px;
+	font-weight: bold;
+}
+
+.content-wrapper__topic-intor__item {
+	float: left;
+}
+
+#topicFileListCaption {
+	text-align: center;
+	font-size: 17px;
+	font-weight: bold;
+}
+
+
+.content-wrapper__topic-intro__file-list {
+	border: 2px solid #eee;
+	border-radius: 6px;
+	max-height: 250px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.content-wrapper__topic-intro__file-list__table {
+	margin-bottom: 0;
+}
+.content-wrapper__topic-intro__file-list__table thead {
+	background-color: #eee;
+}
+
+.content-wrapper__topic-intro__file-list__table__tr:hover {
+	cursor: auto;
+}
