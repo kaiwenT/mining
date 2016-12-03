@@ -214,7 +214,7 @@
 
 <script id="paginationTemplate" type="text/x-handlebars-template">
 	{{#each resultList}}
-	<tr class="result-list" id="file_{{this.fileId}}">
+	<tr class="result-list" data-issue-id="{{this.issueId}}">
 		<td>{{this.NO}}</td>
 		<td>{{this.topicName}}</td>
 		<td>{{this.author}}</td>

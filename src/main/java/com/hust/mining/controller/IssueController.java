@@ -68,7 +68,7 @@ public class IssueController {
     @RequestMapping("/enterIntoIssue")
     public Object enterIntoIssue(@RequestParam(value = "issue_id", required = true) String issueId,
             HttpServletRequest request) {
-        if (issueService.queryIssueById(issueId) == null) {
+        if (issueService.queryIssueWithBLOBsById(issueId) == null) {
             return ResultUtil.errorWithMsg("current issue doesn't exist");
         }
         request.getSession().setAttribute(Constant.ISSUE_ID, issueId);
@@ -101,7 +101,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueById(issueId).getClusterResult());
+                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -123,7 +123,7 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueById(issueId).getOrigCountResult());
+                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
@@ -142,7 +142,7 @@ public class IssueController {
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueById(issueId).getModifiedClusterResult());
+                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
             ViewPage page = new ViewPage();
             page.setCurrentPage(currentSet);
             page.setTotalPage(list.size());
@@ -164,7 +164,7 @@ public class IssueController {
         }
         try {
             List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueById(issueId).getModifiedOrigCountResult());
+                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getModifiedOrigCountResult());
             return ResultUtil.success(list);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");

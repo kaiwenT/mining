@@ -1,3 +1,73 @@
+/* no file message */
+.topic-detail-result__result-list__no-file-message {
+	text-align: center;
+	font-size: 20px;
+}
+
+/* topic details */
+.topic-detail-result__result-list {
+	margin-top: 5px;
+	padding: 8px;
+	border: 2px solid #eee;
+	border-radius: 6px;
+	max-height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.topic-detail-result__top-message {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.topic-detail-result__top-message__item {
+	padding-right: 34px;
+}
+
+.topic-detail-result__result-list__item {
+	position: relative;
+	clear:both;
+	overflow: hidden;
+	border: 2px solid #eee;
+	border-radius: 6px;
+	margin-bottom: 10px;
+}
+.topic-detail-result__result-list__item__checkbox {
+	position: absolute;
+	top: 10px;
+	left: 11px;
+	margin-right: 10px;
+}
+
+.topic-detail-result__result-list__item__message-wrapper {
+	margin: 10px 0 10px 35px;
+}
+.topic-detail-result__result-list__item__message-wrapper__title {
+	margin-bottom: 10px;
+}
+.topic-detail-result__result-list__item__message-wrapper__title__item {
+	padding-right: 25px;
+	line-height: 1.5;
+}
+.topic-detail-result__result-list__item__message-wrapper__numbers__item {
+	padding-right: 20px;
+}
+
+.topic-detail-result__operations {
+	margin-top: 10px;
+}
+
+.topic-detail-result__operations__checkbox {
+	float: left;
+	line-height: 34px;
+	margin-left: 25px;
+}
+.topic-detail-result__operations__checkbox__btns {
+	float: right;
+}
+.topic-detail-result__operations__checkbox__delete {
+	margin-right: 11px;
+}
+/* census */
 .content-wrapper__content__result-census__unit-list-wrapper {
 	margin-top: 12px;
 }

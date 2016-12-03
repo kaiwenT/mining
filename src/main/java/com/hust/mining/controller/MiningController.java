@@ -49,7 +49,7 @@ public class MiningController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        IssueWithBLOBs issue = issueService.queryIssueById(issueId);
+        IssueWithBLOBs issue = issueService.queryIssueWithBLOBsById(issueId);
         List<String[]> content = null;
         try {
             content = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getFilteredContent());
@@ -113,7 +113,7 @@ public class MiningController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        IssueWithBLOBs issue = issueService.queryIssueById(issueId);
+        IssueWithBLOBs issue = issueService.queryIssueWithBLOBsById(issueId);
         try {
             List<String[]> list = null;
             if (Constant.TYPE_ORIG.equals(params.getType())) {

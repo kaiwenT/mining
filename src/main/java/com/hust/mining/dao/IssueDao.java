@@ -42,6 +42,9 @@ public class IssueDao {
     public List<Issue> queryIssue(IssueQueryCondition con) {
         IssueExample example = new IssueExample();
         Criteria criteria = example.createCriteria();
+        if (!StringUtils.isBlank(con.getIssueId())) {
+            criteria.andIssueIdEqualTo(con.getIssueId());
+        }
         if (!StringUtils.isBlank(con.getUser())) {
             criteria.andCreatorEqualTo(con.getUser());
         }

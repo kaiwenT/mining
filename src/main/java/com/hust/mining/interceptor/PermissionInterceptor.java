@@ -37,7 +37,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 			List<String> powers = (List<String>) request.getSession().getAttribute("userPowerUrl");
 			if ("/".equals(url) || "/index.html".equals(url)) {
 				if (null != request.getSession().getAttribute("username")) {
-					response.sendRedirect("/page/main.html");
+					response.sendRedirect("/page/infoManager.html");
 				} else {
 					return true;
 				}

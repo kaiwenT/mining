@@ -19,8 +19,8 @@ public interface IssueService {
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
-    IssueWithBLOBs queryIssueById(String uuid);
-
+    IssueWithBLOBs queryIssueWithBLOBsById(String uuid);
+    
     boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
 
     boolean combineCountResult(String type, int[] indexes, HttpServletRequest request);
