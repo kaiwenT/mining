@@ -3,32 +3,28 @@ package com.hust.mining.model;
 import java.util.Date;
 
 public class User {
-    private Integer id;
+    private Integer userId;
 
     private String userName;
 
-    private String passwrod;
-
-    private String trueName;
+    private String password;
 
     private String email;
 
-    private String phone;
+    private String telphone;
 
-    private String company;
+    private String trueName;
 
-    private String masterId;
-
-    private String masterName;
+    private Integer roleId;
 
     private Date createDate;
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -39,20 +35,12 @@ public class User {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public String getPasswrod() {
-        return passwrod;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswrod(String passwrod) {
-        this.passwrod = passwrod == null ? null : passwrod.trim();
-    }
-
-    public String getTrueName() {
-        return trueName;
-    }
-
-    public void setTrueName(String trueName) {
-        this.trueName = trueName == null ? null : trueName.trim();
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
     }
 
     public String getEmail() {
@@ -63,36 +51,28 @@ public class User {
         this.email = email == null ? null : email.trim();
     }
 
-    public String getPhone() {
-        return phone;
+    public String getTelphone() {
+        return telphone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public void setTelphone(String telphone) {
+        this.telphone = telphone == null ? null : telphone.trim();
     }
 
-    public String getCompany() {
-        return company;
+    public String getTrueName() {
+        return trueName;
     }
 
-    public void setCompany(String company) {
-        this.company = company == null ? null : company.trim();
+    public void setTrueName(String trueName) {
+        this.trueName = trueName == null ? null : trueName.trim();
     }
 
-    public String getMasterId() {
-        return masterId;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setMasterId(String masterId) {
-        this.masterId = masterId == null ? null : masterId.trim();
-    }
-
-    public String getMasterName() {
-        return masterName;
-    }
-
-    public void setMasterName(String masterName) {
-        this.masterName = masterName == null ? null : masterName.trim();
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public Date getCreateDate() {
