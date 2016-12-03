@@ -3,6 +3,15 @@ body{
 	margin: 2px auto;
 	font-family: "微软雅黑";
 }
+
+.col-md-12 {
+	margin-left: 0;
+	min-width: 869px;
+	max-width: 869px;
+	padding: 0;
+	float: left;
+}
+
 /* head bar info */
 .head-bar {
 	padding: 8px 2px 2px 0;
@@ -13,6 +22,7 @@ body{
 	margin-bottom: 4px;
 	overflow: hidden;
 	clear: both;
+	min-width: 1079px;
 }
 
 .head-bar__info__title {
@@ -37,12 +47,16 @@ body{
 .content-wrapper {
 	position: relative;
 	display: block;
+	min-width: 1079px;
 }
 
 /* left side nav */
 .content-wrapper__nav {
 	padding: 0;
 	background-color: #d9edf7;
+	min-width: 178px;
+	max-width: 178px;
+	float: left;
 }
 .content-wrapper__nav__ul {
 	padding: 0;
@@ -58,7 +72,7 @@ body{
 }*/
 
 .content-wrapper__nav__ul__element-child {
-	list-style:  none; 
+	list-style:  none;
 }
 .content-wrapper__nav__ul__element__link,
 .content-wrapper__nav__ul__element-child__el__link {
@@ -76,13 +90,19 @@ body{
 	color: white;
 }
 
-.active {
+.content-wrapper__nav__ul__element-child__el__link.active {
 	background-color: #428bca;
 	color: white;
 }
 
 
 /* search input part */
+.content-wrapper__content {
+	min-width: 869px;
+	max-width: 869px;
+	float: left;
+}
+
 .content-wrapper__content__info {
 	padding: 0;
 }
@@ -121,13 +141,17 @@ body{
 	margin-bottom: 0;
 }
 
+#contentSearchResultList tr:hover {
+	cursor: pointer;
+}
+
 .waiting-mask {
 	position: absolute;
 	top: 0;
 	left: 0;
 	height: 107%;
 	width: 99%;
-	background: url('../libs/images/loading.gif') no-repeat center center;
+	background: url('lib/images/loading.gif') no-repeat center center;
 	opacity: 0.4;
 	z-index: 100;
 	display: none;

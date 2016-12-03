@@ -15,134 +15,142 @@
 	<script src="../libs/jquery-ui.min.js"></script>
 	<script src="../js/infoManager.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" type="text/css" href="../css/infoManager.css">
+	<link rel="stylesheet" type="text/css" href="../css/census.css">
+	<link rel="stylesheet" type="text/css" href="../css/issueIntro.css">
 </head>
 <body>
-	<div class="head-bar">
-		<div class="head-bar__info__title">
-			<h1>舆情信息挖掘子系统</h1>
-		</div>
-		<div class="head-bar__info">
-			<div class="head-bar__info__hello">您好:<span class="head-bar__info__hello__user-name">xx</span></div>
-			<div class="head-bar__info__time">
-				时间：<span class="head-bar__info__time__real">xxxx</span>
-			</div>
-			<a class="head-bar__info__exit-btn">
-				退出
-			</a>
-		</div>
+<div class="head-bar">
+	<div class="head-bar__info__title">
+		<h1>舆情信息挖掘子系统</h1>
 	</div>
+	<div class="head-bar__info">
+		<div class="head-bar__info__hello">您好:<span class="head-bar__info__hello__user-name">xx</span></div>
+		<div class="head-bar__info__time">
+			时间：<span class="head-bar__info__time__real">xxxx</span>
+		</div>
+		<a class="head-bar__info__exit-btn">
+			退出
+		</a>
+	</div>
+</div>
 
-	<div class="container-fluid content-wrapper">
-		<div class="row">
-			<div class="waiting-mask"></div>
-			<!-- 左侧导航栏 -->
-			<div class="col-md-2 content-wrapper__nav">
-				<ul class="content-wrapper__nav__ul">
-					<li class="content-wrapper__nav__ul__element">
-						<a href="#" class="content-wrapper__nav__ul__element__link" title="topicManage">话题管理</a>
-						<ul class="content-wrapper__nav__ul__element-child">
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="privateTopic">
-									自有话题
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="allTopic">
-									所有话题
-								</a>
-							</li>
-						</ul>
-					</li>
+<div class="container-fluid content-wrapper">
+	<div class="row">
+		<div class="waiting-mask"></div>
+		<!-- 左侧导航栏 -->
+		<div class="col-md-2 content-wrapper__nav">
+			<ul class="content-wrapper__nav__ul">
+				<li class="content-wrapper__nav__ul__element">
+					<a href="#" class="content-wrapper__nav__ul__element__link" title="topicManage">话题管理</a>
+					<ul class="content-wrapper__nav__ul__element-child">
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="privateTopic">
+								自有话题
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="allTopic">
+								所有话题
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="allTopic">
+								创建话题
+							</a>
+						</li>
+					</ul>
+				</li>
 
-					<li class="content-wrapper__nav__ul__element">
-						<a href="#" class="content-wrapper__nav__ul__element__link" title="power">权限管理</a>
-						<ul class="content-wrapper__nav__ul__element-child">
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="user">
-									用户管理
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
-									角色管理
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="resource">
-									资源管理
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="parentManage">
-									父目录管理
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="childManage">
-									父目录管理
-								</a>
-							</li>
-						</ul>
-					</li>
+				<li class="content-wrapper__nav__ul__element">
+					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">权限管理</a>
+					<ul class="content-wrapper__nav__ul__element-child">
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="user">
+								用户管理
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+								角色管理
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="resource">
+								资源管理
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="parentManage">
+								父目录管理
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="childManage">
+								父目录管理
+							</a>
+						</li>
+					</ul>
+				</li>
 
-					<li class="content-wrapper__nav__ul__element">
-						<a href="#" class="content-wrapper__nav__ul__element__link" title="power">账号管理</a>
-						<ul class="content-wrapper__nav__ul__element-child">
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
-									个人信息
-								</a>
-							</li>
-							<li class="content-wrapper__nav__ul__element-child__el">
-								<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
-									xx管理
-								</a>
-							</li>
-						</ul>
-					</li>
+				<li class="content-wrapper__nav__ul__element">
+					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">账号管理</a>
+					<ul class="content-wrapper__nav__ul__element-child">
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+								个人信息
+							</a>
+						</li>
+						<li class="content-wrapper__nav__ul__element-child__el">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+								xx管理
+							</a>
+						</li>
+					</ul>
+				</li>
 
-				</ul>
+			</ul>
+		</div>
+
+
+		<!-- 右侧信息显示 -->
+		<div class="col-md-10 content-wrapper__content">
+			<!-- 当前位置 -->
+			<div class="col-md-12 content-wrapper__content__info">
+				<span class="content-wrapper__content__info__message">当前位置:</span>
+				<span class="content-wrapper__content__info__child"><a href="">话题管理</a></span>
+				<span class="content-wrapper__content__info__icon">>></span>
+				<span class="content-wrapper__content__info__child"><a href="">自有话题</a></span>
 			</div>
-
-
-			<!-- 右侧信息显示 -->
-			<div class="col-md-10 content-wrapper__content">
-				<!-- 当前位置 -->
-				<div class="col-md-12 content-wrapper__content__info">
-					<span class="content-wrapper__content__info__message">当前位置:</span>
-					<span class="content-wrapper__content__info__parent">话题管理</span>
-					<span class="content-wrapper__content__info__icon">>></span>
-					<span class="content-wrapper__content__info__child">自有话题</span>
-				</div>
-				<!-- 搜索栏 -->
+			<!-- 搜索栏 -->
+			<div class="col-md-12 content-wrapper__changeable">
 				<div class="col-md-12 content-wrapper__content__search">
 					<form id="contentSearchForm" action="#" method="get" role="form" class="form-inline" accept-charset="utf-8">
 						<label class="content-wrapper__content__search__label">
 							话题名称：
 						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" id="searchTopicName" value="">
+						<input class="content-wrapper__content__search__label__input" type="text" name="searchTopicName" value="">
 						<label class="content-wrapper__content__search__label">
 							创建起始时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchStartTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchStartTime" value="">
 						<label class="content-wrapper__content__search__label">
 							创建终止时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchEndTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchEndTime" value="">
 						<label class="content-wrapper__content__search__label">
 							创建人：
 						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" id="searchCreator" value="">
+						<input class="content-wrapper__content__search__label__input" type="text" name="searchCreatePersonName" value="">
 						<label class="content-wrapper__content__search__label">
 							修改起始时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" 
-								type="text" id="searchModifyStartTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime"
+							   type="text" name="searchModifyStartTime" value="">
 						<label class="content-wrapper__content__search__label">
 							修改终止时间：
 						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" 
-								type="text" id="searchModifyEndTime" value="">
+						<input class="content-wrapper__content__search__label__input form_datetime"
+							   type="text" name="searchModifyEndTime" value="">
 					</form>
 					<button type="submit" class="btn btn-primary" id="searchSubmit">搜索</button>
 				</div>
@@ -150,46 +158,192 @@
 
 				<!-- 搜索结果 -->
 				<div class="content-wrapper__content__result">
-					<table id="contentSearchResult" class="table table-hover">	
+					<table id="contentSearchResult" class="table table-hover">
 						<thead>
-							<tr>
-								<th>序号</th>
-								<th>话题名称</th>
-								<th>创建人</th>
-								<th>创建时间</th>
-								<th>最后修改人</th>
-								<th>最后修改时间</th>
-							</tr>
+						<tr>
+							<th>序号</th>
+							<th>话题名称</th>
+							<th>创建人</th>
+							<th>创建时间</th>
+							<th>最后修改人</th>
+							<th>最后修改时间</th>
+						</tr>
 						</thead>
 						<tbody id="contentSearchResultList">
 						</tbody>
 					</table>
 				</div>
 				<!-- 搜索结果end -->
-
-				
 			</div>
-			<!-- class content wrapper end -->
+
+			<!-- another area -->
+			<div class="col-md-12 content-wrapper__content__result-census" style="display: none">
+				<div class="content-wrapper__content__result-census__unit-list-wrapper">
+					<ul class="content-wrapper__content__result-census__unit-list-wrapper__ul nav nav-tabs" role="tablist">
+						<li class="content-wrapper__content__result-census__unit-list-wrapper__item active" role="presentation">
+							<a href="#" title="showTopicCensusDetail">详情展示</a>
+						</li>
+						<li class="content-wrapper__content__result-census__unit-list-wrapper__item" role="presentation">
+							<a href="#" title="showTopicCensusResult">统计结果</a>
+						</li>
+						<li class="content-wrapper__content__result-census__unit-list-wrapper__item" role="presentation">
+							<a href="#" title="showTopicCensusLine">折线图</a>
+						</li>
+						<li class="content-wrapper__content__result-census__unit-list-wrapper__item" role="presentation">
+							<a href="#" title="showTopicCensusPie">饼图</a>
+						</li>
+						<li class="content-wrapper__content__result-census__unit-list-wrapper__item" role="presentation">
+							<a href="#" title="showTopicCensusSquare">柱状图</a>
+						</li>
+					</ul>
+				</div>
+				<div class="content-wrapper__content__result-census__result-wrapper">
+
+				</div>
+			</div>
 		</div>
-		<!-- class row end -->
-		<div class="content-wrapper__pagination">
-			<ul class="pagination" id="pagination">
-			</ul>
+		<!-- class content wrapper end -->
+	</div>
+	<!-- class row end -->
+	<div class="content-wrapper__pagination">
+		<ul class="pagination" id="pagination">
+		</ul>
+	</div>
+</div>
+<!-- class wrapper end -->
+
+<script id="paginationTemplate" type="text/x-handlebars-template">
+	{{#each resultList}}
+	<tr class="result-list" id="file_{{this.fileId}}">
+		<td>{{this.NO}}</td>
+		<td>{{this.topicName}}</td>
+		<td>{{this.author}}</td>
+		<td>{{this.createTime}}</td>
+		<td>{{this.modifier}}</td>
+		<td>{{this.modifyTime}}</td>
+	</tr>
+	{{/each}}
+</script>
+
+<script id="topicIntroduction" type="text/x-handlebars-template">
+	<div class="content-wrapper__topic-intro">
+		<div class="content-wrapper__topic-intro-wrapper">
+			<div class="content-wrapper__topic-intor__item">话题名称：{{this.topicName}}</div>
+			<div class="content-wrapper__topic-intor__item">创建人：{{this.author}}</div>
+			<div class="content-wrapper__topic-intor__item">
+				创建时间：<span class="content-wrapper__topic-intro__item__create-time">{{this.createTime}}</span>
+			</div>
+			<div class="content-wrapper__topic-intor__item">最后修改人：{{this.modifier}}</div>
+			<div class="content-wrapper__topic-intor__item">
+				最后修改时间：<span class="content-wrapper__topic-intro__item__modify-time">{{this.modifyTime}}</span>
+			</div>
+		</div>
+		<div class="content-wrapper__topic-intor__buttons">
+			<div id="checkTopicDetail" class="btn btn-primary">
+				查看话题详情
+			</div>
+			<div id="checkTopicCensus" class="btn btn-primary">
+				查看话题统计结果
+			</div>
+		</div>
+		<div  class="content-wrapper__topic-intor__files">
+			文件列表：
+		</div>
+		<div class="content-wrapper__topic-intro__file-list">
+			<table id="topicFileList" class="content-wrapper__topic-intro__file-list__table table table-hover">
+				<thead>
+				<tr>
+					<th class="content-wrapper__topic-intro__file-list__table-th">
+						编号
+					</th>
+					<th class="content-wrapper__topic-intro__file-list__table-th">
+						文件名称
+					</th>
+					<th class="content-wrapper__topic-intro__file-list__table-th">
+						创建人
+					</th>
+					<th class="content-wrapper__topic-intro__file-list__table-th">
+						上传时间
+					</th>
+					<th class="content-wrapper__topic-intro__file-list__table-th">
+						操作
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				{{#each this.fileList}}
+				<tr class="content-wrapper__topic-intro__file-list__table__tr">
+					<td>{{this.fileNO}}</td>
+					<td>{{this.fileName}}</td>
+					<td>{{this.author}}</td>
+					<td>{{this.time}}</td>
+					<td>
+						<button class="content-wrapper__topic-intro__file-list__delete"
+								data-file-no={{this.fileNO}}
+								type="submit"
+						>
+							删除
+						</button>
+					</td>
+				</tr>
+				{{/each}}
+				</tbody>
+			</table>
 		</div>
 	</div>
-	<!-- class wrapper end -->
+</script>
 
-	<script id="paginationTemplate" type="text/x-handlebars-template">
-		{{#each resultList}}
+<script id="showTopicCensusDetail" type="text/x-handlebars-template">
+	<div class="topic-census-detial">
+		<table class="topic-census-detial__table table table-hover">
+			<thead class="topic-census-detial__table__thead">
 			<tr>
-				<td>{{this.NO}}</td>
-				<td>{{this.topicName}}</td>
-				<td>{{this.author}}</td>
-				<td>{{this.createTime}}</td>
-				<td>{{this.modifier}}</td>
-				<td>{{this.modifyTime}}</td>
+				<th></th>
+				<th>标题</th>
+				<th>url</th>
+				<th>发布时间</th>
 			</tr>
-		{{/each}}
-	</script>
+			</thead>
+			<tbody>
+			{{#each fileList}}
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>{{this.topic}}</td>
+				<td>{{this.url}}</td>
+				<td>{{this.time}}</td>
+			</tr>
+			{{/each}}
+			<tr>
+				<td class="topic-census-detial__table__select-all"><input type="checkbox"></td>
+				<td colspan="3"><button class="topic-census-detial__table__delete-all-btn" type="submit">删除所有</button></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</script>
+
+<script id="showTopicCensusResult" type="text/x-handlebars-template">
+	<div>
+		统计结果
+	</div>
+</script>
+
+<script id="showTopicCensusLine" type="text/x-handlebars-template">
+	<div>
+		折线图
+	</div>
+</script>
+
+<script id="showTopicCensusPie" type="text/x-handlebars-template">
+	<div>
+		饼状图
+	</div>
+</script>
+
+<script id="showTopicCensusSquare" type="text/x-handlebars-template">
+	<div>
+		柱状图
+	</div>
+</script>
 </body>
 </html>
