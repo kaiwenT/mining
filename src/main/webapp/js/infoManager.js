@@ -3,12 +3,12 @@ $(document)
                 function() {
                     var isEventBinded = false;
                     var paginationDomTemp = "#paginationTemplate";
-                    var paginationTarget = "#contentSearchResultList";
+                    var paginationTarget = ".content-wrapper__changeable";
 
                     var topicIntroDomTemp = "#topicIntroduction";
                     var topicIntorTarget = ".content-wrapper__changeable";
 
-                    var $originLink = $("a[title='privateTopic']");
+                    var $originLink = $("#topicManagePrivateTopic");
                     $originLink.addClass('active');
 
                     var showCensus = {
@@ -219,7 +219,7 @@ $(document)
                         $('#searchSubmit').on("click", function(){
                             getPageContent(1);
                         });
-                        $navigationUl.on("click", "a",
+                        $navigationUl.on("click", ".content-wrapper__nav__ul__element-child__el__link",
                                 onClickLeftSideBarNavLink);
                         $resultListArea.on("click", ".result-list",
                                 onClickResultListItem);
@@ -254,6 +254,11 @@ $(document)
                         var $oldActiveElement = $(".active");
                         $waitingMask.show();
                         var $this = $(event.currentTarget);
+                        var eventId = $this.attr("id");
+                        var text = $this.text();
+                        var parentText = $($this.parents()[2]).text();
+
+
                         var title = $this.text();
                         var $target = $('.content-wrapper__content__info');
                         var $infoSpan = $('<span></span>');
