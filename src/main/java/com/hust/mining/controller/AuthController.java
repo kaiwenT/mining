@@ -1,5 +1,7 @@
 package com.hust.mining.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +16,23 @@ import com.hust.mining.service.UserService;
 @RequestMapping("/")
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String login(@RequestParam(value = "form-username", required = true) String userName,
-            @RequestParam(value = "form-password", required = true) String passwd, HttpServletRequest request) {
-        // ModelAndView mav = new ModelAndView();
-        if (userService.login(userName, passwd)) {
-            request.getSession().setAttribute("username", userName);
-            // mav.setViewName("page/upload.html");
-            // return mav;
-            return "redirect:page/infoManager.html";
-        }
-        // mav.setViewName("page/error.html");
-        // return mav;
-        return "redirect:page/error.html";
-    }
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	public String login(@RequestParam(value = "form-username", required = true) String userName,
+			@RequestParam(value = "form-password", required = true) String passwd, HttpServletRequest request) {
+		// ModelAndView mav = new ModelAndView();
+		if (userService.login(userName, passwd)) {
+			request.getSession().setAttribute("username", userName);
+			List<String> userPowerUrl = userService.selectUserPowerUrl(userName);
+			request.getSession().setAttribute("userPowerUrl", userPowerUrl);
+			// mav.setViewName("page/upload.html");
+			// return mav;
+			return "redirect:page/infoManager.html";
+		}
+		// mav.setViewName("page/error.html");
+		// return mav;
+		return "redirect:page/error.jsp";
+	}
 }

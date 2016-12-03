@@ -2,15 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.UserMapper">
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.User">
-		<id column="id" jdbcType="INTEGER" property="id" />
+		<id column="user_id" jdbcType="INTEGER" property="userId" />
 		<result column="user_name" jdbcType="VARCHAR" property="userName" />
-		<result column="passwrod" jdbcType="VARCHAR" property="passwrod" />
-		<result column="true_name" jdbcType="VARCHAR" property="trueName" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
 		<result column="email" jdbcType="VARCHAR" property="email" />
-		<result column="phone" jdbcType="VARCHAR" property="phone" />
-		<result column="company" jdbcType="VARCHAR" property="company" />
-		<result column="master_id" jdbcType="VARCHAR" property="masterId" />
-		<result column="master_name" jdbcType="VARCHAR" property="masterName" />
+		<result column="telphone" jdbcType="VARCHAR" property="telphone" />
+		<result column="true_name" jdbcType="VARCHAR" property="trueName" />
+		<result column="role_id" jdbcType="INTEGER" property="roleId" />
 		<result column="create_date" jdbcType="DATE" property="createDate" />
 	</resultMap>
 	<sql id="Example_Where_Clause">
@@ -27,8 +25,7 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
+									and ${criterion.condition} #{criterion.value} and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -60,8 +57,7 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
+									and ${criterion.condition} #{criterion.value} and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -79,10 +75,7 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		id, user_name, passwrod, true_name, email, phone, company,
-		master_id,
-		master_name,
-		create_date
+		user_id, user_name, password, email, telphone, true_name, role_id, create_date
 	</sql>
 	<select id="selectByExample" parameterType="com.hust.mining.model.UserExample"
 		resultMap="BaseResultMap">
@@ -99,8 +92,8 @@
 		<if test="orderByClause != null">
 			order by ${orderByClause}
 		</if>
-		<if test="start !=0 or limit!=0">
-			limit #{start},#{limit}
+		<if test="page!=0 or row!=0">
+			limit #{(page-1)*row},#{row}
 		</if>
 	</select>
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
@@ -108,11 +101,11 @@
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where id = #{id,jdbcType=INTEGER}
+		where user_id = #{userId,jdbcType=INTEGER}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
 		delete from user
-		where id = #{id,jdbcType=INTEGER}
+		where user_id = #{userId,jdbcType=INTEGER}
 	</delete>
 	<delete id="deleteByExample" parameterType="com.hust.mining.model.UserExample">
 		delete from user
@@ -121,83 +114,63 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.User">
-		insert into user (id,
-		user_name, passwrod,
-		true_name, email, phone,
-		company, master_id,
-		master_name,
-		create_date)
-		values (#{id,jdbcType=INTEGER},
-		#{userName,jdbcType=VARCHAR},
-		#{passwrod,jdbcType=VARCHAR},
-		#{trueName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-		#{phone,jdbcType=VARCHAR},
-		#{company,jdbcType=VARCHAR},
-		#{masterId,jdbcType=VARCHAR},
-		#{masterName,jdbcType=VARCHAR},
-		#{createDate,jdbcType=DATE})
+		insert into user (user_id, user_name, password,
+		email, telphone, true_name,
+		role_id, create_date)
+		values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, #{trueName,jdbcType=VARCHAR},
+		#{roleId,jdbcType=INTEGER}, #{createDate,jdbcType=DATE})
 	</insert>
 	<insert id="insertSelective" parameterType="com.hust.mining.model.User">
 		insert into user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				id,
+			<if test="userId != null">
+				user_id,
 			</if>
 			<if test="userName != null">
 				user_name,
 			</if>
-			<if test="passwrod != null">
-				passwrod,
-			</if>
-			<if test="trueName != null">
-				true_name,
+			<if test="password != null">
+				password,
 			</if>
 			<if test="email != null">
 				email,
 			</if>
-			<if test="phone != null">
-				phone,
+			<if test="telphone != null">
+				telphone,
 			</if>
-			<if test="company != null">
-				company,
+			<if test="trueName != null">
+				true_name,
 			</if>
-			<if test="masterId != null">
-				master_id,
-			</if>
-			<if test="masterName != null">
-				master_name,
+			<if test="roleId != null">
+				role_id,
 			</if>
 			<if test="createDate != null">
 				create_date,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null">
-				#{id,jdbcType=INTEGER},
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
 			</if>
 			<if test="userName != null">
 				#{userName,jdbcType=VARCHAR},
 			</if>
-			<if test="passwrod != null">
-				#{passwrod,jdbcType=VARCHAR},
-			</if>
-			<if test="trueName != null">
-				#{trueName,jdbcType=VARCHAR},
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
 			</if>
 			<if test="email != null">
 				#{email,jdbcType=VARCHAR},
 			</if>
-			<if test="phone != null">
-				#{phone,jdbcType=VARCHAR},
+			<if test="telphone != null">
+				#{telphone,jdbcType=VARCHAR},
 			</if>
-			<if test="company != null">
-				#{company,jdbcType=VARCHAR},
+			<if test="trueName != null">
+				#{trueName,jdbcType=VARCHAR},
 			</if>
-			<if test="masterId != null">
-				#{masterId,jdbcType=VARCHAR},
-			</if>
-			<if test="masterName != null">
-				#{masterName,jdbcType=VARCHAR},
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
 			</if>
 			<if test="createDate != null">
 				#{createDate,jdbcType=DATE},
@@ -214,32 +187,26 @@
 	<update id="updateByExampleSelective" parameterType="map">
 		update user
 		<set>
-			<if test="record.id != null">
-				id = #{record.id,jdbcType=INTEGER},
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
 			</if>
 			<if test="record.userName != null">
 				user_name = #{record.userName,jdbcType=VARCHAR},
 			</if>
-			<if test="record.passwrod != null">
-				passwrod = #{record.passwrod,jdbcType=VARCHAR},
-			</if>
-			<if test="record.trueName != null">
-				true_name = #{record.trueName,jdbcType=VARCHAR},
+			<if test="record.password != null">
+				password = #{record.password,jdbcType=VARCHAR},
 			</if>
 			<if test="record.email != null">
 				email = #{record.email,jdbcType=VARCHAR},
 			</if>
-			<if test="record.phone != null">
-				phone = #{record.phone,jdbcType=VARCHAR},
+			<if test="record.telphone != null">
+				telphone = #{record.telphone,jdbcType=VARCHAR},
 			</if>
-			<if test="record.company != null">
-				company = #{record.company,jdbcType=VARCHAR},
+			<if test="record.trueName != null">
+				true_name = #{record.trueName,jdbcType=VARCHAR},
 			</if>
-			<if test="record.masterId != null">
-				master_id = #{record.masterId,jdbcType=VARCHAR},
-			</if>
-			<if test="record.masterName != null">
-				master_name = #{record.masterName,jdbcType=VARCHAR},
+			<if test="record.roleId != null">
+				role_id = #{record.roleId,jdbcType=INTEGER},
 			</if>
 			<if test="record.createDate != null">
 				create_date = #{record.createDate,jdbcType=DATE},
@@ -251,25 +218,14 @@
 	</update>
 	<update id="updateByExample" parameterType="map">
 		update user
-		set id = #{record.id,jdbcType=INTEGER},
-		user_name =
-		#{record.userName,jdbcType=VARCHAR},
-		passwrod =
-		#{record.passwrod,jdbcType=VARCHAR},
-		true_name =
-		#{record.trueName,jdbcType=VARCHAR},
-		email =
-		#{record.email,jdbcType=VARCHAR},
-		phone =
-		#{record.phone,jdbcType=VARCHAR},
-		company =
-		#{record.company,jdbcType=VARCHAR},
-		master_id =
-		#{record.masterId,jdbcType=VARCHAR},
-		master_name =
-		#{record.masterName,jdbcType=VARCHAR},
-		create_date =
-		#{record.createDate,jdbcType=DATE}
+		set user_id = #{record.userId,jdbcType=INTEGER},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		password = #{record.password,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		telphone = #{record.telphone,jdbcType=VARCHAR},
+		true_name = #{record.trueName,jdbcType=VARCHAR},
+		role_id = #{record.roleId,jdbcType=INTEGER},
+		create_date = #{record.createDate,jdbcType=DATE}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -280,49 +236,36 @@
 			<if test="userName != null">
 				user_name = #{userName,jdbcType=VARCHAR},
 			</if>
-			<if test="passwrod != null">
-				passwrod = #{passwrod,jdbcType=VARCHAR},
-			</if>
-			<if test="trueName != null">
-				true_name = #{trueName,jdbcType=VARCHAR},
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
 			</if>
 			<if test="email != null">
 				email = #{email,jdbcType=VARCHAR},
 			</if>
-			<if test="phone != null">
-				phone = #{phone,jdbcType=VARCHAR},
+			<if test="telphone != null">
+				telphone = #{telphone,jdbcType=VARCHAR},
 			</if>
-			<if test="company != null">
-				company = #{company,jdbcType=VARCHAR},
+			<if test="trueName != null">
+				true_name = #{trueName,jdbcType=VARCHAR},
 			</if>
-			<if test="masterId != null">
-				master_id = #{masterId,jdbcType=VARCHAR},
-			</if>
-			<if test="masterName != null">
-				master_name = #{masterName,jdbcType=VARCHAR},
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=INTEGER},
 			</if>
 			<if test="createDate != null">
 				create_date = #{createDate,jdbcType=DATE},
 			</if>
 		</set>
-		where id = #{id,jdbcType=INTEGER}
+		where user_id = #{userId,jdbcType=INTEGER}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.User">
 		update user
-		set
-		user_name = #{userName,jdbcType=VARCHAR},
-		passwrod =
-		#{passwrod,jdbcType=VARCHAR},
-		true_name = #{trueName,jdbcType=VARCHAR},
+		set user_name = #{userName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
-		phone = #{phone,jdbcType=VARCHAR},
-		company = #{company,jdbcType=VARCHAR},
-		master_id =
-		#{masterId,jdbcType=VARCHAR},
-		master_name =
-		#{masterName,jdbcType=VARCHAR},
-		create_date =
-		#{createDate,jdbcType=DATE}
-		where id = #{id,jdbcType=INTEGER}
+		telphone = #{telphone,jdbcType=VARCHAR},
+		true_name = #{trueName,jdbcType=VARCHAR},
+		role_id = #{roleId,jdbcType=INTEGER},
+		create_date = #{createDate,jdbcType=DATE}
+		where user_id = #{userId,jdbcType=INTEGER}
 	</update>
 </mapper>
