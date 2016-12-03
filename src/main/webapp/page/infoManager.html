@@ -44,17 +44,24 @@
 					<a href="#" class="content-wrapper__nav__ul__element__link" id="topicManage">话题管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" id="topicManagePrivateTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   id="originalLink"
+							   data-handle-bar-template="#paginationTemplate"
+							   data-target-dom=".content-wrapper__changeable">
 								自有话题
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" id="topicManageAllTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template=".content-wrapper__changeable">
 								所有话题
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" id="topicManageCreateTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template="#createTopic"
+							   data-target-template=".content-wrapper__changeable">
 								创建话题
 							</a>
 						</li>
@@ -65,27 +72,37 @@
 					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">权限管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="user">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="user">
 								用户管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								角色管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="resource">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="resource">
 								资源管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="parentManage">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="parentManage">
 								父目录管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="childManage">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="childManage">
 								父目录管理
 							</a>
 						</li>
@@ -93,15 +110,19 @@
 				</li>
 
 				<li class="content-wrapper__nav__ul__element">
-					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">账号管理</a>
+					<a href="#" class="content-wrapper__nav__ul__element__link" data-target-template="power">账号管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								个人信息
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								xx管理
 							</a>
 						</li>
@@ -121,6 +142,11 @@
 				<span class="content-wrapper__content__info__icon">>></span>
 				<span class="content-wrapper__content__info__child">自有话题</span>
 			</div>
+
+			<div class="col-md-12 content-wrapper__content__developing" style="display: none">
+				系统开发中……
+			</div>
+
 			<!-- 页面显示区域 -->
 			<div class="col-md-12 content-wrapper__changeable">
 			</div>
@@ -420,7 +446,7 @@
 <!-- 自有话题template结束 -->
 <!-- 创建话题 -->
 <script id="createTopic" type="text/x-handlebars-template">
-
+	创建话题
 </script>
 </body>
 </html>

@@ -2,11 +2,8 @@ $(document)
         .ready(
                 function() {
                     var isEventBinded = false;
-                    var paginationDomTemp = "#paginationTemplate";
-                    var paginationTarget = ".content-wrapper__changeable";
-
-                    var topicIntroDomTemp = "#topicIntroduction";
-                    var topicIntorTarget = ".content-wrapper__changeable";
+                    var changableArea = ".content-wrapper__changeable";
+                    var $changeableArea = $(changableArea);
 
                     var $originLink = $("#topicManagePrivateTopic");
                     $originLink.addClass('active');
@@ -16,11 +13,6 @@ $(document)
                         target : ".content-wrapper__content__result-census__result-wrapper"
                     };
 
-                    var showResult = {
-                        domTemp : "#topicDetailResult",
-                        target : ".content-wrapper__changeable"
-                    };
-
                     var infoMessageClass = {
                         target : $('.content-wrapper__content__info'),
                         message : 'content-wrapper__content__info__message',
@@ -28,16 +20,15 @@ $(document)
                         icon : 'content-wrapper__content__info__icon'
                     };
 
-                    var $originLink = $("a[title='privateTopic']");
+                    var $originLink = $("#originalLink");
                     var $paginaionWrapper = $(".content-wrapper__pagination");
-                    var $listChangableArea = $(".content-wrapper__changeable");
                     var $censusChangableArea = $(".content-wrapper__content__result-census");
-                    $originLink.addClass('active');
 
                     mainInit();
 
                     function mainInit(){
                         getPageContent(1);
+                        $originLink.addClass('active');
                     }
 
                     // ==================main template========================
@@ -84,6 +75,8 @@ $(document)
                                 that.$waitingMask.show();
                             },
                             success : function(data) {
+                                var paginationDomTemp = "#paginationTemplate";
+                                var paginationTarget = changableArea;
                                 that.totalPages = data.result.pageTotal;
                                 if (data !== undefined && data !== '') {
                                     if (data.status === 'OK') {
@@ -98,7 +91,10 @@ $(document)
                                 }
                             },
                             error : function() {
+                                var paginationDomTemp = "#paginationTemplate";
+                                var paginationTarget = changableArea;
                                 // 测试用,本地测试,真实数据无法请求到时,调用mock数据,不要删除!
+                                that.totalPages = 10;
                                 var resultList = mockDataOfPagination(1);
                                 handleBarTemplate(paginationDomTemp,
                                         paginationTarget, resultList);
@@ -107,10 +103,11 @@ $(document)
                             complete: function() {
                                 if( !isEventBinded ){
                                     eventBind();
-                                    $(".form_datetime").datepicker();
                                 }
 
-                                if( that.page === 1 ){
+                                $(".form_datetime").datepicker();
+
+                                if( that.page == 1 ){
                                     paginationFunc(that.totalPages);
                                 }
 
@@ -211,17 +208,16 @@ $(document)
                     // ===========================events functions=============================
 
                     function eventBind() {
-                        isEventBinded = true;
                         var $navigationUl = $(".content-wrapper__nav__ul");
-                        var $resultListArea = $("#contentSearchResultList");
-                        var $changeableArea = $(".content-wrapper__changeable");
+                        var $changeableArea = $(changableArea);
                         var $censusAreaNavigation = $(".content-wrapper__content__result-census__unit-list-wrapper__ul");
-                        $('#searchSubmit').on("click", function(){
-                            getPageContent(1);
-                        });
+
                         $navigationUl.on("click", ".content-wrapper__nav__ul__element-child__el__link",
                                 onClickLeftSideBarNavLink);
-                        $resultListArea.on("click", ".result-list",
+                        $changeableArea.on("click", "#searchSubmit",function(){
+                            getPageContent(1);
+                        });
+                        $changeableArea.on("click", ".result-list",
                                 onClickResultListItem);
                         $changeableArea.on("click", "#checkTopicDetail",
                                 onClickCheckTopicDetail);
@@ -244,6 +240,7 @@ $(document)
                                         onClickCombineButton);
                         $censusAreaNavigation.on("click", "a",
                                 onClickCensusNavigationBar);
+                        isEventBinded = true;
                     }
 
                     /**
@@ -251,30 +248,42 @@ $(document)
                      */
                     function onClickLeftSideBarNavLink(event) {
                         var $waitingMask = $(".waiting-mask");
-                        var $oldActiveElement = $(".active");
+                        var $oldActiveElement = $(".content-wrapper__nav .active");
                         $waitingMask.show();
                         var $this = $(event.currentTarget);
-                        var eventId = $this.attr("id");
-                        var text = $this.text();
-                        var parentText = $($this.parents()[2]).text();
+                        var tempDom = $this.data("handleBarTemplate");
+                        var theTargetDom = $this.data("targetDom");
+                        var $parent = $($($this.parents()[2]).children()[0])
 
-
-                        var title = $this.text();
-                        var $target = $('.content-wrapper__content__info');
-                        var $infoSpan = $('<span></span>');
-                        var $childSpan = $('<span></span>');
-                        var $iconSpan = $('<span></span>');
-                        var infoClasses = {
-                            message : 'content-wrapper__content__info__message',
-                            child : 'content-wrapper__content__info__child',
-                            icon : 'content-wrapper__content__info__icon'
+                        var text = $.trim($this.text());
+                        var parentText = $.trim($parent.text());
+                        var params = {
+                            firstText: parentText,
+                            secondText: text
                         }
+                        cleanContentInfoMessage(params);
 
-                        var link = "url" + title;
-
-                        $target.text(title);
                         $oldActiveElement.removeClass("active");
                         $this.addClass("active");
+
+                        if( !tempDom ){
+                            $(".content-wrapper__content__developing").show();
+                            $changeableArea.hide();
+                            $(".content-wrapper__content__result-census").hide();
+                        } else {
+                            if( tempDom === "#paginationTemplate" ){
+                                $(".content-wrapper__content__result-census").hide();
+                                getPageContent(1);
+                            }
+
+                            if( tempDom === "#createTopic" ){
+                                $(".content-wrapper__content__result-census").hide();
+                                showCreateTopicPage();
+                            }
+                            $(".content-wrapper__content__developing").hide();
+                            $changeableArea.show();
+                        }
+
                         $waitingMask.hide();
                     }
 
@@ -298,6 +307,8 @@ $(document)
                                 $waitingMask.show();
                             },
                             success : function(data){
+                                var topicIntroDomTemp = "#topicIntroduction";
+                                var topicIntorTarget = changableArea;
                                 if(data !== undefined && data !== ''){
                                     if(data.status === 'OK'){
                                         var json ={};
@@ -331,6 +342,8 @@ $(document)
                                 }
                             },
                             error : function(){
+                                var topicIntroDomTemp = "#topicIntroduction";
+                                var topicIntorTarget = changableArea;
                                 var mockData = mockResultIntroData();
                                 handleBarTemplate(topicIntroDomTemp, topicIntorTarget,
                                         mockData);
@@ -367,10 +380,14 @@ $(document)
                      * 点击事件内 查看结果详情按钮 响应事件
                      */
                     function onClickCheckTopicDetail() {
+                        var showResult = {
+                            domTemp : "#topicDetailResult",
+                            target : changableArea
+                        };
                         var $waitingMask = $(".waiting-mask");
                         $censusChangableArea.hide();
                         $paginaionWrapper.hide();
-                        $listChangableArea.show();
+                        $changeableArea.show();
                         $waitingMask.show();
                         var mockData = mockTopicDetailData();
                         handleBarTemplate(showResult.domTemp,
@@ -385,7 +402,7 @@ $(document)
                     function onClickShowTopicCensus() {
                         var $waitingMask = $(".waiting-mask");
                         $censusChangableArea.show();
-                        $listChangableArea.hide();
+                        $changeableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
                         var mockData = mockTopicCensusData();
@@ -468,7 +485,7 @@ $(document)
                         var link = $this.attr('href');
                         var mockData = mockTopicCensusData();
                         $censusChangableArea.show();
-                        $listChangableArea.hide();
+                        $changeableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
                         $ul.find(".active").removeClass("active");
@@ -477,9 +494,22 @@ $(document)
                         $waitingMask.hide();
                     }
 
+                    /**
+                     * 创建topic页面
+                     */
+                    function showCreateTopicPage() {
+                        $waitingMask.show();
+                        var tempDom = $("#createTopic");
+                        handleBarTemplate(tempDom, $changeableArea, {});
+                        $changeableArea.show();
+                        $paginaionWrapper.hide();
+                        $censusChangableArea.hide();
+                        $waitingMask.hide();
+                    }
+
                     // =================util functions=========================
-                    function paginationFunc( totalPages ) {
-                        var totalPages = totalPages;
+                    function paginationFunc( tp ) {
+                        var totalPages = tp;
                         var visiblePages = utilGetVisiblePages(totalPages);
                         $('#pagination').twbsPagination({
                             totalPages : totalPages, // need backend data
@@ -495,6 +525,8 @@ $(document)
                             next : '下一页',
                             last : '尾页'
                         });
+                        $(".content-wrapper__pagination").show();
+                        $($(".pagination").children()[2]).addClass("active");
                     }
 
                     function dataFormatTransfor(data, page) {
@@ -544,20 +576,12 @@ $(document)
                     }
 
                     // 创建info-message中的span
-                    function utilCreateInfoSpan(text, className, isATagNeeded,
-                            extraParam) {
+                    function utilCreateInfoSpan(text, className, isATagNeeded) {
                         var $span = $('<span></span>');
                         var $a = $('<a></a>');
                         $span.addClass(className);
                         if (isATagNeeded) {
                             $a.text(text);
-                            // if( extraParam.url ){
-                            // $a.attr('href', extraParam.url);
-                            // }
-
-                            // if( extraParam.id ){
-                            // $a.attr('data-item-id', extraParam.id);
-                            // }
                             $span.append($a);
                         } else {
                             $span.text(text);
@@ -578,7 +602,18 @@ $(document)
                                 $childSpan);
                     }
 
-                    function cleanContentInfoMessage(target) {
+                    function cleanContentInfoMessage(params) {
+                        var $target = $(".content-wrapper__content__info");
+                        var firstText = params.firstText || "";
+                        var secondText = params.secondText || "";
+                        var className = "content-wrapper__content__info__child";
+                        var iconClassName = "content-wrapper__content__info__icon";
+                        var $messageSpan = utilCreateInfoSpan("当前位置:","content-wrapper__content__info__message", false);
+                        var $firstSpan = utilCreateInfoSpan(firstText, className, false);
+                        var $iconSpan = utilCreateInfoSpan(">>", iconClassName, false);
+                        var $secondSpan = utilCreateInfoSpan(secondText, className, false);
 
+                        $target.empty();
+                        $target.append($messageSpan).append($firstSpan).append($iconSpan).append($secondSpan);
                     }
                 });
