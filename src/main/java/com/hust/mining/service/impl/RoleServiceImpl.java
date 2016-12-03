@@ -47,10 +47,11 @@ public class RoleServiceImpl implements RoleService {
 	public boolean insertRoleInfo(Role role) {
 		// 添加新的角色信息，信息不能重复
 		List<Role> roles = roleDao.selectRoleByName(role.getRoleName());
-		if (null != roles) {
+		if (!roles.isEmpty()) {
 			logger.info("role table have been roelinfo");
 			return false;
 		}
+		//状态值
 		roleDao.insert(role);
 		return true;
 	}

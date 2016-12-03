@@ -39,11 +39,16 @@ public class PowerServiceImpl implements PowerService {
 	public boolean insertPowerInfo(Power power) {
 		// 不能添加重复的判断
 		List<Power> powers = powerDao.selectPowerByPowerName(power.getPowerName());
-		if (null != powers) {
+		if (!powers.isEmpty()) {
 			logger.info("power table has this power");
 			return false;
 		}
-		powerDao.insertSelective(power);
+		// 判断插入状态
+		int status = powerDao.insertSelective(power);
+		if (status == 0) {
+			logger.info("insert table is error");
+			return false;
+		}
 		return true;
 	}
 

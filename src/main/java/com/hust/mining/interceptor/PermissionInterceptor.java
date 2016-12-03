@@ -15,18 +15,21 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hust.mining.service.UserService;
 import com.hust.mining.util.ResultUtil;
 
 public class PermissionInterceptor implements HandlerInterceptor {
 	/**
 	 * Logger for this class
 	 */
+	@Autowired
+	private UserService userService;
 	private static final Logger LOG = LoggerFactory.getLogger(PermissionInterceptor.class);
 
 	@Autowired
 	private MappingJackson2HttpMessageConverter converter;
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -34,7 +37,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
 		try {
 			String url = request.getRequestURI();
 			String requestPath = request.getServletPath();
-			List<String> powers = (List<String>) request.getSession().getAttribute("userPowerUrl");
+			// 登陆成功以后 当数据库权限是一定的 但是你添加权限信息，程序缓存的还是以前的权限信息 ，更新的权限没有添加到里面
+			// 现在解决办法就是 在拦截器里面 可以重新获取权限信息
+			// 先判断
 			if ("/".equals(url) || "/index.html".equals(url)) {
 				if (null != request.getSession().getAttribute("username")) {
 					response.sendRedirect("/page/main.html");
@@ -43,7 +48,14 @@ public class PermissionInterceptor implements HandlerInterceptor {
 				}
 			} else {
 				if (null != request.getSession().getAttribute("username")) {
-					if (powers.contains(requestPath)) {
+					if (request.getSession().getAttribute("userPowerUrl") != null) {
+						request.getSession().removeAttribute("userPowerUrl");
+					}
+					// 在这里可以重新获取
+					List<String> userPowerUrl = userService
+							.selectUserPowerUrl(request.getSession().getAttribute("username").toString());
+					request.getSession().setAttribute("userPowerUrl", userPowerUrl);
+					if (userPowerUrl.contains(requestPath)) {
 						return true;
 					} else {
 						LOG.warn("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(),

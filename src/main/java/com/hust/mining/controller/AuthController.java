@@ -1,7 +1,5 @@
 package com.hust.mining.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,6 @@ public class AuthController {
 		// ModelAndView mav = new ModelAndView();
 		if (userService.login(userName, passwd)) {
 			request.getSession().setAttribute("username", userName);
-			List<String> userPowerUrl = userService.selectUserPowerUrl(userName);
-			request.getSession().setAttribute("userPowerUrl", userPowerUrl);
 			// mav.setViewName("page/upload.html");
 			// return mav;
 			return "redirect:page/infoManager.html";
