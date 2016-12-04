@@ -76,7 +76,7 @@
 	margin-top: 12px;
 }
 
-.topic-census-detial {
+.topic-census-detail {
 	margin-top: 8px;
 	border: 2px solid #eee;
 	border-radius: 6px;
@@ -84,12 +84,49 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.topic-census-detial__table {
+.topic-census-detail__table {
 	margin-bottom: 0;
 }
-.topic-census-detial__table__thead {
+.topic-census-detail__table__thead {
 	background-color: #eee;
 }
-.topic-census-detial__table__delete-all-btn {
-	
+
+/* 创建话题css */
+.content-wrapper__content__create-files__wrapper {
+	max-height: 200px;
+	border: 2px solid #eee;
+	overflow-x: hidden;
+	overflow-y: auto;
+	margin-top: 5px;
+}
+.content-wrapper__content__create-files__wrapper__message {
+	color: #eee;
+	padding: 10px;
+	text-align: center;
+}
+.content-wrapper__content__create-files__name-wrapper {
+	margin: 20px 0;
+	display: inline-block;
+}
+.content-wrapper__content__create-files__add-file {
+	width: 50%;
+	text-align: center;
+	line-height: 150px;
+	margin: auto;
+	border: 2px solid #eee;
+	border-radius: 6px;
+}
+.create-topic__file-list-wrapper {
+	margin: 10px 0 10px 10px;
+}
+.create-topic__file-list-wrapper .form-control {
+	display: inline-block;
+	width: 100px;
+}
+.contnet-wrapper__content__create-files__button-wrapper {
+	display: inline-block;
+}
+#createTopicSubmit {
+	display: inline-block;
+	margin-left: 8px;
 }

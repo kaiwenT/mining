@@ -43,6 +43,17 @@ $(document)
                         $(targetDom).html(template(context));
                     }
 
+                    function appendHandleBarTemplate(tempDom, targetDom, context) {
+                        // 用jquery获取模板
+                        var source = $(tempDom).html();
+                        // 预编译模板
+                        var template = Handlebars.compile(source);
+
+                        // var html = template(context);
+                        // 输入模板
+                        $(targetDom).append(template(context));
+                    }
+
                     // ===================get data from mock or ajax===============
 
                     function getPageContent(page) {
@@ -177,7 +188,7 @@ $(document)
                             topic : "小学女生上吊",
                             url : "http://xx.xx.xx",
                             time : "2011-11-11 11:11:11"
-                        }
+                        };
                         for (var i = 0; i < 5; i++) {
                             json.fileList.push(file);
                         }
@@ -191,7 +202,7 @@ $(document)
                             fileName : "文件名",
                             author : "作者",
                             time : "2011-11-11 11:11:11"
-                        }
+                        };
                         json.topicName = "多悦小学事件";
                         json.author = "高岩";
                         json.createTime = "2011-11-11 11:11:11";
@@ -204,12 +215,45 @@ $(document)
                         return json;
                     }
 
+                    function mockFileResolveData() {
+                        var json = {};
+                        json.fileId = 122;
+                        json.fileName = "mock的文件名";
+                        json.urlList = [
+                            {optionId: 1, optionText: "url1"},
+                            {optionId: 2, optionText: "url2"},
+                            {optionId: 3, optionText: "url3"},
+                            {optionId: 4, optionText: "url4"}
+                        ];
+                        json.titleList = [
+                            {optionId: 1, optionText: "title1"},
+                            {optionId: 2, optionText: "title2"},
+                            {optionId: 3, optionText: "title3"},
+                            {optionId: 4, optionText: "title4"}
+                        ];
+                        json.timeList = [
+                            {optionId: 1, optionText: "time1"},
+                            {optionId: 2, optionText: "time2"},
+                            {optionId: 3, optionText: "time3"},
+                            {optionId: 4, optionText: "time4"}
+                        ];
+                        json.typeList = [
+                            {optionId: 1, optionText: "type1"},
+                            {optionId: 2, optionText: "type2"},
+                            {optionId: 3, optionText: "type3"},
+                            {optionId: 4, optionText: "type4"}
+                        ];
+                        return json;
+                    }
+
                     // ===========================events functions=============================
 
                     function eventBind() {
                         var $navigationUl = $(".content-wrapper__nav__ul");
                         var $changeableArea = $(changableArea);
+                        var $censusArea = $(".content-wrapper__content__result-census");
                         var $censusAreaNavigation = $(".content-wrapper__content__result-census__unit-list-wrapper__ul");
+                        var $createTopic = $(".content-wrapper__content__create-files");
 
                         $navigationUl.on("click", ".content-wrapper__nav__ul__element-child__el__link",
                                 onClickLeftSideBarNavLink);
@@ -220,6 +264,14 @@ $(document)
                                 onClickResultListItem);
                         $changeableArea.on("click", "#checkTopicDetail",
                                 onClickCheckTopicDetail);
+                        $changeableArea.on("click", ".content-wrapper__topic-intro__file-list__delete",
+                                onClickDeleteFile);
+
+                        $censusArea.on("click", ".topic-census-detail__table__item__checkbox", onClickShowDetailCheckBox)
+                        $censusArea.on("click", ".topic-census-detail__table__select-all__checkbox",
+                                onClickShowDetailSelectAll);
+                        $censusArea.on("click", ".topic-census-detail__table__delete-all-btn",
+                                onClickShowDetailDeleteAll);
                         $changeableArea.on("click", ".topic-detail-result__result-list__item__message-wrapper",
                                 onClickShowTopicCensus);
                         $changeableArea
@@ -239,6 +291,11 @@ $(document)
                                         onClickCombineButton);
                         $censusAreaNavigation.on("click", "a",
                                 onClickCensusNavigationBar);
+
+                        // 创建文件
+                        $createTopic.on("click", ".content-wrapper__content__create-files__add-file", onClickToAddFile);
+                        $createTopic.on("click", "#createTopicSubmit", onClickCreateTopic);
+                        $createTopic.on("click", ".create-topic__file-list-wrapper__upload-file", onClickUploadFile)
                         isEventBinded = true;
                     }
 
@@ -251,7 +308,6 @@ $(document)
                         $waitingMask.show();
                         var $this = $(event.currentTarget);
                         var tempDom = $this.data("handleBarTemplate");
-                        var theTargetDom = $this.data("targetDom");
                         var $parent = $($($this.parents()[2]).children()[0])
 
                         var text = $.trim($this.text());
@@ -266,21 +322,18 @@ $(document)
                         $this.addClass("active");
 
                         if( !tempDom ){
-                            $(".content-wrapper__content__developing").show();
-                            $changeableArea.hide();
-                            $(".content-wrapper__content__result-census").hide();
+                            utilDisplayCorrectArea($(".content-wrapper__content__developing"));
                         } else {
                             if( tempDom === "#paginationTemplate" ){
-                                $(".content-wrapper__content__result-census").hide();
                                 getPageContent(1);
+                                $paginaionWrapper.show();
+                                utilDisplayCorrectArea($changeableArea)
                             }
 
                             if( tempDom === "#createTopic" ){
-                                $(".content-wrapper__content__result-census").hide();
+                                $paginaionWrapper.hide();
                                 showCreateTopicPage();
                             }
-                            $(".content-wrapper__content__developing").hide();
-                            $changeableArea.show();
                         }
 
                         $waitingMask.hide();
@@ -351,12 +404,6 @@ $(document)
                                 $waitingMask.hide();
                             },
                         });
-                        $("#topicFileList")
-                                .on(
-                                        "click",
-                                        ".content-wrapper__topic-intro__file-list__delete",
-                                        onClickDeleteFile);
-                        
                     }
                     
                     /**
@@ -385,9 +432,7 @@ $(document)
                             target : changableArea
                         };
                         var $waitingMask = $(".waiting-mask");
-                        $censusChangableArea.hide();
-                        $paginaionWrapper.hide();
-                        $changeableArea.show();
+                        utilDisplayCorrectArea($changeableArea);
                         $waitingMask.show();
                         var mockData = mockTopicDetailData();
                         handleBarTemplate(showResult.domTemp,
@@ -397,13 +442,67 @@ $(document)
                     }
 
                     /**
+                     * 在统计结果展示页面中的详情展示页面
+                     * 点击某个item的checkbox时,为父类添加标志类
+                     */
+                    function onClickShowDetailCheckBox(){
+                        var $this = $(this);
+                        var $parent = $($this.parents()[1]);
+                        var selectedClass = "topic-census-detail__table__item-selected";
+                        if( $this.is(":checked") ){
+                            $parent.addClass(selectedClass);
+                        } else {
+                            $parent.removeClass(selectedClass);
+                        }
+                    }
+
+                    /**
+                     * 在统计结果展示页面中的详情展示页面
+                     * 点击选择全部的checkbox时,添加标志类,并负责选中所有文件
+                     */
+                    function onClickShowDetailSelectAll(){
+                        var $this = $(this);
+                        var $checkboxes = $(".topic-census-detail__table__item__checkbox");
+                        var selectedClass = "topic-census-detail__table__item-selected";
+                        if( $this.is(":checked") ){
+                            $.each($checkboxes, function(){
+                                var $this = $(this);
+                                var $parent = $($this.parents()[1]);
+                                $this.prop("checked", true);
+                                $parent.addClass(selectedClass);
+                            });
+                        } else {
+                            $.each($checkboxes, function(){
+                                var $this = $(this);
+                                var $parent = $($this.parents()[1]);
+                                $this.prop("checked", false);
+                                $parent.removeClass(selectedClass);
+                            });
+                        }
+                    }
+
+                    /**
+                     * 在统计结果展示页面中的详情展示页面
+                     * 删除按钮事件
+                     */
+                    function onClickShowDetailDeleteAll() {
+                        var $selectedItems = $(".topic-census-detail__table__item-selected");
+                        $.each($selectedItems, function(){
+                            var $this = $(this);
+                            var fileId = $this.data("fileId");
+                            var fileName = $this.data("topicName");
+                            $this.remove();
+                            alert("删除文件   " + fileId + "::" + fileName);
+                        });
+                    }
+
+                    /**
                      * 点击事件内的 查看结果统计按钮 响应事件
                      */
                     function onClickShowTopicCensus() {
                         var $waitingMask = $(".waiting-mask");
-                        $censusChangableArea.show();
-                        $changeableArea.hide();
-                        $paginaionWrapper.hide();
+                        utilDisplayCorrectArea($censusChangableArea)
+                        // $paginaionWrapper.hide();
                         $waitingMask.show();
                         $.ajax({
                             type : 'post',
@@ -500,9 +599,6 @@ $(document)
                         var domTemp = $("#" + title);
                         var link = $this.attr('href');
                         var mockData = mockTopicCensusData();
-                        $censusChangableArea.show();
-                        $changeableArea.hide();
-                        $paginaionWrapper.hide();
                         $waitingMask.show();
                         $ul.find(".active").removeClass("active");
                         $(this.parentNode).addClass("active");
@@ -515,12 +611,54 @@ $(document)
                      */
                     function showCreateTopicPage() {
                         $waitingMask.show();
-                        var tempDom = $("#createTopic");
-                        handleBarTemplate(tempDom, $changeableArea, {});
-                        $changeableArea.show();
-                        $paginaionWrapper.hide();
-                        $censusChangableArea.hide();
+                        var $createTopicArea = $(".content-wrapper__content__create-files");
+                        var $fileListWrapper = $(".content-wrapper__content__create-files__wrapper");
+                        var $div = $("<div></div>");
+                        $div.addClass("content-wrapper__content__create-files__wrapper__message");
+                        $div.text("请点击上方区域,添加文件");
+                        $fileListWrapper.empty();
+                        $fileListWrapper.append($div);
+                        utilDisplayCorrectArea($createTopicArea);
+                        $(".content-wrapper__content__create-files__name-wrapper__file").hide();
                         $waitingMask.hide();
+                    }
+
+                    function onClickCreateTopic() {
+                        // TODO: 增加创建话题的后台交互
+                        var topicName = $.trim($("#createTopicNameInput").val());
+                        if( topicName ){
+                            alert("创建话题:" + topicName);
+                        } else {
+                            alert("请输入话题名称");
+                            return;
+                        }
+
+                        $(".content-wrapper__content__create-files__name-wrapper__file").show();
+                    }
+
+                    /**
+                     * 创建topic, 点击添加文件
+                     */
+                    function onClickToAddFile() {
+                        // TODO:解析文件在这里进行
+                        $waitingMask.show();
+                        var $tempDom = $("#createTopic");
+                        var $targetDom = $(".content-wrapper__content__create-files__wrapper");
+                        var mockData = mockFileResolveData();
+                        appendHandleBarTemplate($tempDom, $targetDom, mockData);
+                        $(".content-wrapper__content__create-files__wrapper__message").hide();
+                        $waitingMask.hide();
+                    }
+
+                    function onClickUploadFile() {
+                        var $this = $(this);
+                        var $parent = $($this.parents()[1]);
+                        var fileId = $parent.data("fileId");
+                        var fileName = $.trim($parent.find(".create-topic__file-list-wrapper__span__file-name").val());
+                        var url = $parent.find(".create-topic__file-list-wrapper__span__url").val();
+                        var title = $parent.find(".create-topic__file-list-wrapper__span__title").val();
+                        var time = $parent.find(".create-topic__file-list-wrapper__span__time").val();
+                        alert("上传文件:" + fileName + " id=" + fileId + " url=" + url + " title=" + title + " time=" + time );
                     }
 
                     // =================util functions=========================
@@ -632,5 +770,13 @@ $(document)
 
                         $target.empty();
                         $target.append($messageSpan).append($firstSpan).append($iconSpan).append($secondSpan);
+                    }
+
+                    function utilDisplayCorrectArea($areaShouldShow){
+                        $(".content-wrapper__content__create-files").hide();
+                        $(".content-wrapper__content__result-census").hide();
+                        $(".content-wrapper__changeable").hide();
+                        $(".content-wrapper__content__developing").hide();
+                        $areaShouldShow.show();
                     }
                 });
