@@ -2,9 +2,7 @@ package com.hust.mining.model;
 
 import java.util.Date;
 
-public class IssueFile {
-    private String fileId;
-
+public class IssueFile extends IssueFileKey {
     private String fileName;
 
     private String sourceType;
@@ -18,16 +16,6 @@ public class IssueFile {
     private Date uploadTime;
 
     private String creator;
-
-    private byte[] content;
-
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId == null ? null : fileId.trim();
-    }
 
     public String getFileName() {
         return fileName;
@@ -83,13 +71,5 @@ public class IssueFile {
 
     public void setCreator(String creator) {
         this.creator = creator == null ? null : creator.trim();
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
     }
 }

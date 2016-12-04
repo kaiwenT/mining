@@ -11,9 +11,9 @@ public class IssueFileExample {
 
     protected List<Criteria> oredCriteria;
 
-    protected int start;
-
-    protected int limit;
+    protected long start;
+    
+    protected long limit;
 
     public IssueFileExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -664,10 +664,6 @@ public class IssueFileExample {
 
         private String typeHandler;
 
-        public Criterion() {
-            super();
-        }
-
         public String getCondition() {
             return condition;
         }
@@ -698,6 +694,11 @@ public class IssueFileExample {
 
         public String getTypeHandler() {
             return typeHandler;
+        }
+        
+
+        public Criterion() {
+            super();
         }
 
         protected Criterion(String condition) {
@@ -735,22 +736,21 @@ public class IssueFileExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-
     }
 
-    public int getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(int start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public int getLimit() {
+    public long getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(long limit) {
         this.limit = limit;
     }
 }

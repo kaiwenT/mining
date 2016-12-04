@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant;
-import com.hust.mining.model.Condition;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.IssueWithBLOBs;
+import com.hust.mining.model.params.Condition;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
