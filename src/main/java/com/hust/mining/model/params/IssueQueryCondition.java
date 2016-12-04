@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class IssueQueryCondition {
 
+    private String issueId;
     private String issueName;
     private Date createStartTime;
     private Date createEndTime;
@@ -75,6 +76,14 @@ public class IssueQueryCondition {
 
     public void setLastUpdateEndTime(Date lastUpdateEndTime) {
         this.lastUpdateEndTime = lastUpdateEndTime;
+    }
+
+    public String getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(String issueId) {
+        this.issueId = issueId;
     }
 
 }

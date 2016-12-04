@@ -42,7 +42,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 			// 先判断
 			if ("/".equals(url) || "/index.html".equals(url)) {
 				if (null != request.getSession().getAttribute("username")) {
-					response.sendRedirect("/page/main.html");
+					response.sendRedirect("/page/infoManager.html");
 				} else {
 					return true;
 				}

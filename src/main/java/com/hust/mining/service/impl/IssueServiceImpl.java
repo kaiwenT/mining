@@ -141,7 +141,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueWithBLOBs queryIssueById(String uuid) {
+    public IssueWithBLOBs queryIssueWithBLOBsById(String uuid) {
         // TODO Auto-generated method stub
         return issueDao.selectByUUID(uuid);
     }
@@ -154,10 +154,10 @@ public class IssueServiceImpl implements IssueService {
             List<List<String[]>> origlist = null;
             if (Constant.TYPE_ORIG.equals(params.getType())) {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueById(issueId).getClusterResult());
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getClusterResult());
             } else {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueById(issueId).getModifiedClusterResult());
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
             }
 
             List<String[]> setList = origlist.get(params.getCurrentSet());
@@ -235,10 +235,10 @@ public class IssueServiceImpl implements IssueService {
             List<List<String[]>> origlist = null;
             if (Constant.TYPE_ORIG.equals(type)) {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueById(issueId).getClusterResult());
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getClusterResult());
             } else {
                 origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueById(issueId).getModifiedClusterResult());
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
             }
             Arrays.sort(set);
             for (int i = set.length - 1; i >= 0; i--) {

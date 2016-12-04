@@ -21,13 +21,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant;
 import com.hust.mining.model.Condition;
+import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.IssueWithBLOBs;
+import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
+
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/file")
@@ -79,7 +83,7 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            IssueWithBLOBs issue = issueService.queryIssueById(uuid);
+            IssueWithBLOBs issue = issueService.queryIssueWithBLOBsById(uuid);
             List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
             List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
             outputStream = response.getOutputStream();
@@ -103,6 +107,15 @@ public class FileController {
     @RequestMapping(value = "/queryIssueFiles")
     public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId) {
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
-        return ResultUtil.success(list);
+        IssueQueryCondition con = new IssueQueryCondition();
+        con.setIssueId(issueId);
+        List<Issue> issues = issueService.queryIssue(con);
+        if(issues.isEmpty()){
+            return ResultUtil.errorWithMsg("query issue info failed");
+        }
+        JSONObject json = new JSONObject();
+        json.put("issue", issues.get(0));
+        json.put("list", list);
+        return ResultUtil.success(json);
     }
 }
