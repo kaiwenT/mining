@@ -1,25 +1,16 @@
 $(document)
         .ready(
                 function() {
-                    this.totalPages = 10;
-                    var paginationDomTemp = "#paginationTemplate";
-                    var paginationTarget = "#contentSearchResultList";
+                    var isEventBinded = false;
+                    var changableArea = ".content-wrapper__changeable";
+                    var $changeableArea = $(changableArea);
 
-                    var topicIntroDomTemp = "#topicIntroduction";
-                    var topicIntorTarget = ".content-wrapper__changeable";
-
-                    var $originLink = $("a[title='privateTopic']");
-                    var originPage = 1;
+                    var $originLink = $("#topicManagePrivateTopic");
                     $originLink.addClass('active');
 
                     var showCensus = {
                         domTemp : "#showTopicCensusDetail",
                         target : ".content-wrapper__content__result-census__result-wrapper"
-                    };
-
-                    var showResult = {
-                        domTemp : "#topicDetailResult",
-                        target : ".content-wrapper__changeable"
                     };
 
                     var infoMessageClass = {
@@ -29,57 +20,15 @@ $(document)
                         icon : 'content-wrapper__content__info__icon'
                     };
 
-                    var $originLink = $("a[title='privateTopic']");
+                    var $originLink = $("#originalLink");
                     var $paginaionWrapper = $(".content-wrapper__pagination");
-                    var $listChangableArea = $(".content-wrapper__changeable");
                     var $censusChangableArea = $(".content-wrapper__content__result-census");
-                    $originLink.addClass('active');
 
-                    getPageContent(originPage).always(function() {
-                        var totalPages = window.totalPages;
-                        var visiblePages = utilGetVisiblePages(totalPages);
-                        $('#pagination').twbsPagination({
-                            totalPages : totalPages, // need backend data
-                                                        // totalPage
-                            visiblePages : visiblePages, // set it.
-                            onPageClick : function(event, page) {
-                                // send page info here, something as ajax call
-                                if(page === 1) return;
-                                getPageContent(page);
-                            },
-                            first : '首页',
-                            prev : '上一页',
-                            next : '下一页',
-                            last : '尾页'
-                        });
-                        eventBind();
-                        $(".form_datetime").datepicker();
-                    });
+                    mainInit();
 
-                    function getDataOfPagination(data, page) {
-                        var page = page;
-                        var json = {};
-
-                        // data of pagination
-                        var resultList = []
-                        for ( var index in data) {
-                            var obj = data[index];
-                            var createTimeString = utilConvertTimeObject2String(obj.createTime);
-                            var modifyTimeString = utilConvertTimeObject2String(obj.lastUpdateTime);
-                            var resultElement = {
-                                NO : (page - 1) * 10 + index,
-                                issueId : obj.issueId,
-                                topicName : obj.issueName,
-                                author : obj.creator,
-                                createTime : createTimeString,
-                                modifier : obj.lastOperator,
-                                modifyTime : modifyTimeString
-                            }
-                            resultList.push(resultElement);
-                        }
-                        json.resultList = resultList;
-
-                        return json;
+                    function mainInit(){
+                        getPageContent(1);
+                        $originLink.addClass('active');
                     }
 
                     // ==================main template========================
@@ -94,8 +43,7 @@ $(document)
                         $(targetDom).html(template(context));
                     }
 
-                    // ===================get data from mock or
-                    // ajax===============
+                    // ===================get data from mock or ajax===============
 
                     function getPageContent(page) {
                         var that = this;
@@ -111,28 +59,28 @@ $(document)
                             pageSize : 10,
                             issueName : $.trim($('#searchTopicName').val()),
                             user : $.trim($('#searchCreator').val()),
-                            createStartTime : $.trim($('#searchStartTime')
-                                    .val()),
+                            createStartTime : $.trim($('#searchStartTime').val()),
                             createEndTime : $.trim($('#searchEndTime').val()),
-                            lastUpdateStartTime : $.trim($(
-                                    '#searchModifyStartTime').val()),
-                            lastUpdateEndTime : $
-                                    .trim($('#searchModifyEndTime').val()),
+                            lastUpdateStartTime : $.trim($('#searchModifyStartTime').val()),
+                            lastUpdateEndTime : $.trim($('#searchModifyEndTime').val())
                         };
                         return $.ajax({
                             type : that.type,
                             url : that.url,
                             dateType : that.dateType,
                             contentType : that.contentType,
-                            data : JSON.stringify(that.json),
+                            // data : JSON.stringify(that.json),
+                            data: that.json,
                             beforeSend : function() {
                                 that.$waitingMask.show();
                             },
                             success : function(data) {
+                                var paginationDomTemp = "#paginationTemplate";
+                                var paginationTarget = changableArea;
                                 that.totalPages = data.result.pageTotal;
                                 if (data !== undefined && data !== '') {
                                     if (data.status === 'OK') {
-                                        var resultList = getDataOfPagination(
+                                        var resultList = dataFormatTransfor(
                                                 data.result.list, that.page);
                                         handleBarTemplate(paginationDomTemp,
                                                 paginationTarget, resultList);
@@ -143,13 +91,28 @@ $(document)
                                 }
                             },
                             error : function() {
+                                var paginationDomTemp = "#paginationTemplate";
+                                var paginationTarget = changableArea;
                                 // 测试用,本地测试,真实数据无法请求到时,调用mock数据,不要删除!
+                                that.totalPages = 10;
                                 var resultList = mockDataOfPagination(1);
                                 handleBarTemplate(paginationDomTemp,
                                         paginationTarget, resultList);
                                 that.$waitingMask.hide();
+                            },
+                            complete: function() {
+                                if( !isEventBinded ){
+                                    eventBind();
+                                }
+
+                                $(".form_datetime").datepicker();
+
+                                if( that.page == 1 ){
+                                    paginationFunc(that.totalPages);
+                                }
+
                             }
-                        })
+                        });
                     }
 
                     // !!!!暂时不要删除,只有在ajax请求真实数据有错时才会调用mock
@@ -224,7 +187,6 @@ $(document)
 
                     function mockResultIntroData() {
                         var json = {};
-                        var fileList = [];
                         var file = {
                             fileNO : 1,
                             fileName : "文件名",
@@ -243,23 +205,23 @@ $(document)
                         return json;
                     }
 
-                    // ===========================events
-                    // function=============================
+                    // ===========================events functions=============================
 
                     function eventBind() {
-                        var $wrapper = $(".content-wrapper__content");
                         var $navigationUl = $(".content-wrapper__nav__ul");
-                        var $resultListArea = $("#contentSearchResultList");
-                        var $changeableArea = $(".content-wrapper__changeable");
+                        var $changeableArea = $(changableArea);
                         var $censusAreaNavigation = $(".content-wrapper__content__result-census__unit-list-wrapper__ul");
-                        $('#searchSubmit').on("click", getPageContent);
-                        $navigationUl.on("click", "a",
+
+                        $navigationUl.on("click", ".content-wrapper__nav__ul__element-child__el__link",
                                 onClickLeftSideBarNavLink);
-                        $resultListArea.on("click", ".result-list",
+                        $changeableArea.on("click", "#searchSubmit",function(){
+                            getPageContent(1);
+                        });
+                        $changeableArea.on("click", ".result-list",
                                 onClickResultListItem);
                         $changeableArea.on("click", "#checkTopicDetail",
                                 onClickCheckTopicDetail);
-                        $changeableArea.on("click", "#checkTopicCensus",
+                        $changeableArea.on("click", ".topic-detail-result__result-list__item__message-wrapper",
                                 onClickShowTopicCensus);
                         $changeableArea
                                 .on(
@@ -278,6 +240,7 @@ $(document)
                                         onClickCombineButton);
                         $censusAreaNavigation.on("click", "a",
                                 onClickCensusNavigationBar);
+                        isEventBinded = true;
                     }
 
                     /**
@@ -285,25 +248,42 @@ $(document)
                      */
                     function onClickLeftSideBarNavLink(event) {
                         var $waitingMask = $(".waiting-mask");
-                        var $oldActiveElement = $(".active");
+                        var $oldActiveElement = $(".content-wrapper__nav .active");
                         $waitingMask.show();
                         var $this = $(event.currentTarget);
-                        var title = $this.text();
-                        var $target = $('.content-wrapper__content__info');
-                        var $infoSpan = $('<span></span>');
-                        var $childSpan = $('<span></span>');
-                        var $iconSpan = $('<span></span>');
-                        var infoClasses = {
-                            message : 'content-wrapper__content__info__message',
-                            child : 'content-wrapper__content__info__child',
-                            icon : 'content-wrapper__content__info__icon'
+                        var tempDom = $this.data("handleBarTemplate");
+                        var theTargetDom = $this.data("targetDom");
+                        var $parent = $($($this.parents()[2]).children()[0])
+
+                        var text = $.trim($this.text());
+                        var parentText = $.trim($parent.text());
+                        var params = {
+                            firstText: parentText,
+                            secondText: text
                         }
+                        cleanContentInfoMessage(params);
 
-                        var link = "url" + title;
-
-                        $target.text(title);
                         $oldActiveElement.removeClass("active");
                         $this.addClass("active");
+
+                        if( !tempDom ){
+                            $(".content-wrapper__content__developing").show();
+                            $changeableArea.hide();
+                            $(".content-wrapper__content__result-census").hide();
+                        } else {
+                            if( tempDom === "#paginationTemplate" ){
+                                $(".content-wrapper__content__result-census").hide();
+                                getPageContent(1);
+                            }
+
+                            if( tempDom === "#createTopic" ){
+                                $(".content-wrapper__content__result-census").hide();
+                                showCreateTopicPage();
+                            }
+                            $(".content-wrapper__content__developing").hide();
+                            $changeableArea.show();
+                        }
+
                         $waitingMask.hide();
                     }
 
@@ -322,10 +302,12 @@ $(document)
                             data : {
                                 issueId : issueId,
                             },
-                            beforSend : function(){
+                            beforeSend : function(){
                                 $waitingMask.show();
                             },
                             success : function(data){
+                                var topicIntroDomTemp = "#topicIntroduction";
+                                var topicIntorTarget = changableArea;
                                 if(data !== undefined && data !== ''){
                                     if(data.status === 'OK'){
                                         var json ={};
@@ -359,6 +341,8 @@ $(document)
                                 }
                             },
                             error : function(){
+                                var topicIntroDomTemp = "#topicIntroduction";
+                                var topicIntorTarget = changableArea;
                                 var mockData = mockResultIntroData();
                                 handleBarTemplate(topicIntroDomTemp, topicIntorTarget,
                                         mockData);
@@ -395,14 +379,18 @@ $(document)
                      * 点击事件内 查看结果详情按钮 响应事件
                      */
                     function onClickCheckTopicDetail() {
+                        var showResult = {
+                            domTemp : "#topicDetailResult",
+                            target : changableArea
+                        };
                         var $waitingMask = $(".waiting-mask");
                         $censusChangableArea.hide();
                         $paginaionWrapper.hide();
-                        $listChangableArea.show();
+                        $changeableArea.show();
                         $waitingMask.show();
                         var mockData = mockTopicDetailData();
                         handleBarTemplate(showResult.domTemp,
-                                showResult.target, mockData);
+                            showResult.target, mockData);
                         appendContentInfoMessage("查看话题详情");
                         $waitingMask.hide();
                     }
@@ -413,7 +401,7 @@ $(document)
                     function onClickShowTopicCensus() {
                         var $waitingMask = $(".waiting-mask");
                         $censusChangableArea.show();
-                        $listChangableArea.hide();
+                        $changeableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
                         $.ajax({
@@ -510,7 +498,7 @@ $(document)
                         var link = $this.attr('href');
                         var mockData = mockTopicCensusData();
                         $censusChangableArea.show();
-                        $listChangableArea.hide();
+                        $changeableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
                         $ul.find(".active").removeClass("active");
@@ -519,7 +507,67 @@ $(document)
                         $waitingMask.hide();
                     }
 
+                    /**
+                     * 创建topic页面
+                     */
+                    function showCreateTopicPage() {
+                        $waitingMask.show();
+                        var tempDom = $("#createTopic");
+                        handleBarTemplate(tempDom, $changeableArea, {});
+                        $changeableArea.show();
+                        $paginaionWrapper.hide();
+                        $censusChangableArea.hide();
+                        $waitingMask.hide();
+                    }
+
                     // =================util functions=========================
+                    function paginationFunc( tp ) {
+                        var totalPages = tp;
+                        var visiblePages = utilGetVisiblePages(totalPages);
+                        $('#pagination').twbsPagination({
+                            totalPages : totalPages, // need backend data
+                            // totalPage
+                            visiblePages : visiblePages, // set it.
+                            onPageClick : function(event, page) {
+                                // send page info here, something as ajax call
+                                if(page === 1) return;
+                                getPageContent(page);
+                            },
+                            first : '首页',
+                            prev : '上一页',
+                            next : '下一页',
+                            last : '尾页'
+                        });
+                        $(".content-wrapper__pagination").show();
+                        $($(".pagination").children()[2]).addClass("active");
+                    }
+
+                    function dataFormatTransfor(data, page) {
+                        var page = page;
+                        var json = {};
+
+                        // data of pagination
+                        var resultList = []
+                        for ( var index in data) {
+                            var obj = data[index];
+                            var createTimeString = utilConvertTimeObject2String(obj.createTime);
+                            var modifyTimeString = utilConvertTimeObject2String(obj.lastUpdateTime);
+                            var resultElement = {
+                                NO : (page - 1) * 10 + index,
+                                issueId : obj.issueId,
+                                topicName : obj.issueName,
+                                author : obj.creator,
+                                createTime : createTimeString,
+                                modifier : obj.lastOperator,
+                                modifyTime : modifyTimeString
+                            }
+                            resultList.push(resultElement);
+                        }
+                        json.resultList = resultList;
+
+                        return json;
+                    }
+
                     function utilGetVisiblePages(totalPages) {
                         if (totalPages < 7) {
                             return totalPages;
@@ -541,20 +589,12 @@ $(document)
                     }
 
                     // 创建info-message中的span
-                    function utilCreateInfoSpan(text, className, isATagNeeded,
-                            extraParam) {
+                    function utilCreateInfoSpan(text, className, isATagNeeded) {
                         var $span = $('<span></span>');
                         var $a = $('<a></a>');
                         $span.addClass(className);
                         if (isATagNeeded) {
                             $a.text(text);
-                            // if( extraParam.url ){
-                            // $a.attr('href', extraParam.url);
-                            // }
-
-                            // if( extraParam.id ){
-                            // $a.attr('data-item-id', extraParam.id);
-                            // }
                             $span.append($a);
                         } else {
                             $span.text(text);
@@ -570,12 +610,23 @@ $(document)
                         var $iconSpan = utilCreateInfoSpan('>>',
                                 infoMessageClass.icon, false);
                         var $childSpan = utilCreateInfoSpan(str,
-                                infoMessageClass.child, true);
+                                infoMessageClass.child, false);
                         infoMessageClass.target.append($iconSpan).append(
                                 $childSpan);
                     }
 
-                    function cleanContentInfoMessage(target) {
+                    function cleanContentInfoMessage(params) {
+                        var $target = $(".content-wrapper__content__info");
+                        var firstText = params.firstText || "";
+                        var secondText = params.secondText || "";
+                        var className = "content-wrapper__content__info__child";
+                        var iconClassName = "content-wrapper__content__info__icon";
+                        var $messageSpan = utilCreateInfoSpan("当前位置:","content-wrapper__content__info__message", false);
+                        var $firstSpan = utilCreateInfoSpan(firstText, className, false);
+                        var $iconSpan = utilCreateInfoSpan(">>", iconClassName, false);
+                        var $secondSpan = utilCreateInfoSpan(secondText, className, false);
 
+                        $target.empty();
+                        $target.append($messageSpan).append($firstSpan).append($iconSpan).append($secondSpan);
                     }
                 });

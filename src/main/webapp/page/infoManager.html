@@ -41,20 +41,27 @@
 		<div class="col-md-2 content-wrapper__nav">
 			<ul class="content-wrapper__nav__ul">
 				<li class="content-wrapper__nav__ul__element">
-					<a href="#" class="content-wrapper__nav__ul__element__link" title="topicManage">话题管理</a>
+					<a href="#" class="content-wrapper__nav__ul__element__link" id="topicManage">话题管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="privateTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   id="originalLink"
+							   data-handle-bar-template="#paginationTemplate"
+							   data-target-dom=".content-wrapper__changeable">
 								自有话题
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="allTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template=".content-wrapper__changeable">
 								所有话题
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="allTopic">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template="#createTopic"
+							   data-target-template=".content-wrapper__changeable">
 								创建话题
 							</a>
 						</li>
@@ -65,27 +72,37 @@
 					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">权限管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="user">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="user">
 								用户管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								角色管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="resource">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="resource">
 								资源管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="parentManage">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="parentManage">
 								父目录管理
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="childManage">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="childManage">
 								父目录管理
 							</a>
 						</li>
@@ -93,15 +110,19 @@
 				</li>
 
 				<li class="content-wrapper__nav__ul__element">
-					<a href="#" class="content-wrapper__nav__ul__element__link" title="power">账号管理</a>
+					<a href="#" class="content-wrapper__nav__ul__element__link" data-target-template="power">账号管理</a>
 					<ul class="content-wrapper__nav__ul__element-child">
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								个人信息
 							</a>
 						</li>
 						<li class="content-wrapper__nav__ul__element-child__el">
-							<a href="#" class="content-wrapper__nav__ul__element-child__el__link" title="role">
+							<a href="#" class="content-wrapper__nav__ul__element-child__el__link"
+							   data-handle-bar-template=""
+							   data-target-template="role">
 								xx管理
 							</a>
 						</li>
@@ -117,66 +138,20 @@
 			<!-- 当前位置 -->
 			<div class="col-md-12 content-wrapper__content__info">
 				<span class="content-wrapper__content__info__message">当前位置:</span>
-				<span class="content-wrapper__content__info__child"><a href="">话题管理</a></span>
+				<span class="content-wrapper__content__info__child">话题管理</span>
 				<span class="content-wrapper__content__info__icon">>></span>
-				<span class="content-wrapper__content__info__child"><a href="">自有话题</a></span>
+				<span class="content-wrapper__content__info__child">自有话题</span>
 			</div>
-			<!-- 搜索栏 -->
+
+			<div class="col-md-12 content-wrapper__content__developing" style="display: none">
+				系统开发中……
+			</div>
+
+			<!-- 页面显示区域 -->
 			<div class="col-md-12 content-wrapper__changeable">
-				<div class="col-md-12 content-wrapper__content__search">
-					<form id="contentSearchForm" action="#" method="get" role="form" class="form-inline" accept-charset="utf-8">
-						<label class="content-wrapper__content__search__label">
-							话题名称：
-						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" name="searchTopicName" value="">
-						<label class="content-wrapper__content__search__label">
-							创建起始时间：
-						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchStartTime" value="">
-						<label class="content-wrapper__content__search__label">
-							创建终止时间：
-						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime" type="text" name="searchEndTime" value="">
-						<label class="content-wrapper__content__search__label">
-							创建人：
-						</label>
-						<input class="content-wrapper__content__search__label__input" type="text" name="searchCreatePersonName" value="">
-						<label class="content-wrapper__content__search__label">
-							修改起始时间：
-						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime"
-							   type="text" name="searchModifyStartTime" value="">
-						<label class="content-wrapper__content__search__label">
-							修改终止时间：
-						</label>
-						<input class="content-wrapper__content__search__label__input form_datetime"
-							   type="text" name="searchModifyEndTime" value="">
-					</form>
-					<button type="button" class="btn btn-primary" id="searchSubmit">搜索</button>
-				</div>
-
-
-				<!-- 搜索结果 -->
-				<div class="content-wrapper__content__result">
-					<table id="contentSearchResult" class="table table-hover">
-						<thead>
-						<tr>
-							<th>序号</th>
-							<th>话题名称</th>
-							<th>创建人</th>
-							<th>创建时间</th>
-							<th>最后修改人</th>
-							<th>最后修改时间</th>
-						</tr>
-						</thead>
-						<tbody id="contentSearchResultList">
-						</tbody>
-					</table>
-				</div>
-				<!-- 搜索结果end -->
 			</div>
 
-			<!-- another area -->
+			<!-- 聚类统计结果区域 -->
 			<div class="col-md-12 content-wrapper__content__result-census" style="display: none">
 				<div class="content-wrapper__content__result-census__unit-list-wrapper">
 					<ul class="content-wrapper__content__result-census__unit-list-wrapper__ul nav nav-tabs" role="tablist">
@@ -226,17 +201,70 @@
 </div>
 <!-- class wrapper end -->
 
+<!-- handlebar templates -->
+
 <script id="paginationTemplate" type="text/x-handlebars-template">
-	{{#each resultList}}
-	<tr class="result-list" data-issue-id="{{this.issueId}}">
-		<td>{{this.NO}}</td>
-		<td>{{this.topicName}}</td>
-		<td>{{this.author}}</td>
-		<td>{{this.createTime}}</td>
-		<td>{{this.modifier}}</td>
-		<td>{{this.modifyTime}}</td>
-	</tr>
-	{{/each}}
+	<div class="col-md-12 content-wrapper__content__search">
+		<form id="contentSearchForm" action="#" method="get" role="form" class="form-inline" accept-charset="utf-8">
+			<label class="content-wrapper__content__search__label">
+				话题名称：
+			</label>
+			<input class="content-wrapper__content__search__label__input" type="text" id="searchTopicName" value="">
+			<label class="content-wrapper__content__search__label">
+				创建起始时间：
+			</label>
+			<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchStartTime" value="">
+			<label class="content-wrapper__content__search__label">
+				创建终止时间：
+			</label>
+			<input class="content-wrapper__content__search__label__input form_datetime" type="text" id="searchEndTime" value="">
+			<label class="content-wrapper__content__search__label">
+				创建人：
+			</label>
+			<input class="content-wrapper__content__search__label__input" type="text" id="searchCreatePersonName" value="">
+			<label class="content-wrapper__content__search__label">
+				修改起始时间：
+			</label>
+			<input class="content-wrapper__content__search__label__input form_datetime"
+				   type="text" id="searchModifyStartTime" value="">
+			<label class="content-wrapper__content__search__label">
+				修改终止时间：
+			</label>
+			<input class="content-wrapper__content__search__label__input form_datetime"
+				   type="text" id="searchModifyEndTime" value="">
+		</form>
+		<button type="button" class="btn btn-primary" id="searchSubmit">搜索</button>
+	</div>
+
+
+	<!-- 搜索结果 -->
+	<div class="content-wrapper__content__result">
+		<table id="contentSearchResult" class="table table-hover">
+			<thead>
+			<tr>
+				<th>序号</th>
+				<th>话题名称</th>
+				<th>创建人</th>
+				<th>创建时间</th>
+				<th>最后修改人</th>
+				<th>最后修改时间</th>
+			</tr>
+			</thead>
+			<tbody id="contentSearchResultList">
+				<!-- 搜索结果end -->
+				{{#each resultList}}
+				<tr class="result-list" data-issue-id="{{this.issueId}}">
+					<td>{{this.NO}}</td>
+					<td>{{this.topicName}}</td>
+					<td>{{this.author}}</td>
+					<td>{{this.createTime}}</td>
+					<td>{{this.modifier}}</td>
+					<td>{{this.modifyTime}}</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
 </script>
 
 <script id="topicIntroduction" type="text/x-handlebars-template">
@@ -254,10 +282,7 @@
 		</div>
 		<div class="content-wrapper__topic-intor__buttons">
 			<div id="checkTopicDetail" class="btn btn-primary">
-				查看话题详情
-			</div>
-			<div id="checkTopicCensus" class="btn btn-primary">
-				查看话题统计结果
+				查看话题聚类结果
 			</div>
 		</div>
 		<div  class="content-wrapper__topic-intor__files">
@@ -306,7 +331,66 @@
 		</div>
 	</div>
 </script>
-
+<!-- template for show topic detail result -->
+<script id="topicDetailResult" type="text/x-handlebars-template">
+	<div class="topic-detail-result__top-message">
+		<span class="topic-detail-result__top-message__item">话题名称:{{topicName}}</span>
+		<span class="topic-detail-result__top-message__item">创建人:{{author}}</span>
+		<span class="topic-detail-result__top-message__item">创建时间:{{createTime}}</span>
+		<span class="topic-detail-result__top-message__item">最后修改人:{{modifier}}</span>
+		<span class="topic-detail-result__top-message__item">最后修改时间:{{modifyTime}}</span>
+	</div>
+	<div class="topic-detail-result__result-list">
+		<div class="topic-detail-result__result-list__no-file-message" style="display: none">
+			没有文件
+		</div>
+		{{#each topicDetialList}}
+		<div class="topic-detail-result__result-list__item">
+			<div class="topic-detail-result__result-list__item__checkbox">
+				<input data-file-id="{{this.fileId}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
+			</div>
+			<div class="topic-detail-result__result-list__item__message-wrapper">
+				<div class="topic-detail-result__result-list__item__message-wrapper__title">
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						标题:{{this.title}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						网站:{{this.sourceSite}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						发布时间:{{this.pubTime}}
+					</span>
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						数量:{{this.numbers}}
+					</span>
+				</div>
+				<div class="topic-detail-result__result-list__item__message-wrapper__numbers">
+					<!--TODO: don't know the data structure yet-->
+					{{#each this.sourceMedia}}
+					<span class="topic-detail-result__result-list__item__message-wrapper__numbers__item">
+						{{this.title}}:{{this.number}}
+					</span>
+					{{/each}}
+				</div>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+	<div class="topic-detail-result__operations">
+		<div class="topic-detail-result__operations__checkbox">
+			<input class="topic-detail-result__operations__checkbox__delete" type="checkbox">全选
+		</div>
+		<div class="topic-detail-result__operations__checkbox__btns">
+			<div class="topic-detail-result__operations__checkbox__btns__delete btn btn-danger">
+				删除
+			</div>
+			<div class="topic-detail-result__operations__checkbox__btns__combine btn btn-success">
+				合并
+			</div>
+		</div>
+	</div>
+</script>
+<!-- template for topic cesus details -->
 <script id="showTopicCensusDetail" type="text/x-handlebars-template">
 	<div class="topic-census-detial">
 		<table class="topic-census-detial__table table table-hover">
@@ -335,7 +419,7 @@
 		</table>
 	</div>
 </script>
-
+<!-- templates for census result, the way of display aren't same -->
 <script id="showTopicCensusResult" type="text/x-handlebars-template">
 	<div>
 		统计结果
@@ -358,6 +442,11 @@
 	<div>
 		柱状图
 	</div>
+</script>
+<!-- 自有话题template结束 -->
+<!-- 创建话题 -->
+<script id="createTopic" type="text/x-handlebars-template">
+	创建话题
 </script>
 </body>
 </html>

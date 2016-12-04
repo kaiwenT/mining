@@ -36,5 +36,5 @@
 }
 
 .content-wrapper__topic-intro__file-list__table__tr:hover {
-	cursor: auto;
+	cursor: pointer;
 }
