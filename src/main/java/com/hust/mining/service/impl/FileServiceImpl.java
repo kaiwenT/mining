@@ -15,8 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant;
 import com.hust.mining.dao.FileDao;
-import com.hust.mining.model.Condition;
 import com.hust.mining.model.IssueFile;
+import com.hust.mining.model.IssueFileWithBLOBs;
+import com.hust.mining.model.params.Condition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
@@ -52,7 +53,7 @@ public class FileServiceImpl implements FileService {
 
         String user = userService.getCurrentUser(request);
         String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
-        IssueFile issueFile = new IssueFile();
+        IssueFileWithBLOBs issueFile = new IssueFileWithBLOBs();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());
         issueFile.setCreator(user);
@@ -86,10 +87,10 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<String[]> combineFilesContentOnSameIssueId(String issueId) {
         // TODO Auto-generated method stub
-        List<IssueFile> files = fileDao.queryFilesByIssueId(issueId);
+        List<IssueFileWithBLOBs> files = fileDao.queryFilesWithBOLOBsByIssueId(issueId);
         List<String[]> list = new ArrayList<String[]>();
         try {
-            for (IssueFile file : files) {
+            for (IssueFileWithBLOBs file : files) {
                 List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(file.getContent());
                 list.addAll(content);
             }

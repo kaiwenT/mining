@@ -69,8 +69,7 @@ $(document)
                             url : that.url,
                             dateType : that.dateType,
                             contentType : that.contentType,
-                            // data : JSON.stringify(that.json),
-                            data: that.json,
+                            data : JSON.stringify(that.json),
                             beforeSend : function() {
                                 that.$waitingMask.show();
                             },
@@ -300,7 +299,6 @@ $(document)
                             url : 'http://localhost:8080/file/queryIssueFiles',
                             dataType : 'json',
                             data : {
-//                                issueId : '7276f3f6-f8ab-4672-9cba-becd8d15cfe1',
                                 issueId : issueId,
                             },
                             beforeSend : function(){
@@ -319,7 +317,7 @@ $(document)
                                             var time = utilConvertTimeObject2String(obj.uploadTime);
                                             var author = obj.creator;
                                             var fileName = obj.fileName;
-                                            var fileNO = index;
+                                            var fileNO = Number(index) + 1;
                                             var element = {
                                                     fileNO : fileNO,
                                                     fileName : fileName,
@@ -338,6 +336,8 @@ $(document)
                                                 json);
                                         appendContentInfoMessage(json.topicName);
                                         $waitingMask.hide();
+                                    }else{
+                                        alert(data.result);
                                     }
                                 }
                             },
@@ -405,6 +405,22 @@ $(document)
                         $changeableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
+                        $.ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/issue/queryModifiedOrigAndCountResult',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data){
+                                if(data !== undefined && data !== ''){
+                                    if(data.status === 'OK'){
+                                        
+                                    }else{
+                                        alert(data.result);
+                                    }
+                                }
+                            }
+                        });
                         var mockData = mockTopicCensusData();
                         handleBarTemplate(showCensus.domTemp,
                                 showCensus.target, mockData);
@@ -539,8 +555,9 @@ $(document)
                             var obj = data[index];
                             var createTimeString = utilConvertTimeObject2String(obj.createTime);
                             var modifyTimeString = utilConvertTimeObject2String(obj.lastUpdateTime);
+                            var NO = (Number(page) - 1) * 10 + Number(index) + 1;
                             var resultElement = {
-                                NO : (page - 1) * 10 + index,
+                                NO : NO,
                                 issueId : obj.issueId,
                                 topicName : obj.issueName,
                                 author : obj.creator,

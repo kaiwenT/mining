@@ -12,7 +12,7 @@
 		<result column="creator" jdbcType="VARCHAR" property="creator" />
 	</resultMap>
 	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-		type="com.hust.mining.model.IssueFile">
+		type="com.hust.mining.model.IssueFileWithBLOBs">
 		<result column="content" jdbcType="LONGVARBINARY" property="content" />
 	</resultMap>
 	<sql id="Example_Where_Clause">
@@ -94,7 +94,6 @@
 		<if test="distinct">
 			distinct
 		</if>
-		'true' as QUERYID,
 		<include refid="Base_Column_List" />
 		,
 		<include refid="Blob_Column_List" />
@@ -115,7 +114,6 @@
 		<if test="distinct">
 			distinct
 		</if>
-		'true' as QUERYID,
 		<include refid="Base_Column_List" />
 		from file
 		<if test="_parameter != null">
@@ -128,16 +126,16 @@
 			limit #{start},#{limit}
 		</if>
 	</select>
-	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+	<select id="selectByPrimaryKey" parameterType="com.hust.mining.model.IssueFileKey"
 		resultMap="ResultMapWithBLOBs">
-		select
+		select 'true' as QUERYID,
 		<include refid="Base_Column_List" />
 		,
 		<include refid="Blob_Column_List" />
 		from file
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.IssueFileKey">
 		delete from file
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</delete>
@@ -147,7 +145,7 @@
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.mining.model.IssueFile">
+	<insert id="insert" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
 		insert into file (file_id,
 		file_name, source_type,
 		size, line_number, issue_id,
@@ -164,7 +162,7 @@
 		#{content,jdbcType=LONGVARBINARY}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueFile">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
 		insert into file
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="fileId != null">
@@ -311,7 +309,7 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueFile">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
 		update file
 		<set>
 			<if test="fileName != null">
@@ -341,7 +339,7 @@
 		</set>
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.IssueFile">
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
 		update
 		file
 		set file_name = #{fileName,jdbcType=VARCHAR},

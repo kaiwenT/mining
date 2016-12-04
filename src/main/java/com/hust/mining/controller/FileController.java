@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant;
-import com.hust.mining.model.Condition;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.IssueWithBLOBs;
+import com.hust.mining.model.params.Condition;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
@@ -105,7 +105,7 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
-    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId) {
+    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId, HttpServletRequest request) {
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
         IssueQueryCondition con = new IssueQueryCondition();
         con.setIssueId(issueId);
@@ -113,6 +113,7 @@ public class FileController {
         if(issues.isEmpty()){
             return ResultUtil.errorWithMsg("query issue info failed");
         }
+        request.getSession().setAttribute(Constant.ISSUE_ID, issueId);
         JSONObject json = new JSONObject();
         json.put("issue", issues.get(0));
         json.put("list", list);
