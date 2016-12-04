@@ -21,7 +21,7 @@
 <body>
 <div class="head-bar">
 	<div class="head-bar__info__title">
-		<h1>舆情信息挖掘子系统</h1>
+		<h1>舆情信息挖掘系统</h1>
 	</div>
 	<div class="head-bar__info">
 		<div class="head-bar__info__hello">您好:<span class="head-bar__info__hello__user-name">xx</span></div>
@@ -371,10 +371,13 @@
 		{{#each topicDetialList}}
 		<div class="topic-detail-result__result-list__item">
 			<div class="topic-detail-result__result-list__item__checkbox">
-				<input data-file-id="{{this.fileId}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
+				<input data-file-id="{{this.id}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
 			</div>
-			<div class="topic-detail-result__result-list__item__message-wrapper">
+			<div class="topic-detail-result__result-list__item__message-wrapper" data-index-id="{{this.id}}">
 				<div class="topic-detail-result__result-list__item__message-wrapper__title">
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						序号:{{this.id}}
+					</span>
 					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
 						标题:{{this.title}}
 					</span>
@@ -387,14 +390,6 @@
 					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
 						数量:{{this.numbers}}
 					</span>
-				</div>
-				<div class="topic-detail-result__result-list__item__message-wrapper__numbers">
-					<!--TODO: don't know the data structure yet-->
-					{{#each this.sourceMedia}}
-					<span class="topic-detail-result__result-list__item__message-wrapper__numbers__item">
-						{{this.title}}:{{this.number}}
-					</span>
-					{{/each}}
 				</div>
 			</div>
 		</div>

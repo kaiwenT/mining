@@ -163,9 +163,18 @@ public class IssueController {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
         try {
+            IssueQueryCondition con = new IssueQueryCondition();
+            con.setIssueId(issueId);
+            List<Issue> issues = issueService.queryIssue(con);
+            if(issues.isEmpty()){
+                return ResultUtil.errorWithMsg("query issue info failed");
+            }
             List<String[]> list = (List<String[]>) ConvertUtil
                     .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getModifiedOrigCountResult());
-            return ResultUtil.success(list);
+            JSONObject json = new JSONObject();
+            json.put("issue", issues.get(0));
+            json.put("list", list);
+            return ResultUtil.success(json);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
         }

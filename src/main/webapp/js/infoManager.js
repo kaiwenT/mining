@@ -167,6 +167,7 @@ $(document)
                             file.sourceSite = '新华网';
                             file.pubTime = '2011-11-1 11:11:11';
                             file.numbers = 260;
+                            // 为什么要删除掉?这是模拟的media数据??
                             file.sourceMedia = [];
                             for (var j = 0; j < 12; j++) {
                                 var media = {};
@@ -434,10 +435,50 @@ $(document)
                         var $waitingMask = $(".waiting-mask");
                         utilDisplayCorrectArea($changeableArea);
                         $waitingMask.show();
-                        var mockData = mockTopicDetailData();
-                        handleBarTemplate(showResult.domTemp,
-                            showResult.target, mockData);
-                        appendContentInfoMessage("查看话题详情");
+                        $.ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/issue/queryModifiedOrigAndCountResult',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data){
+                                if(data !== undefined && data !== ''){
+                                    if(data.status === 'OK'){
+                                        var json = {};
+                                        var issue = data.result.issue;
+                                        json.topicName = issue.issueName;
+                                        json.author = issue.creator;
+                                        json.createTime = utilConvertTimeObject2String(issue.createTime);
+                                        json.modifier = issue.lastOperator;
+                                        json.modifyTime = utilConvertTimeObject2String(issue.lastUpdateTime);
+                                        json.topicDetialList = [];
+                                        var list = data.result.list;
+                                        for(var index in list){
+                                            var obj = list[index];
+                                            var ele = {
+                                                    title : obj[2],
+                                                    id : Number(index),
+                                                    sourceSite : obj[1],
+                                                    pubTime : obj[3],
+                                                    numbers : obj[0]
+                                            }
+                                            json.topicDetialList.push(ele);
+                                        }
+                                        handleBarTemplate(showResult.domTemp,
+                                                showResult.target, json);
+                                            appendContentInfoMessage("查看话题详情");
+                                    }else{
+                                        alert(data.result);
+                                    }
+                                }
+                            },
+                            error : function(data){
+                                var mockData = mockTopicDetailData();
+                                handleBarTemplate(showResult.domTemp,
+                                    showResult.target, mockData);
+                                appendContentInfoMessage("查看话题详情");
+                            }
+                        });
                         $waitingMask.hide();
                     }
 
@@ -499,31 +540,54 @@ $(document)
                     /**
                      * 点击事件内的 查看结果统计按钮 响应事件
                      */
-                    function onClickShowTopicCensus() {
+                    function onClickShowTopicCensus(event) {
+                        var $target = $(event.currentTarget);
+                        var id = $target.data('indexId');
                         var $waitingMask = $(".waiting-mask");
                         utilDisplayCorrectArea($censusChangableArea)
                         // $paginaionWrapper.hide();
                         $waitingMask.show();
                         $.ajax({
                             type : 'post',
-                            url : 'http://localhost:8080/issue/queryModifiedOrigAndCountResult',
+                            url : 'http://localhost:8080/issue/queryModifiedClusterResult',
                             beforeSend : function() {
                                 $waitingMask.show();
+                            },
+                            data : {
+                                currentset : Number(id) +1
                             },
                             success : function(data){
                                 if(data !== undefined && data !== ''){
                                     if(data.status === 'OK'){
-                                        
+                                        var json = {
+                                                fileList : []
+                                            };
+                                        var list = data.result.set;
+                                        for(var index in list){
+                                            var obj = list[index];
+                                            var ele = {
+                                                    topic : obj[1],
+                                                    id : Number(index),
+                                                    url : obj[0],
+                                                    time : obj[2]
+                                            }
+                                            json.fileList.push(ele);
+                                        }
+                                        handleBarTemplate(showCensus.domTemp,
+                                                showCensus.target, json);
+                                        appendContentInfoMessage("统计结果展示");
                                     }else{
                                         alert(data.result);
                                     }
                                 }
+                            },
+                            error : function(data){
+                                var mockData = mockTopicCensusData();
+                                handleBarTemplate(showCensus.domTemp,
+                                        showCensus.target, mockData);
+                                appendContentInfoMessage("统计结果展示");
                             }
                         });
-                        var mockData = mockTopicCensusData();
-                        handleBarTemplate(showCensus.domTemp,
-                                showCensus.target, mockData);
-                        appendContentInfoMessage("统计结果展示");
                         $waitingMask.hide();
                     }
 
@@ -531,6 +595,7 @@ $(document)
                      * 查看结果页面(话题详情页面) 相关事件
                      */
                     function onClickDetailDeleteAll(event) {
+                        alert('dfd');
                         var $target = $(event.currentTarget);
                         var $checkBoxes = $(".topic-detail-result__result-list__item__checkbox__delete");
                         var isChecked = false;
