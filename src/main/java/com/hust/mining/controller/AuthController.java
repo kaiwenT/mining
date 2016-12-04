@@ -31,4 +31,10 @@ public class AuthController {
 		// return mav;
 		return "redirect:page/error.jsp";
 	}
+
+	@RequestMapping(value = "logout")
+	public String logout(HttpServletRequest request) {
+		userService.logout(request);
+		return "redirect:/index.html";
+	}
 }
