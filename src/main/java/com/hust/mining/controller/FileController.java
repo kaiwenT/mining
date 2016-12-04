@@ -105,7 +105,7 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
-    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId) {
+    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId, HttpServletRequest request) {
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
         IssueQueryCondition con = new IssueQueryCondition();
         con.setIssueId(issueId);
@@ -113,6 +113,7 @@ public class FileController {
         if(issues.isEmpty()){
             return ResultUtil.errorWithMsg("query issue info failed");
         }
+        request.getSession().setAttribute(Constant.ISSUE_ID, issueId);
         JSONObject json = new JSONObject();
         json.put("issue", issues.get(0));
         json.put("list", list);
