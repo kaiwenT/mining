@@ -320,7 +320,6 @@ $(document)
                             url : 'http://localhost:8080/file/queryIssueFiles',
                             dataType : 'json',
                             data : {
-//                                issueId : '7276f3f6-f8ab-4672-9cba-becd8d15cfe1',
                                 issueId : issueId,
                             },
                             beforSend : function(){
@@ -417,6 +416,20 @@ $(document)
                         $listChangableArea.hide();
                         $paginaionWrapper.hide();
                         $waitingMask.show();
+                        $.ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/issue/queryModifiedOrigAndCountResult',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data){
+                                if(data !== undefined && data !== ''){
+                                    if(data.status === 'OK'){
+                                        
+                                    }
+                                }
+                            }
+                        });
                         var mockData = mockTopicCensusData();
                         handleBarTemplate(showCensus.domTemp,
                                 showCensus.target, mockData);
