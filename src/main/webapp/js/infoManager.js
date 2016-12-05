@@ -601,6 +601,7 @@ $(document).ready(
                                     }
                                     json.fileList.push(ele);
                                 }
+                                sessionStorage.setItem("censusDetailShowData", JSON.stringify(json));
                                 handleBarTemplate(showCensus.domTemp,
                                         showCensus.target, json);
                                 appendContentInfoMessage("统计结果展示");
@@ -611,6 +612,7 @@ $(document).ready(
                             }
                         }else{
                             var mockData = mockTopicCensusData();
+                            sessionStorage.setItem("censusDetailShowData", JSON.stringify(mockData));
                             handleBarTemplate(showCensus.domTemp,
                                     showCensus.target, mockData);
                             appendContentInfoMessage("统计结果展示");
@@ -619,10 +621,16 @@ $(document).ready(
                     },
                     error : function(data){
                         var mockData = mockTopicCensusData();
+                        sessionStorage.setItem("censusDetailShowData", JSON.stringify(mockData));
                         handleBarTemplate(showCensus.domTemp,
                                 showCensus.target, mockData);
                         appendContentInfoMessage("统计结果展示");
                         isDetailsShow = false;
+                    },
+                    complete: function(){
+                        var $oldActive = $(".content-wrapper__content__result-census__unit-list-wrapper__ul").find(".active");
+                        $oldActive.removeClass("active");
+                        $("a[title='showTopicCensusDetail']").parent().addClass("active");
                     }
                 });
                 $waitingMask.hide();
@@ -762,7 +770,25 @@ $(document).ready(
                 var title = $this.attr('title');
                 var domTemp = $("#" + title);
                 var link = $this.attr('href');
-                var mockData = mockTopicCensusData();
+                var mockData;
+                if( title === "showTopicCensusDetail" ){
+                    mockData = JSON.parse(sessionStorage.getItem("censusDetailShowData"));
+                }
+                // TODO: 完成逻辑
+                // sessionStorage.setItem('lineData', JSON.stringify(data));
+                // var mockData = JSON.parse(sessionStorage.getItem('lineData'));
+                if( title === "showTopicCensusLine" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusResult" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusPie" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusSquare" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
                 $waitingMask.show();
                 $ul.find(".active").removeClass("active");
                 $(this.parentNode).addClass("active");
