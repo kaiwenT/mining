@@ -101,7 +101,10 @@ $(document).ready(
                             }
                         }
                     },
-                    error : function() {
+                    error : function(XMLHttpRequest) {
+                        var text = XMLHttpRequest.responseText;
+                        var json = JSON.parse(text);
+                        alert(json.result);
                         var paginationDomTemp = "#paginationTemplate";
                         var paginationTarget = changableArea;
                         // 测试用,本地测试,真实数据无法请求到时,调用mock数据,不要删除!
@@ -465,7 +468,7 @@ $(document).ready(
                 $waitingMask.show();
                 $.ajax({
                     type : 'post',
-                    url : 'http://localhost:8080/issue/queryModifiedOrigAndCountResult',
+                    url : 'http://localhost:8080/issue/queryOrigAndCountResult',
                     beforeSend : function() {
                         $waitingMask.show();
                     },
@@ -577,7 +580,7 @@ $(document).ready(
                 $waitingMask.show();
                 $.ajax({
                     type : 'post',
-                    url : 'http://localhost:8080/issue/queryModifiedClusterResult',
+                    url : 'http://localhost:8080/issue/queryClusterResult',
                     beforeSend : function() {
                         $waitingMask.show();
                     },
@@ -588,11 +591,15 @@ $(document).ready(
                         if(data !== undefined && data !== ''){
                             if(data.status === 'OK'){
                                 var json = {
-                                        fileList : []
+                                        fileList : [],
+                                        infotype : [],
+                                        netAtten : [],
+                                        media : [],
+                                        mediaAtten : []
                                     };
-                                var list = data.result.set;
-                                for(var index in list){
-                                    var obj = list[index];
+                                var set = data.result.set;
+                                for(var index in set){
+                                    var obj = set[index];
                                     var ele = {
                                             topic : obj[1],
                                             id : Number(index),
@@ -601,10 +608,11 @@ $(document).ready(
                                     }
                                     json.fileList.push(ele);
                                 }
+                                parseDetail(data.result.statis,json);
                                 handleBarTemplate(showCensus.domTemp,
                                         showCensus.target, json);
                                 appendContentInfoMessage("统计结果展示");
-                                isDetailsShow = true;
+                                sessionStorage.setItem("data",json);
                             }else{
                                 alert(data.result);
                                 isDetailsShow = false;
@@ -628,6 +636,60 @@ $(document).ready(
                 $waitingMask.hide();
             }
         
+            function parseDetail(statis,json){
+                for(var key in statis){
+                    var tmpJson = statis[key];
+                    var infotype = tmpJson.infoType;
+                    var eleInfoType = {
+                            time : key,
+                            luntan : infotype['论坛'],
+                            xinwen : infotype['新闻'],
+                            boke : infotype['博客'],
+                            baozhi : infotype['报纸'],
+                            weixin : infotype['微信'],
+                            tieba : infotype['贴吧'],
+                            wenda : infotype['问答'],
+                            shouji : infotype['手机'],
+                            shipin : infotype['视频'],
+                            weibo : infotype['微博'],
+                            qita : infotype['其他']
+                    };
+                    json.infotype.push(eleInfoType);
+                    var netAtten = tmpJson.netizenAttention;
+                    var eleNetAtten = {
+                            time : key,
+                            luntan : netAtten['论坛'],
+                            xinwen : netAtten['新闻'],
+                            boke : netAtten['博客'],
+                            baozhi : netAtten['报纸'],
+                            weixin : netAtten['微信'],
+                            tieba : netAtten['贴吧'],
+                            wenda : netAtten['问答'],
+                            shouji : netAtten['手机'],
+                            shipin : netAtten['视频'],
+                            weibo : netAtten['微博']
+                    };
+                    json.netAtten.push(eleNetAtten);
+                    var media = tmpJson.media;
+                    var eleMedia ={
+                            time : key,
+                            zhongyang : media['中央媒体'],
+                            shengji : media['省级媒体'],
+                            qita : media['其他媒体'],
+                            weizhi : media['未知媒体'] 
+                    };
+                    json.media.push(eleMedia);
+                    var mediaAtten = tmpJson.mediaAttention;
+                    var eleMediaAtten ={
+                            time : key,
+                            zhongyang : media['中央媒体'],
+                            shengji : media['省级媒体'],
+                            qita : media['其他媒体'],
+                            weizhi : media['未知媒体'] 
+                    };
+                    json.mediaAtten.push(eleMediaAtten);
+                }
+            }
             /**
              * 查看结果页面(话题详情页面) 相关事件
              */
@@ -762,7 +824,7 @@ $(document).ready(
                 var title = $this.attr('title');
                 var domTemp = $("#" + title);
                 var link = $this.attr('href');
-                var mockData = mockTopicCensusData();
+                var mockData = sessionStorage.getItem('data');
                 $waitingMask.show();
                 $ul.find(".active").removeClass("active");
                 $(this.parentNode).addClass("active");
@@ -789,15 +851,45 @@ $(document).ready(
         
             function onClickCreateTopic() {
                 // TODO: 增加创建话题的后台交互
+                var $waitingMask = $(".waiting-mask");
                 var topicName = $.trim($("#createTopicNameInput").val());
-                if( topicName ){
-                    alert("创建话题:" + topicName);
+                if(topicName){
+                    var createIssueConfirm = confirm("创建话题:" + topicName);
+                    if(!createIssueConfirm){
+                        return;
+                    }
+                    $.ajax({
+                        type : 'post',
+                        url : 'http://localhost:8080/issue/create',
+                        data :{
+                            issueName : topicName
+                        },
+                        beforeSend : function() {
+                            $waitingMask.show();
+                        },
+                        success : function(data){
+                            if(data !== undefined && data !== ''){
+                                if(data.status === 'OK'){
+                                    alert('create issue success');
+                                    $(".content-wrapper__content__create-files__name-wrapper__file").show();
+                                }else{
+                                    alert(data.status);
+                                }
+                            }else{
+                                alert('create issue failed');
+                            }
+                        },
+                        error : function(XMLHttpRequest){
+                            var text = XMLHttpRequest.responseText;
+                            var json = JSON.parse(text);
+                            alert(json.result);
+                        }
+                    });
+                    $waitingMask.hide();
                 } else {
                     alert("请输入话题名称");
                     return;
                 }
-        
-                $(".content-wrapper__content__create-files__name-wrapper__file").show();
             }
         
             /**

@@ -27,7 +27,6 @@ import com.hust.mining.service.IssueService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
-import com.hust.mining.util.ResultUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -268,6 +267,12 @@ public class IssueServiceImpl implements IssueService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int deleteIssueById(String issueId) {
+        // TODO Auto-generated method stub
+        return issueDao.deleteIssueById(issueId);
     }
 
 }

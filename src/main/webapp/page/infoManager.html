@@ -173,7 +173,7 @@
 					</ul>
 				</div>
 				<div class="content-wrapper__content__result-census__result-wrapper">
-
+	
 				</div>
 			</div>
 			<!-- 文件区域 -->
@@ -443,8 +443,133 @@
 </script>
 <!-- templates for census result, the way of display aren't same -->
 <script id="showTopicCensusResult" type="text/x-handlebars-template">
-	<div>
-		统计结果
+	<div>类型统计结果</div>
+	<div class="topic-census-detail">
+		<table class="topic-census-detail__table table table-hover" id ="datatable_infotype">
+			<thead class="topic-census-detail__table__thead">
+			<tr>
+				<th></th>
+				<th>论坛</th>
+				<th>新闻</th>
+				<th>博客</th>
+				<th>报纸</th>
+				<th>微信</th>
+				<th>贴吧</th>
+				<th>问答</th>
+				<th>手机</th>
+				<th>视频</th>
+				<th>微博</th>
+				<th>未知</th>
+			</tr>
+			</thead>
+			<tbody>
+			{{#each infotype}}
+			<tr class="topic-census-detail__table__item">
+				<td>{{tis.time}}</td>
+				<td>{{this.luntan}}</td>
+				<td>{{this.xinwen}}</td>
+				<td>{{this.boke}}</td>
+				<td>{{this.baozhi}}</td>
+				<td>{{this.weixin}}</td>
+				<td>{{this.tieba}}</td>
+				<td>{{this.wenda}}</td>
+				<td>{{this.shouji}}</td>
+				<td>{{this.shipin}}</td>
+				<td>{{this.weibo}}</td>
+				<td>{{this.weizhi}}</td>
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</div>
+	<div>网民关注度：</div>
+	<div class="topic-census-detail">
+		<table class="topic-census-detail__table table table-hover" id ="datatable_netAtten">
+			<thead class="topic-census-detail__table__thead">
+			<tr>
+				<th></th>
+				<th>论坛</th>
+				<th>新闻</th>
+				<th>博客</th>
+				<th>报纸</th>
+				<th>微信</th>
+				<th>贴吧</th>
+				<th>问答</th>
+				<th>手机</th>
+				<th>视频</th>
+				<th>微博</th>
+				<th>未知</th>
+			</tr>
+			</thead>
+			<tbody>
+			{{#each netAtten}}
+			<tr class="topic-census-detail__table__item">
+				<td>{{tis.time}}</td>
+				<td>{{this.luntan}}</td>
+				<td>{{this.xinwen}}</td>
+				<td>{{this.boke}}</td>
+				<td>{{this.baozhi}}</td>
+				<td>{{this.weixin}}</td>
+				<td>{{this.tieba}}</td>
+				<td>{{this.wenda}}</td>
+				<td>{{this.shouji}}</td>
+				<td>{{this.shipin}}</td>
+				<td>{{this.weibo}}</td>
+				<td>{{this.weizhi}}</td>
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</div>
+	<div>媒体统计结果：</div>
+	<div class="topic-census-detail">
+		<table class="topic-census-detail__table table table-hover" id ="datatable_media">
+			<thead class="topic-census-detail__table__thead">
+			<tr>
+				<th></th>
+				<th>中央媒体</th>
+				<th>省级媒体</th>
+				<th>其他媒体</th>
+				<th>未知媒体</th>
+			</tr>
+			</thead>
+			<tbody>
+			{{#each media}}
+			<tr class="topic-census-detail__table__item">
+				<td>{{tis.time}}</td>
+				<td>{{this.zhongyang}}</td>
+				<td>{{this.shengji}}</td>
+				<td>{{this.qita}}</td>
+				<td>{{this.weizhi}}</td>
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</div>
+	<div>媒体关注度：</div>
+	<div class="topic-census-detail">
+		<table class="topic-census-detail__table table table-hover" id ="datatable_mediaAtten">
+			<thead class="topic-census-detail__table__thead">
+			<tr>
+				<th></th>
+				<th>中央媒体</th>
+				<th>省级媒体</th>
+				<th>其他媒体</th>
+				<th>未知媒体</th>
+			</tr>
+			</thead>
+			<tbody>
+			{{#each mediaAtten}}
+			<tr class="topic-census-detail__table__item">
+				<td>{{tis.time}}</td>
+				<td>{{this.zhongyang}}</td>
+				<td>{{this.shengji}}</td>
+				<td>{{this.qita}}</td>
+				<td>{{this.weizhi}}</td>
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
 	</div>
 </script>
 
