@@ -24,6 +24,7 @@ import com.hust.mining.model.params.DeleteItemsParams;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.StatisticService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 
@@ -40,6 +41,8 @@ public class IssueServiceImpl implements IssueService {
     private UserService userService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private StatisticService statService;
 
     @Override
     public int createIssue(IssueWithBLOBs issue) {
@@ -125,10 +128,12 @@ public class IssueServiceImpl implements IssueService {
                 return o2.size() - o1.size();
             }
         });
+        List<String[]> calResult = statService.getOrigAndCount(resultList, Index.TIME_INDEX);
         IssueWithBLOBs issue = new IssueWithBLOBs();
         issue.setIssueId(issueId);
         try {
             issue.setModifiedClusterResult(ConvertUtil.convertToBytes(resultList));
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(calResult));
             issue.setLastOperator(userService.getCurrentUser(request));
             issue.setLastUpdateTime(new Date());
             if (issueDao.updateIssueInfo(issue) == 0) {

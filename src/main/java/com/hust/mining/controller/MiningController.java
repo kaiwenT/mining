@@ -59,6 +59,7 @@ public class MiningController {
         List<List<String[]>> clusterResult = clusterService.getClusterResult(content, Index.TITLE_INDEX);
         try {
             issue.setClusterResult(ConvertUtil.convertToBytes(clusterResult));
+            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(clusterResult));
         } catch (Exception e) {
             logger.error("convert cluster result and origAndCount result to byte[] failed \t" + e.toString());
             return ResultUtil.unknowError();
@@ -71,30 +72,20 @@ public class MiningController {
 
     @ResponseBody
     @RequestMapping("/calOrigAndCountResult")
-    public Object calculateOrigAndCountResult(@RequestParam(value = "type", required = true) String type,
-            HttpServletRequest request) {
+    public Object calculateOrigAndCountResult(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        List<List<String[]>> list = null;
-        if ("orig".equals(type)) {
-            list = issueService.queryClusterResult(issueId);
-        } else {
-            list = issueService.queryModifiedClusterResult(issueId);
-        }
+        List<List<String[]>> list = issueService.queryModifiedClusterResult(issueId);
         if (null == list) {
-            return ResultUtil.errorWithMsg("query (modified)cluster result failed");
+            return ResultUtil.errorWithMsg("query cluster result failed");
         }
         List<String[]> origAndCountResult = statisticService.getOrigAndCount(list, Index.TIME_INDEX);
         IssueWithBLOBs issue = new IssueWithBLOBs();
         issue.setIssueId(issueId);
         try {
-            if ("orig".equals(type)) {
-                issue.setOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
-            } else {
-                issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
-            }
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
         } catch (Exception e) {
             logger.error("convert origAndCountResult failed");
             return ResultUtil.errorWithMsg("execute failed");

@@ -35,7 +35,7 @@ public class StatisticServiceImpl implements StatisticService {
     public List<String[]> getOrigAndCount(List<List<String[]>> setList, int timeIndex) {
         // TODO Auto-generated method stub
         List<String[]> reList = new ArrayList<String[]>();
-        for (int i = 0; i < setList.size() - 1; i++) {
+        for (int i = 0; i < setList.size(); i++) {
             List<String[]> tmpList = setList.get(i);
             int origIndex = -1;
             String origTime = "9999-12-12 23:59:59";
@@ -55,14 +55,14 @@ public class StatisticServiceImpl implements StatisticService {
             newRow[0] = tmpList.size() + "";
             reList.add(newRow);
         }
-        List<String[]> singleList = setList.get(setList.size() - 1);
-        for (int i = 0; i < singleList.size(); i++) {
-            String[] oldRow = singleList.get(i);
-            String[] newRow = new String[oldRow.length + 1];
-            System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
-            newRow[0] = "1";
-            reList.add(newRow);
-        }
+//        List<String[]> singleList = setList.get(setList.size() - 1);
+//        for (int i = 0; i < singleList.size(); i++) {
+//            String[] oldRow = singleList.get(i);
+//            String[] newRow = new String[oldRow.length + 1];
+//            System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
+//            newRow[0] = "1";
+//            reList.add(newRow);
+//        }
         return reList;
     }
 

@@ -46,12 +46,12 @@ public class ConvertUtil {
             }
         });
         List<List<String[]>> listStrSet = new ArrayList<List<String[]>>();
-        List<String[]> singleDataList = new ArrayList<String[]>();
+//        List<String[]> singleDataList = new ArrayList<String[]>();
         for (List<Integer> set : resultIndexSet) {
-            if (set.size() == 1) {
-                singleDataList.add(list.get(set.get(0) + 1));
-                continue;
-            }
+//            if (set.size() == 1) {
+//                singleDataList.add(list.get(set.get(0) + 1));
+//                continue;
+//            }
             List<String[]> setDataList = new ArrayList<String[]>();
             for (int i : set) {
                 setDataList.add(list.get(i + 1));
@@ -63,12 +63,12 @@ public class ConvertUtil {
             });
             listStrSet.add(setDataList);
         }
-        Collections.sort(singleDataList, new Comparator<String[]>() {
-            public int compare(String[] o1, String[] o2) {
-                return o1[targetIndex].compareTo(o2[targetIndex]);
-            }
-        });
-        listStrSet.add(singleDataList);
+//        Collections.sort(singleDataList, new Comparator<String[]>() {
+//            public int compare(String[] o1, String[] o2) {
+//                return o1[targetIndex].compareTo(o2[targetIndex]);
+//            }
+//        });
+//        listStrSet.add(singleDataList);
         return listStrSet;
     }
 
