@@ -62,7 +62,7 @@ $(document).ready(
                 that.totalPages;
                 that.$waitingMask = $(".waiting-mask");
                 that.page = page;
-                that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
+                that.url = "http://localhost:8080/issue/queryOwnIssue";
                 that.type = "POST";
                 that.dataType = "json";
                 that.contentType = "application/json";
@@ -354,7 +354,7 @@ $(document).ready(
                 $paginaionWrapper.hide();
                 $.ajax({
                     type : 'POST',
-                    url : 'http://218.199.92.27:8080/file/queryIssueFiles',
+                    url : 'http://localhost:8080/file/queryIssueFiles',
                     dataType : 'json',
                     data : {
                         issueId : issueId,
@@ -424,7 +424,7 @@ $(document).ready(
                 if (confirmDelete) {
                     $.ajax({
                         type : 'post',
-                        url : 'http://218.199.92.27:8080/file/deleteFileById',
+                        url : 'http://localhost:8080/file/deleteFileById',
                         dataType : 'json',
                         data : {
                             fileid : fileId,
@@ -468,7 +468,7 @@ $(document).ready(
                 $waitingMask.show();
                 $.ajax({
                     type : 'post',
-                    url : 'http://218.199.92.27:8080/issue/queryOrigAndCountResult',
+                    url : 'http://localhost:8080/issue/queryOrigAndCountResult',
                     beforeSend : function() {
                         $waitingMask.show();
                     },
@@ -580,7 +580,7 @@ $(document).ready(
                 $waitingMask.show();
                 $.ajax({
                     type : 'post',
-                    url : 'http://218.199.92.27:8080/issue/queryClusterResult',
+                    url : 'http://localhost:8080/issue/queryClusterResult',
                     beforeSend : function() {
                         $waitingMask.show();
                     },
@@ -612,7 +612,7 @@ $(document).ready(
                                 handleBarTemplate(showCensus.domTemp,
                                         showCensus.target, json);
                                 appendContentInfoMessage("统计结果展示");
-                                sessionStorage.setItem("data",json);
+                                sessionStorage.setItem("data",JSON.stringify(json));
                             }else{
                                 alert(data.result);
                                 isDetailsShow = false;
@@ -622,7 +622,7 @@ $(document).ready(
                             handleBarTemplate(showCensus.domTemp,
                                     showCensus.target, mockData);
                             appendContentInfoMessage("统计结果展示");
-                            isDetailsShow = false;
+                            sessionStorage.setItem("data",JSON.stringify(mockData));
                         }
                     },
                     error : function(data){
@@ -630,7 +630,7 @@ $(document).ready(
                         handleBarTemplate(showCensus.domTemp,
                                 showCensus.target, mockData);
                         appendContentInfoMessage("统计结果展示");
-                        isDetailsShow = false;
+                        sessionStorage.setItem("data",JSON.stringify(mockData));
                     }
                 });
                 $waitingMask.hide();
@@ -642,50 +642,83 @@ $(document).ready(
                     var infotype = tmpJson.infoType;
                     var eleInfoType = {
                             time : key,
-                            luntan : infotype['论坛'],
-                            xinwen : infotype['新闻'],
-                            boke : infotype['博客'],
-                            baozhi : infotype['报纸'],
-                            weixin : infotype['微信'],
-                            tieba : infotype['贴吧'],
-                            wenda : infotype['问答'],
-                            shouji : infotype['手机'],
-                            shipin : infotype['视频'],
-                            weibo : infotype['微博'],
-                            qita : infotype['其他']
+                            luntan : 0,
+                            xinwen : 0,
+                            boke : 0,
+                            baozhi : 0,
+                            weixin : 0,
+                            tieba : 0,
+                            wenda : 0,
+                            shouji :0,
+                            shipin : 0,
+                            weibo : 0,
+                            qita : 0,
+                            weizhi : 0,
+//                    luntan : infotype['论坛'],
+//                    xinwen : infotype['新闻'],
+//                    boke : infotype['博客'],
+//                    baozhi : infotype['报纸'],
+//                    weixin : infotype['微信'],
+//                    tieba : infotype['贴吧'],
+//                    wenda : infotype['问答'],
+//                    shouji : infotype['手机'],
+//                    shipin : infotype['视频'],
+//                    weibo : infotype['微博'],
+//                    qita : infotype['其他']
                     };
                     json.infotype.push(eleInfoType);
                     var netAtten = tmpJson.netizenAttention;
                     var eleNetAtten = {
                             time : key,
-                            luntan : netAtten['论坛'],
-                            xinwen : netAtten['新闻'],
-                            boke : netAtten['博客'],
-                            baozhi : netAtten['报纸'],
-                            weixin : netAtten['微信'],
-                            tieba : netAtten['贴吧'],
-                            wenda : netAtten['问答'],
-                            shouji : netAtten['手机'],
-                            shipin : netAtten['视频'],
-                            weibo : netAtten['微博']
+                            luntan : 0,
+                            xinwen : 0,
+                            boke : 0,
+                            baozhi : 0,
+                            weixin : 0,
+                            tieba : 0,
+                            wenda : 0,
+                            shouji :0,
+                            shipin : 0,
+                            weibo : 0,
+                            qita : 0,
+                            weizhi : 0,
+//                            luntan : netAtten['论坛'],
+//                            xinwen : netAtten['新闻'],
+//                            boke : netAtten['博客'],
+//                            baozhi : netAtten['报纸'],
+//                            weixin : netAtten['微信'],
+//                            tieba : netAtten['贴吧'],
+//                            wenda : netAtten['问答'],
+//                            shouji : netAtten['手机'],
+//                            shipin : netAtten['视频'],
+//                            weibo : netAtten['微博'],
+//                            qita : infotype['其他'],
                     };
                     json.netAtten.push(eleNetAtten);
                     var media = tmpJson.media;
                     var eleMedia ={
                             time : key,
-                            zhongyang : media['中央媒体'],
-                            shengji : media['省级媒体'],
-                            qita : media['其他媒体'],
-                            weizhi : media['未知媒体'] 
+                            zhongyang : 0,
+                            shengji : 0,
+                            qita : 0,
+                            weizhi : 0,
+//                            zhongyang : media['中央媒体'],
+//                            shengji : media['省级媒体'],
+//                            qita : media['其他媒体'],
+//                            weizhi : media['未知媒体'],
                     };
                     json.media.push(eleMedia);
                     var mediaAtten = tmpJson.mediaAttention;
                     var eleMediaAtten ={
                             time : key,
-                            zhongyang : media['中央媒体'],
-                            shengji : media['省级媒体'],
-                            qita : media['其他媒体'],
-                            weizhi : media['未知媒体'] 
+                            zhongyang : 0,
+                            shengji : 0,
+                            qita : 0,
+                            weizhi : 0,
+//                            zhongyang : media['中央媒体'],
+//                            shengji : media['省级媒体'],
+//                            qita : media['其他媒体'],
+//                            weizhi : media['未知媒体'],
                     };
                     json.mediaAtten.push(eleMediaAtten);
                 }
@@ -727,7 +760,7 @@ $(document).ready(
                 }
                 $.ajax({
                     type : 'post',
-                    url : 'http://218.199.92.27:8080/issue/deleteSetsFromClusterResult',
+                    url : 'http://localhost:8080/issue/deleteSetsFromClusterResult',
                     dataType : 'json',
                     traditional: true,
                     data : {
@@ -774,7 +807,7 @@ $(document).ready(
                 $.ajax({
                     type : 'post',
                     dataType : 'json',
-                    url : 'http://218.199.92.27:8080/issue/combineResult',
+                    url : 'http://localhost:8080/issue/combineResult',
                     traditional: true,
                     data : {
                         indexSet : combineItems
@@ -826,7 +859,7 @@ $(document).ready(
                 var link = $this.attr('href');
                 var mockData;
                 if( title === "showTopicCensusDetail" ){
-                    mockData = JSON.parse(sessionStorage.getItem("censusDetailShowData"));
+                    mockData = JSON.parse(sessionStorage.getItem("data"));
                 }
                 // TODO: 完成逻辑
                 // sessionStorage.setItem('lineData', JSON.stringify(data));
@@ -878,7 +911,7 @@ $(document).ready(
                     }
                     $.ajax({
                         type : 'post',
-                        url : 'http://218.199.92.27:8080/issue/create',
+                        url : 'http://localhost:8080/issue/create',
                         data :{
                             issueName : topicName
                         },
@@ -1052,5 +1085,10 @@ $(document).ready(
                 $(".content-wrapper__changeable").hide();
                 $(".content-wrapper__content__developing").hide();
                 $areaShouldShow.show();
+            }
+            
+            /****************************ajax方法**************************/
+            function ajax4(param){
+                
             }
         });
