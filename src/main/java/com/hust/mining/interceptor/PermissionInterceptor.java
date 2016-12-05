@@ -29,7 +29,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
 	@Autowired
 	private MappingJackson2HttpMessageConverter converter;
 
-
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -68,9 +67,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 					fail(response);
 				}
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			LOG.error("permissionInterceptor error \t" + e.toString());
 			try {
