@@ -22,6 +22,20 @@ public class PowerDao {
 		return powers;
 	}
 
+	public List<Power> selectPowerByPOwerId(List<Integer> powerIds) {
+		PowerExample example = new PowerExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andPowerIdEqualTo(powerIds.get(0));
+		// 查询不出来用户的所有权限
+		for (int i = 1; i < powerIds.size(); i++) {
+			Criteria criterias = example.createCriteria();
+			criterias.andPowerIdEqualTo(powerIds.get(i));
+			example.or(criterias);
+		}
+		List<Power> powers = powerMapper.selectByExample(example);
+		return powers;
+	}
+
 	public List<Power> selectPowerByPowerName(String powerName) {
 		PowerExample example = new PowerExample();
 		Criteria criteria = example.createCriteria();
