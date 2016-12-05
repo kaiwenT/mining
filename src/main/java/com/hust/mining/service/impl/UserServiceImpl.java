@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<String> selectUserPowerUrl(String userName) {
 		List<String> powerUrls = new ArrayList<>();
+		List<Integer> powerId = new ArrayList<>();
 		List<User> users = userDao.selectByUserName(userName);
 		List<RolePower> rolePowers = new ArrayList<>();
 		if (null != users.get(0).getRoleId()) {
@@ -123,13 +124,12 @@ public class UserServiceImpl implements UserService {
 			logger.info("power url is empty");
 			return powerUrls;
 		}
-		List<Integer> powerIds = new ArrayList<>();
 		for (RolePower rolePowerInfo : rolePowers) {
-			powerIds.add(rolePowerInfo.getPowerId());
+			powerId.add(rolePowerInfo.getPowerId());
 		}
-		for (int powerId : powerIds) {
-			List<Power> powerInfo = powerDao.selectPowerById(powerId);
-			powerUrls.add(powerInfo.get(0).getPowerUrl());
+		List<Power> power = powerDao.selectPowerByPOwerId(powerId);
+		for (Power powerInfo : power) {
+			powerUrls.add(powerInfo.getPowerUrl());
 		}
 		return powerUrls;
 	}
