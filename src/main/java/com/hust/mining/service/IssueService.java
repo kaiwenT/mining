@@ -33,4 +33,5 @@ public interface IssueService {
 
     long countIssues(IssueQueryCondition con);
 
+    boolean reset(HttpServletRequest request);
 }

@@ -27,6 +27,7 @@ import com.hust.mining.service.IssueService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
+import com.hust.mining.util.ResultUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -245,6 +246,28 @@ public class IssueServiceImpl implements IssueService {
     public long countIssues(IssueQueryCondition con) {
         // TODO Auto-generated method stub
         return issueDao.countIssues(con);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean reset(HttpServletRequest request) {
+        try {
+            String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
+            IssueWithBLOBs issue = issueDao.selectByUUID(issueId);
+            List<List<String[]>> content =
+                    (List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
+            List<String[]> calResult = statService.getOrigAndCount(content, Index.TIME_INDEX);
+            issue.setModifiedClusterResult(issue.getClusterResult());
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(calResult));
+            issue.setLastOperator(userService.getCurrentUser(request));
+            issue.setLastUpdateTime(new Date());
+            if (0 == issueDao.updateIssueInfo(issue)) {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
 }

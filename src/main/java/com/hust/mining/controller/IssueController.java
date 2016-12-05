@@ -80,8 +80,8 @@ public class IssueController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping("/queryModifiedClusterResult")
-    public Object queryModifiedClusterResult(@RequestParam(value = "currentset", required = true) int currentSet,
+    @RequestMapping("/queryClusterResult")
+    public Object queryClusterResult(@RequestParam(value = "currentset", required = true) int currentSet,
             HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
@@ -91,11 +91,7 @@ public class IssueController {
         try {
             List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
                     .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
-            ViewPage page = new ViewPage();
-            page.setCurrentPage(currentSet);
-            page.setTotalPage(list.size());
-            resultMap.put("page", page);
-            resultMap.put("set", list.get(currentSet - 1));
+            resultMap.put("set", list.get(currentSet));
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取聚类结果出错");
         }
@@ -104,8 +100,8 @@ public class IssueController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping("/queryModifiedOrigAndCountResult")
-    public Object queryModifiedOrigAndCountResult(HttpServletRequest request) {
+    @RequestMapping("/queryOrigAndCountResult")
+    public Object queryOrigAndCountResult(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
@@ -198,5 +194,21 @@ public class IssueController {
     public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         List<Issue> list = issueService.queryIssue(con);
         return ResultUtil.success(list);
+    }
+
+    @ResponseBody
+    @RequestMapping("/reset")
+    public Object reset(HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
+        }
+        boolean reset = issueService.reset(request);
+        if(reset){
+            return ResultUtil.success("reset success");
+        }
+        return ResultUtil.errorWithMsg("reset failed");
+        
+
     }
 }
