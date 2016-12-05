@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
-import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.model.IssueWithBLOBs;
 import com.hust.mining.model.params.StatisticParams;
