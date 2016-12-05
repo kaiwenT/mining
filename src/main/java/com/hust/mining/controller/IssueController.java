@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
 import com.hust.mining.constant.Constant;
+import com.hust.mining.constant.Constant.Interval;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueWithBLOBs;
 import com.hust.mining.model.params.DeleteItemsParams;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.StatisticService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ResultUtil;
@@ -43,10 +45,12 @@ public class IssueController {
     private UserService userService;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private StatisticService statisticService;
 
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Object createIssue(@RequestParam(value = "issue_name", required = true) String issueName,
+    public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
             HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
         IssueWithBLOBs issue = new IssueWithBLOBs();
@@ -61,6 +65,15 @@ public class IssueController {
         }
         request.getSession().setAttribute(Constant.ISSUE_ID, issue.getIssueId());
         return ResultUtil.success("create issue success");
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId) {
+        if (issueService.deleteIssueById(issueId) > 0) {
+            return ResultUtil.success("delete success");
+        }
+        return ResultUtil.errorWithMsg("delete failed");
     }
 
     @ResponseBody
@@ -88,9 +101,12 @@ public class IssueController {
         }
         Map<String, Object> resultMap = Maps.newHashMap();
         try {
-            List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
+            List<List<String[]>> allList = (List<List<String[]>>) ConvertUtil
                     .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
-            resultMap.put("set", list.get(currentSet));
+            List<String[]> list = allList.get(currentSet);
+            resultMap.put("set", list);
+            Map<String, Map<String, Map<String, Integer>>> timeMap = statisticService.processAll(list, Interval.DAY);
+            resultMap.put("statis", timeMap);
         } catch (Exception e) {
             return ResultUtil.errorWithMsg("从数据库中读取聚类结果出错");
         }
@@ -203,11 +219,10 @@ public class IssueController {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
         boolean reset = issueService.reset(request);
-        if(reset){
+        if (reset) {
             return ResultUtil.success("reset success");
         }
         return ResultUtil.errorWithMsg("reset failed");
-        
 
     }
 }

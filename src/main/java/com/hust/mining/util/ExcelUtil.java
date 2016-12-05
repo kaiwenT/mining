@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
 
-    public static List<String[]> read(String filename, InputStream inputStream, Integer...indexes)
+    public static List<String[]> read(String filename, InputStream inputStream, int rows, Integer...indexes)
             throws FileNotFoundException, IOException {
 
         List<String[]> list = new ArrayList<String[]>();
@@ -33,6 +33,9 @@ public class ExcelUtil {
             for (int i = 0; i < colNum; i++) {
                 indexes[i] = i;
             }
+        }
+        if (rows >= 0) {
+            rowNum = rows > rowNum ? rowNum : rows;
         }
         for (int i = 0; i <= rowNum; i++) {
             String[] rowStr = new String[indexes.length];

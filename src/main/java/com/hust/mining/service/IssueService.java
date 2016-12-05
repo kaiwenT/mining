@@ -12,14 +12,16 @@ import com.hust.mining.model.params.IssueQueryCondition;
 public interface IssueService {
 
     int createIssue(IssueWithBLOBs issue);
+    
+    int deleteIssueById(String issueId);
 
-    int combineFiles(String UUID, String user);
+    int combineFiles(String issueId, String user);
 
     String getCurrentIssueId(HttpServletRequest request);
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
-    IssueWithBLOBs queryIssueWithBLOBsById(String uuid);
+    IssueWithBLOBs queryIssueWithBLOBsById(String issueId);
     
     boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
 

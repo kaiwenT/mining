@@ -1,5 +1,6 @@
 package com.hust.mining.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -129,5 +130,20 @@ public class FileController {
             return ResultUtil.success("delete success");
         }
         return ResultUtil.errorWithMsg("delete fail");
+    }
+
+    @ResponseBody
+    @RequestMapping("/getColumnTitle")
+    public Object getColumnTime(@RequestParam(value = "file", required = true) MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResultUtil.errorWithMsg("文件为空");
+        }
+        try {
+            List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 0);
+            return ResultUtil.success(list);
+        } catch (Exception e) {
+            logger.warn("read column title fail" + e.toString());
+        }
+        return ResultUtil.errorWithMsg("get column title fail");
     }
 }

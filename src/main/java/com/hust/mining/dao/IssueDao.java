@@ -93,4 +93,8 @@ public class IssueDao {
         example.setOrderByClause("last_update_time desc");
         return issueMapper.countByExample(example);
     }
+    
+    public int deleteIssueById(String issueId){
+        return issueMapper.deleteByPrimaryKey(issueId);
+    }
 }
