@@ -21,7 +21,7 @@
 <body>
 <div class="head-bar">
 	<div class="head-bar__info__title">
-		<h1>舆情信息挖掘子系统</h1>
+		<h1>舆情信息挖掘系统</h1>
 	</div>
 	<div class="head-bar__info">
 		<div class="head-bar__info__hello">您好:<span class="head-bar__info__hello__user-name">xx</span></div>
@@ -174,6 +174,30 @@
 				</div>
 				<div class="content-wrapper__content__result-census__result-wrapper">
 
+				</div>
+			</div>
+			<!-- 文件区域 -->
+			<div class="col-md-12 content-wrapper__content__create-files" style="display: none">
+				<div class="content-wrapper__content__create-files__top">
+					<div class="content-wrapper__content__create-files__name-wrapper">
+						话题名称:<input id="createTopicNameInput" type="text">
+					</div>
+					<div class="contnet-wrapper__content__create-files__button-wrapper">
+						<button type="button" class="btn btn-primary" id="createTopicSubmit">创建话题</button>
+					</div>
+				</div>
+				<div class="content-wrapper__content__create-files__name-wrapper__file" style="display: none">
+					<div class="content-wrapper__content__create-files__add-file">
+						测试环境:点击该区域添加文件
+						真实:文件拖到这里,需要更改事件
+					</div>
+
+					<div class="content-wrapper__content__create-files__message">
+						文件列表:
+					</div>
+					<div class="content-wrapper__content__create-files__wrapper">
+						<div class="content-wrapper__content__create-files__wrapper__message">请点击上方区域,添加文件</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -347,10 +371,13 @@
 		{{#each topicDetialList}}
 		<div class="topic-detail-result__result-list__item">
 			<div class="topic-detail-result__result-list__item__checkbox">
-				<input data-file-id="{{this.fileId}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
+				<input data-file-id="{{this.id}}" class="topic-detail-result__result-list__item__checkbox__delete" type="checkbox">
 			</div>
-			<div class="topic-detail-result__result-list__item__message-wrapper">
+			<div class="topic-detail-result__result-list__item__message-wrapper" data-index-id="{{this.id}}">
 				<div class="topic-detail-result__result-list__item__message-wrapper__title">
+					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
+						序号:{{this.id}}
+					</span>
 					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
 						标题:{{this.title}}
 					</span>
@@ -363,14 +390,6 @@
 					<span class="topic-detail-result__result-list__item__message-wrapper__title__item">
 						数量:{{this.numbers}}
 					</span>
-				</div>
-				<div class="topic-detail-result__result-list__item__message-wrapper__numbers">
-					<!--TODO: don't know the data structure yet-->
-					{{#each this.sourceMedia}}
-					<span class="topic-detail-result__result-list__item__message-wrapper__numbers__item">
-						{{this.title}}:{{this.number}}
-					</span>
-					{{/each}}
 				</div>
 			</div>
 		</div>
@@ -392,9 +411,9 @@
 </script>
 <!-- template for topic cesus details -->
 <script id="showTopicCensusDetail" type="text/x-handlebars-template">
-	<div class="topic-census-detial">
-		<table class="topic-census-detial__table table table-hover">
-			<thead class="topic-census-detial__table__thead">
+	<div class="topic-census-detail">
+		<table class="topic-census-detail__table table table-hover">
+			<thead class="topic-census-detail__table__thead">
 			<tr>
 				<th></th>
 				<th>标题</th>
@@ -404,16 +423,19 @@
 			</thead>
 			<tbody>
 			{{#each fileList}}
-			<tr>
-				<td><input type="checkbox"></td>
+			{{!-- 如果tr有class selected說明被選中 --}}
+			<tr class="topic-census-detail__table__item"
+				data-file-id="{{this.fileId}}"
+				data-topic-name="{{this.topic}}">
+				<td><input class="topic-census-detail__table__item__checkbox" type="checkbox"></td>
 				<td>{{this.topic}}</td>
 				<td>{{this.url}}</td>
 				<td>{{this.time}}</td>
 			</tr>
 			{{/each}}
 			<tr>
-				<td class="topic-census-detial__table__select-all"><input type="checkbox"></td>
-				<td colspan="3"><button class="topic-census-detial__table__delete-all-btn" type="submit">删除所有</button></td>
+				<td class="topic-census-detail__table__select-all"><input class="topic-census-detail__table__select-all__checkbox" type="checkbox"></td>
+				<td colspan="3"><button class="topic-census-detail__table__delete-all-btn" type="submit">删除所有</button></td>
 			</tr>
 			</tbody>
 		</table>
@@ -446,7 +468,47 @@
 <!-- 自有话题template结束 -->
 <!-- 创建话题 -->
 <script id="createTopic" type="text/x-handlebars-template">
-	创建话题
+	<div class="create-topic__file-list-wrapper" data-file-id="{{fileId}}">
+		<span class="create-topic__file-list-wrapper__span">
+			文件: <input class="create-topic__file-list-wrapper__span__file-name"
+					   		type="text" value="{{fileName}}" data-file-id="{{fileId}}">
+		</span>
+		<span class="create-topic__file-list-wrapper__span">
+			URL列:
+			<select class="create-topic__file-list-wrapper__span__url form-control">
+				{{#each urlList}}
+				<option value="{{this.optionId}}">{{this.optionText}}</option>
+				{{/each}}
+			</select>
+		</span>
+		<span class="create-topic__file-list-wrapper__span">
+			标题列:
+			<select class="create-topic__file-list-wrapper__span__title form-control">
+				{{#each titleList}}
+				<option value="{{this.optionId}}">{{this.optionText}}</option>
+				{{/each}}
+			</select>
+		</span>
+		<span class="create-topic__file-list-wrapper__span">
+			时间列:
+			<select class="create-topic__file-list-wrapper__span__time form-control">
+				{{#each timeList}}
+				<option value="{{this.optionId}}">{{this.optionText}}</option>
+				{{/each}}
+			</select>
+		</span>
+		<span class="create-topic__file-list-wrapper__span">
+			类型:
+			<select class="create-topic__file-list-wrapper__span__type form-control">
+				{{#each typeList}}
+				<option value="{{this.optionId}}">{{this.optionText}}</option>
+				{{/each}}
+			</select>
+		</span>
+		<span>
+			<button type="submit" class="create-topic__file-list-wrapper__upload-file">上传</button>
+		</span>
+	</div>
 </script>
 </body>
 </html>
