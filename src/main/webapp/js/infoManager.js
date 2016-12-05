@@ -824,7 +824,25 @@ $(document).ready(
                 var title = $this.attr('title');
                 var domTemp = $("#" + title);
                 var link = $this.attr('href');
-                var mockData = sessionStorage.getItem('data');
+                var mockData;
+                if( title === "showTopicCensusDetail" ){
+                    mockData = JSON.parse(sessionStorage.getItem("censusDetailShowData"));
+                }
+                // TODO: 完成逻辑
+                // sessionStorage.setItem('lineData', JSON.stringify(data));
+                // var mockData = JSON.parse(sessionStorage.getItem('lineData'));
+                if( title === "showTopicCensusLine" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusResult" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusPie" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
+                if( title === "showTopicCensusSquare" ){
+                    // mockData = JSON.parse(sessionStorage.setItem...);
+                }
                 $waitingMask.show();
                 $ul.find(".active").removeClass("active");
                 $(this.parentNode).addClass("active");
