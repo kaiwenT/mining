@@ -23,15 +23,13 @@ public interface IssueService {
     
     boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
 
-    boolean combineCountResult(String type, int[] indexes, HttpServletRequest request);
+    boolean combineCountResult(int[] indexes, HttpServletRequest request);
 
     int updateIssueInfo(IssueWithBLOBs issue, HttpServletRequest request);
 
     List<List<String[]>> queryClusterResult(String issueId);
 
-    List<List<String[]>> queryModifiedClusterResult(String issueId);
-
-    boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request);
+    boolean deleteSetsFromClusterResult(int[] set, HttpServletRequest request);
 
     long countIssues(IssueQueryCondition con);
 

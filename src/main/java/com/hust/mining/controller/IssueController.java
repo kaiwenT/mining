@@ -190,7 +190,6 @@ public class IssueController {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
         DeleteItemsParams params = new DeleteItemsParams();
-        params.setType(type);
         params.setCurrentSet(currentset);
         params.setIndexSet(indexset);
         boolean result = issueService.deleteItemsFromClusterResult(params, request);
@@ -203,13 +202,13 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/deleteSetsFromClusterResult")
-    public Object deleteSetsFromClusterResult(@RequestParam(value = "type", required = true) String type,
-            @RequestParam(value = "indexSet", required = true) int[] indexs, HttpServletRequest request) {
+    public Object deleteSetsFromClusterResult(@RequestParam(value = "indexSet", required = true) int[] indexs,
+            HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        boolean result = issueService.deleteSetsFromClusterResult(type, indexs, request);
+        boolean result = issueService.deleteSetsFromClusterResult(indexs, request);
         if (result) {
             return ResultUtil.success("删除成功");
         } else {
@@ -219,13 +218,13 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/combineResult")
-    public Object combineResult(@RequestParam(value = "type", required = true) String type,
-            @RequestParam(value = "indexSet", required = true) int[] indexes, HttpServletRequest request) {
+    public Object combineResult(@RequestParam(value = "indexSet", required = true) int[] indexes,
+            HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
         }
-        boolean result = issueService.combineCountResult(type, indexes, request);
+        boolean result = issueService.combineCountResult(indexes, request);
         if (result) {
             return ResultUtil.success("合并成功");
         } else {

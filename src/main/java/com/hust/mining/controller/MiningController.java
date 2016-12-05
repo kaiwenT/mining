@@ -77,7 +77,7 @@ public class MiningController {
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("get current issue failed,please create or select a issue");
         }
-        List<List<String[]>> list = issueService.queryModifiedClusterResult(issueId);
+        List<List<String[]>> list = issueService.queryClusterResult(issueId);
         if (null == list) {
             return ResultUtil.errorWithMsg("query cluster result failed");
         }

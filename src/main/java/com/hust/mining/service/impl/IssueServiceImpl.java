@@ -97,17 +97,12 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean combineCountResult(String type, int[] indexes, HttpServletRequest request) {
+    public boolean combineCountResult(int[] indexes, HttpServletRequest request) {
         String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
         List<List<String[]>> resultList = null;
         try {
-            if ("orig".equals(type)) {
-                resultList = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(issueDao.selectByUUID(issueId).getClusterResult());
-            } else {
-                resultList = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
-            }
+            resultList = (List<List<String[]>>) ConvertUtil
+                    .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
         } catch (Exception e) {
             return false;
         }
@@ -156,15 +151,8 @@ public class IssueServiceImpl implements IssueService {
     public boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request) {
         String issueId = getCurrentIssueId(request);
         try {
-            List<List<String[]>> origlist = null;
-            if (Constant.TYPE_ORIG.equals(params.getType())) {
-                origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getClusterResult());
-            } else {
-                origlist = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
-            }
-
+            List<List<String[]>> origlist = (List<List<String[]>>) ConvertUtil
+                    .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
             List<String[]> setList = origlist.get(params.getCurrentSet());
             Arrays.sort(params.getIndexSet());
             for (int i = params.getIndexSet().length - 1; i >= 0; i--) {
@@ -210,7 +198,7 @@ public class IssueServiceImpl implements IssueService {
         // TODO Auto-generated method stub
         try {
             List<List<String[]>> result = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueDao.selectByUUID(issueId).getClusterResult());
+                    .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
             return result;
         } catch (Exception e) {
             logger.info("query cluster result from DB failed, issueId:{} \t" + e.toString(), issueId);
@@ -220,36 +208,15 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<List<String[]>> queryModifiedClusterResult(String issueId) {
-        // TODO Auto-generated method stub
-        try {
-            List<List<String[]>> result = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueDao.selectByUUID(issueId).getModifiedClusterResult());
-            return result;
-        } catch (Exception e) {
-            logger.info("query modified cluster result from DB failed, issueId:{} \t" + e.toString(), issueId);
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request) {
+    public boolean deleteSetsFromClusterResult(int[] set, HttpServletRequest request) {
         String issueId = getCurrentIssueId(request);
         try {
             List<List<String[]>> origClusterList = null;
             List<String[]> origCalList = null;
-            if (Constant.TYPE_ORIG.equals(type)) {
-                origClusterList = (List<List<String[]>>) ConvertUtil
-                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getClusterResult());
-                origCalList = (List<String[]>) ConvertUtil
-                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getOrigCountResult());
-            } else {
                 origClusterList = (List<List<String[]>>) ConvertUtil
                         .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
                 origCalList = (List<String[]>) ConvertUtil
                         .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedOrigCountResult());
-            }
             Arrays.sort(set);
             for (int i = set.length - 1; i >= 0; i--) {
                 origClusterList.remove(set[i]);
@@ -264,11 +231,13 @@ public class IssueServiceImpl implements IssueService {
             if (0 == issueDao.updateIssueInfo(issue)) {
                 return false;
             }
-        } catch (Exception e) {
+        }catch(
+
+    Exception e)
+    {
             logger.error("exception occur during deleting sets from cluster result\t" + e.toString());
             return false;
-        }
-        return true;
+        }return true;
     }
 
     @Override
