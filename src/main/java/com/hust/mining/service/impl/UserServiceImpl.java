@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
 		List<User> users = userDao.selectByUserName(loginName);
 		List<User> user = new ArrayList<>();
 		int roleId = users.get(0).getRoleId();
-		System.out.println(roleId);
 		if (roleId == 1 || roleId == 2) {
 			user = userDao.selectAllUserInfo();
 		} else {
@@ -127,7 +126,7 @@ public class UserServiceImpl implements UserService {
 		for (RolePower rolePowerInfo : rolePowers) {
 			powerId.add(rolePowerInfo.getPowerId());
 		}
-		List<Power> power = powerDao.selectPowerByPOwerId(powerId);
+		List<Power> power = powerDao.selectPowerByPowerId(powerId);
 		for (Power powerInfo : power) {
 			powerUrls.add(powerInfo.getPowerUrl());
 		}

@@ -45,7 +45,7 @@ public class RoleDao {
 	public List<Role> selectByLikeRoleName(String roleName) {
 		RoleExample example = new RoleExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andRoleNameLike(roleName);
+		criteria.andRoleNameLike("%" + roleName + "%");
 		List<Role> roles = roleMapper.selectByExample(example);
 		return roles;
 	}
@@ -60,6 +60,12 @@ public class RoleDao {
 
 	public int insert(Role record) {
 		return roleMapper.insert(record);
+	}
+
+	public int insertRole(String roleName) {
+		Role roles = new Role();
+		roles.setRoleName(roleName);
+		return roleMapper.insert(roles);
 	}
 
 	public int insertSelective(Role record) {

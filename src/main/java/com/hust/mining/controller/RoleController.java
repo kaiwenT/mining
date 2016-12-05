@@ -68,8 +68,9 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/insertRoleInfo")
-	public Object insertRoleInfo(@RequestBody Role role, HttpServletRequest request) {
-		boolean statue = roleService.insertRoleInfo(role);
+	public Object insertRoleInfo(@RequestParam(value = "roleName", required = true) String roleName,
+			HttpServletRequest request) {
+		boolean statue = roleService.insertRoleInfo(roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("role table have been Role,unkow error");
 		}
