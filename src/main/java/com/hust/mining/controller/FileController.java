@@ -105,11 +105,12 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
-    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId, HttpServletRequest request) {
+    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId,
+            HttpServletRequest request) {
         IssueQueryCondition con = new IssueQueryCondition();
         con.setIssueId(issueId);
         List<Issue> issues = issueService.queryIssue(con);
-        if(issues.isEmpty()){
+        if (issues.isEmpty()) {
             return ResultUtil.errorWithMsg("query issue info failed");
         }
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
@@ -118,5 +119,15 @@ public class FileController {
         json.put("issue", issues.get(0));
         json.put("list", list);
         return ResultUtil.success(json);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/deleteFileById")
+    public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId) {
+        int i = fileService.deleteById(fileId);
+        if (i > 0) {
+            return ResultUtil.success("delete success");
+        }
+        return ResultUtil.errorWithMsg("delete fail");
     }
 }

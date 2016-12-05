@@ -166,7 +166,7 @@ public class IssueController {
             IssueQueryCondition con = new IssueQueryCondition();
             con.setIssueId(issueId);
             List<Issue> issues = issueService.queryIssue(con);
-            if(issues.isEmpty()){
+            if (issues.isEmpty()) {
                 return ResultUtil.errorWithMsg("query issue info failed");
             }
             List<String[]> list = (List<String[]>) ConvertUtil
@@ -220,7 +220,7 @@ public class IssueController {
     @ResponseBody
     @RequestMapping("/combineResult")
     public Object combineResult(@RequestParam(value = "type", required = true) String type,
-            @RequestParam(value = "indexes", required = true) int[] indexes, HttpServletRequest request) {
+            @RequestParam(value = "indexSet", required = true) int[] indexes, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");

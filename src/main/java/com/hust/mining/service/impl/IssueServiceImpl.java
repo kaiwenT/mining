@@ -232,21 +232,28 @@ public class IssueServiceImpl implements IssueService {
     public boolean deleteSetsFromClusterResult(String type, int[] set, HttpServletRequest request) {
         String issueId = getCurrentIssueId(request);
         try {
-            List<List<String[]>> origlist = null;
+            List<List<String[]>> origClusterList = null;
+            List<String[]> origCalList = null;
             if (Constant.TYPE_ORIG.equals(type)) {
-                origlist = (List<List<String[]>>) ConvertUtil
+                origClusterList = (List<List<String[]>>) ConvertUtil
                         .convertBytesToObject(queryIssueWithBLOBsById(issueId).getClusterResult());
+                origCalList = (List<String[]>) ConvertUtil
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getOrigCountResult());
             } else {
-                origlist = (List<List<String[]>>) ConvertUtil
+                origClusterList = (List<List<String[]>>) ConvertUtil
                         .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedClusterResult());
+                origCalList = (List<String[]>) ConvertUtil
+                        .convertBytesToObject(queryIssueWithBLOBsById(issueId).getModifiedOrigCountResult());
             }
             Arrays.sort(set);
             for (int i = set.length - 1; i >= 0; i--) {
-                origlist.remove(i);
+                origClusterList.remove(set[i]);
+                origCalList.remove(set[i]);
             }
             IssueWithBLOBs issue = new IssueWithBLOBs();
             issue.setIssueId(issueId);
-            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(origlist));
+            issue.setModifiedClusterResult(ConvertUtil.convertToBytes(origClusterList));
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origCalList));
             issue.setLastOperator(userService.getCurrentUser(request));
             issue.setLastUpdateTime(new Date());
             if (0 == issueDao.updateIssueInfo(issue)) {

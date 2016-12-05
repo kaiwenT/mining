@@ -93,27 +93,35 @@ public class StatisticServiceImpl implements StatisticService {
                 Map<String, Integer> levelMap = new HashMap<String, Integer>();
                 typeMap.put(type, 1);
                 levelMap.put(level, 1);
-                timeMap.put(Constant.MEDIA_CH, levelMap);
-                timeMap.put(Constant.INFOTYPE_CH, typeMap);
+                timeMap.put(Constant.MEDIA_EN, levelMap);
+                timeMap.put(Constant.INFOTYPE_EN, typeMap);
                 map.put(timeKey, timeMap);
             } else {
-                Map<String, Integer> typeMap = timeMap.get(Constant.INFOTYPE_CH);
+                Map<String, Integer> typeMap = timeMap.get(Constant.INFOTYPE_EN);
                 if (null == typeMap) {
                     typeMap = new HashMap<String, Integer>();
                     typeMap.put(type, 1);
                 } else {
-                    typeMap.put(type, typeMap.get(type) + 1);
+                    if(typeMap.get(type)==null){
+                        typeMap.put(type, 1);
+                    }else{
+                        typeMap.put(type, typeMap.get(type) + 1);
+                    }
                 }
 
-                Map<String, Integer> levelMap = timeMap.get(Constant.MEDIA_CH);
+                Map<String, Integer> levelMap = timeMap.get(Constant.MEDIA_EN);
                 if (null == levelMap) {
                     levelMap = new HashMap<String, Integer>();
                     levelMap.put(level, 1);
                 } else {
-                    levelMap.put(level, levelMap.get(level) + 1);
+                    if(levelMap.get(level)==null){
+                        levelMap.put(level, 1);
+                    }else{
+                        levelMap.put(level, levelMap.get(level) + 1);
+                    }
                 }
-                timeMap.put(Constant.MEDIA_CH, levelMap);
-                timeMap.put(Constant.INFOTYPE_CH, typeMap);
+                timeMap.put(Constant.MEDIA_EN, levelMap);
+                timeMap.put(Constant.INFOTYPE_EN, typeMap);
                 map.put(timeKey, timeMap);
             }
         }
@@ -122,7 +130,7 @@ public class StatisticServiceImpl implements StatisticService {
             Map<String, Integer> mediaAttention = calculateAttention(timeMap.get(Constant.MEDIA_EN));
             Map<String, Integer> netizenAttention = calculateAttention(timeMap.get(Constant.INFOTYPE_EN));
             timeMap.put(Constant.NETIZENATTENTION_EN, netizenAttention);
-            timeMap.put(Constant.MEDIA_EN, mediaAttention);
+            timeMap.put(Constant.MEDIAATTENTION_EN, mediaAttention);
         }
         return map;
     }
@@ -177,7 +185,7 @@ public class StatisticServiceImpl implements StatisticService {
             return countMap;
         }
         for (Map<String, Map<String, Integer>> values : map.values()) {
-            Map<String, Integer> typeMap = values.get(Constant.INFOTYPE_CH);
+            Map<String, Integer> typeMap = values.get(Constant.INFOTYPE_EN);
             for (Entry<String, Integer> entry : typeMap.entrySet()) {
                 Integer oldValue = countMap.get(entry.getKey());
                 if (null == oldValue) {

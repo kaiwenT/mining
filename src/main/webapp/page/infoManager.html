@@ -342,7 +342,7 @@
 					<td>{{this.time}}</td>
 					<td>
 						<button class="content-wrapper__topic-intro__file-list__delete"
-								data-file-no={{this.fileNO}}
+								data-file-id={{this.fileId}}
 								type="submit"
 						>
 							删除
@@ -425,7 +425,7 @@
 			{{#each fileList}}
 			{{!-- 如果tr有class selected說明被選中 --}}
 			<tr class="topic-census-detail__table__item"
-				data-file-id="{{this.fileId}}"
+				data-file-id="{{this.id}}"
 				data-topic-name="{{this.topic}}">
 				<td><input class="topic-census-detail__table__item__checkbox" type="checkbox"></td>
 				<td>{{this.topic}}</td>
