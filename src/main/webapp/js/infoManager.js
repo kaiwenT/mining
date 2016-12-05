@@ -642,83 +642,49 @@ $(document).ready(
                     var infotype = tmpJson.infoType;
                     var eleInfoType = {
                             time : key,
-                            luntan : 0,
-                            xinwen : 0,
-                            boke : 0,
-                            baozhi : 0,
-                            weixin : 0,
-                            tieba : 0,
-                            wenda : 0,
-                            shouji :0,
-                            shipin : 0,
-                            weibo : 0,
-                            qita : 0,
-                            weizhi : 0,
-//                    luntan : infotype['论坛'],
-//                    xinwen : infotype['新闻'],
-//                    boke : infotype['博客'],
-//                    baozhi : infotype['报纸'],
-//                    weixin : infotype['微信'],
-//                    tieba : infotype['贴吧'],
-//                    wenda : infotype['问答'],
-//                    shouji : infotype['手机'],
-//                    shipin : infotype['视频'],
-//                    weibo : infotype['微博'],
-//                    qita : infotype['其他']
+                            luntan : infotype['论坛'],
+                            xinwen : infotype['新闻'],
+                            boke : infotype['博客'],
+                            baozhi : infotype['报纸'],
+                            weixin : infotype['微信'],
+                            tieba : infotype['贴吧'],
+                            wenda : infotype['问答'],
+                            shouji : infotype['手机'],
+                            shipin : infotype['视频'],
+                            weibo : infotype['微博'],
+                            qita : infotype['其他'],
                     };
                     json.infotype.push(eleInfoType);
                     var netAtten = tmpJson.netizenAttention;
                     var eleNetAtten = {
                             time : key,
-                            luntan : 0,
-                            xinwen : 0,
-                            boke : 0,
-                            baozhi : 0,
-                            weixin : 0,
-                            tieba : 0,
-                            wenda : 0,
-                            shouji :0,
-                            shipin : 0,
-                            weibo : 0,
-                            qita : 0,
-                            weizhi : 0,
-//                            luntan : netAtten['论坛'],
-//                            xinwen : netAtten['新闻'],
-//                            boke : netAtten['博客'],
-//                            baozhi : netAtten['报纸'],
-//                            weixin : netAtten['微信'],
-//                            tieba : netAtten['贴吧'],
-//                            wenda : netAtten['问答'],
-//                            shouji : netAtten['手机'],
-//                            shipin : netAtten['视频'],
-//                            weibo : netAtten['微博'],
-//                            qita : infotype['其他'],
+                            luntan : netAtten['论坛'],
+                            xinwen : netAtten['新闻'],
+                            boke : netAtten['博客'],
+                            baozhi : netAtten['报纸'],
+                            weixin : netAtten['微信'],
+                            tieba : netAtten['贴吧'],
+                            wenda : netAtten['问答'],
+                            shouji : netAtten['手机'],
+                            shipin : netAtten['视频'],
+                            weibo : netAtten['微博'],
+                            qita : infotype['其他'],
                     };
                     json.netAtten.push(eleNetAtten);
                     var media = tmpJson.media;
                     var eleMedia ={
                             time : key,
-                            zhongyang : 0,
-                            shengji : 0,
-                            qita : 0,
-                            weizhi : 0,
-//                            zhongyang : media['中央媒体'],
-//                            shengji : media['省级媒体'],
-//                            qita : media['其他媒体'],
-//                            weizhi : media['未知媒体'],
+                            zhongyang : media['中央媒体'],
+                            shengji : media['省级媒体'],
+                            qita : media['其他'],
                     };
                     json.media.push(eleMedia);
                     var mediaAtten = tmpJson.mediaAttention;
                     var eleMediaAtten ={
                             time : key,
-                            zhongyang : 0,
-                            shengji : 0,
-                            qita : 0,
-                            weizhi : 0,
-//                            zhongyang : media['中央媒体'],
-//                            shengji : media['省级媒体'],
-//                            qita : media['其他媒体'],
-//                            weizhi : media['未知媒体'],
+                            zhongyang : media['中央媒体'],
+                            shengji : media['省级媒体'],
+                            qita : media['其他'],
                     };
                     json.mediaAtten.push(eleMediaAtten);
                 }
@@ -857,29 +823,20 @@ $(document).ready(
                 var title = $this.attr('title');
                 var domTemp = $("#" + title);
                 var link = $this.attr('href');
-                var mockData;
-                if( title === "showTopicCensusDetail" ){
-                    mockData = JSON.parse(sessionStorage.getItem("data"));
-                }
-                // TODO: 完成逻辑
-                // sessionStorage.setItem('lineData', JSON.stringify(data));
-                // var mockData = JSON.parse(sessionStorage.getItem('lineData'));
-                if( title === "showTopicCensusLine" ){
-                    // mockData = JSON.parse(sessionStorage.setItem...);
-                }
-                if( title === "showTopicCensusResult" ){
-                    // mockData = JSON.parse(sessionStorage.setItem...);
-                }
-                if( title === "showTopicCensusPie" ){
-                    // mockData = JSON.parse(sessionStorage.setItem...);
-                }
-                if( title === "showTopicCensusSquare" ){
-                    // mockData = JSON.parse(sessionStorage.setItem...);
-                }
                 $waitingMask.show();
+                var mockData = JSON.parse(sessionStorage.getItem("data"));
                 $ul.find(".active").removeClass("active");
                 $(this.parentNode).addClass("active");
                 handleBarTemplate(domTemp, showCensus.target, mockData);
+                if( title === "showTopicCensusLine" ){
+                    paintline();
+                }
+                if( title === "showTopicCensusPie" ){
+                    paintpie();
+                }
+                if( title === "showTopicCensusSquare" ){
+                    paintcolumn();
+                }
                 $waitingMask.hide();
             }
         
@@ -1087,8 +1044,287 @@ $(document).ready(
                 $areaShouldShow.show();
             }
             
-            /****************************ajax方法**************************/
-            function ajax4(param){
-                
+            /****************************画图**************************/
+            function paintcolumn(){
+                Highcharts.chart('columnInfoType', {
+                    data: {
+                        table: 'datatable_infotype'
+                    },
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                                this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('columnInfoTypeAtten', {
+                    data: {
+                        table: 'datatable_netAtten'
+                    },
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('columnMedia', {
+                    data: {
+                        table: 'datatable_media'
+                    },
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('columnMediaAtten', {
+                    data: {
+                        table: 'datatable_mediaAtten'
+                    },
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+            }
+            function paintline(){
+                Highcharts.chart('lineInfoType', {
+                    data: {
+                        table: 'datatable_infotype'
+                    },
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('lineInfoTypeAtten', {
+                    data: {
+                        table: 'datatable_netAtten'
+                    },
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('lineMedia', {
+                    data: {
+                        table: 'datatable_media'
+                    },
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('lineMediaAtten', {
+                    data: {
+                        table: 'datatable_mediaAtten'
+                    },
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+            }
+            function paintpie(){
+                Highcharts.chart('pieInfoType', {
+                    data: {
+                        table: 'datatable_infotype'
+                    },
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('pieInfoTypeAtten', {
+                    data: {
+                        table: 'datatable_netAtten'
+                    },
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('pieMedia', {
+                    data: {
+                        table: 'datatable_media'
+                    },
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
+                Highcharts.chart('pieMediaAtten', {
+                    data: {
+                        table: 'datatable_mediaAtten'
+                    },
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Data extracted from a HTML table in the page'
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        title: {
+                            text: 'Units'
+                        }
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' ' + this.point.name.toLowerCase();
+                        }
+                    }
+                });
             }
         });
