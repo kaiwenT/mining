@@ -167,10 +167,11 @@ public class IssueServiceImpl implements IssueService {
                     return o2.size() - o1.size();
                 }
             });
-
+            List<String[]> calList = statService.getOrigAndCount(origlist, Index.TIME_INDEX);
             IssueWithBLOBs issue = new IssueWithBLOBs();
             issue.setIssueId(issueId);
             issue.setModifiedClusterResult(ConvertUtil.convertToBytes(origlist));
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(calList));
             issue.setLastOperator(userService.getCurrentUser(request));
             issue.setLastUpdateTime(new Date());
             if (0 == issueDao.updateIssueInfo(issue)) {

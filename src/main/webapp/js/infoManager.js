@@ -669,7 +669,6 @@ $(document).ready(
                     dataType : 'json',
                     traditional: true,
                     data : {
-                        type : 'or',
                         indexSet : deleteItems
                     },
                     beforeSend : function() {
@@ -716,7 +715,6 @@ $(document).ready(
                     url : 'http://localhost:8080/issue/combineResult',
                     traditional: true,
                     data : {
-                        type : 'or',
                         indexSet : combineItems
                     },
                     beforeSend : function() {

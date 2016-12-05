@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Maps;
@@ -106,14 +105,9 @@ public class MiningController {
         }
         IssueWithBLOBs issue = issueService.queryIssueWithBLOBsById(issueId);
         try {
-            List<String[]> list = null;
-            if (Constant.TYPE_ORIG.equals(params.getType())) {
-                list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getClusterResult()))
-                        .get(params.getCurrentSet());
-            } else {
-                list = ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getModifiedClusterResult()))
-                        .get(params.getCurrentSet());
-            }
+            List<String[]> list =
+                    ((List<List<String[]>>) ConvertUtil.convertBytesToObject(issue.getModifiedClusterResult()))
+                            .get(params.getCurrentSet());
             Map<String, Map<String, Map<String, Integer>>> timeMap =
                     statisticService.processAll(list, params.getInterval());
             Map<String, Integer> typeMap = statisticService.getTypeCount(timeMap);

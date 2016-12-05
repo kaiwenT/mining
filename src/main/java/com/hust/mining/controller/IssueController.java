@@ -65,17 +65,6 @@ public class IssueController {
     }
 
     @ResponseBody
-    @RequestMapping("/enterIntoIssue")
-    public Object enterIntoIssue(@RequestParam(value = "issue_id", required = true) String issueId,
-            HttpServletRequest request) {
-        if (issueService.queryIssueWithBLOBsById(issueId) == null) {
-            return ResultUtil.errorWithMsg("current issue doesn't exist");
-        }
-        request.getSession().setAttribute(Constant.ISSUE_ID, issueId);
-        return ResultUtil.success("enter issue success!");
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/shuffle", method = RequestMethod.POST)
     public Object shuffle(HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
@@ -87,47 +76,6 @@ public class IssueController {
             return ResultUtil.errorWithMsg("combine different files failed");
         }
         return ResultUtil.success("combine success");
-    }
-
-    @SuppressWarnings("unchecked")
-    @ResponseBody
-    @RequestMapping("/queryClusterResult")
-    public Object queryClusterResult(@RequestParam(value = "currentset", required = true) int currentSet,
-            HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
-        if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
-        }
-        Map<String, Object> resultMap = Maps.newHashMap();
-        try {
-            List<List<String[]>> list = (List<List<String[]>>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getClusterResult());
-            ViewPage page = new ViewPage();
-            page.setCurrentPage(currentSet);
-            page.setTotalPage(list.size());
-            resultMap.put("page", page);
-            resultMap.put("set", list.get(currentSet - 1));
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("从数据库中读取聚类结果出错");
-        }
-        return ResultUtil.success(resultMap);
-    }
-
-    @SuppressWarnings("unchecked")
-    @ResponseBody
-    @RequestMapping("/queryOrigAndCountResult")
-    public Object queryOrigAndCountResult(HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
-        if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("无法获取issueid，请重新选择或者创建issue");
-        }
-        try {
-            List<String[]> list = (List<String[]>) ConvertUtil
-                    .convertBytesToObject(issueService.queryIssueWithBLOBsById(issueId).getOrigCountResult());
-            return ResultUtil.success(list);
-        } catch (Exception e) {
-            return ResultUtil.errorWithMsg("从数据库中读取统计结果出错");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -182,8 +130,7 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/deleteItemsFromClusterResult")
-    public Object deleteItemsFromClusterResult(@RequestParam(value = "type", required = true) String type,
-            @RequestParam(value = "currentset", required = true) int currentset,
+    public Object deleteItemsFromClusterResult(@RequestParam(value = "currentset", required = true) int currentset,
             @RequestParam(value = "indexset", required = true) int[] indexset, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
