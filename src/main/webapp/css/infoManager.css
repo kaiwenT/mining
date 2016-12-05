@@ -164,6 +164,7 @@ body{
 	text-align: center;
 	background-color: #3071a9;
 	color: white;
+	min-width: 1079px;
 }
 
 .copyright-item {
