@@ -585,7 +585,7 @@ $(document).ready(
                         $waitingMask.show();
                     },
                     data : {
-                        currentset : Number(id) +1
+                        currentset : Number(id)
                     },
                     success : function(data){
                         if(data !== undefined && data !== ''){
@@ -923,6 +923,13 @@ $(document).ready(
                 var title = $parent.find(".create-topic__file-list-wrapper__span__title").val();
                 var time = $parent.find(".create-topic__file-list-wrapper__span__time").val();
                 alert("上传文件:" + fileName + " id=" + fileId + " url=" + url + " title=" + title + " time=" + time );
+                var form = new FormData();
+                form.append("file", fileName);
+                form.append("urlIndex", "2");
+                form.append("titleIndex", "1");
+                form.append("timeIndex", "4");
+                form.append("sourceType", "新闻");
+                
             }
         
             // =================util functions=========================
@@ -1065,7 +1072,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                                this.point.y + ' ' + this.point.name.toLowerCase();
+                                this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1088,7 +1095,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1111,7 +1118,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1134,7 +1141,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1159,7 +1166,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1182,7 +1189,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1205,7 +1212,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1228,7 +1235,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1253,7 +1260,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1276,7 +1283,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1299,7 +1306,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
@@ -1322,7 +1329,7 @@ $(document).ready(
                     tooltip: {
                         formatter: function () {
                             return '<b>' + this.series.name + '</b><br/>' +
-                            this.point.y + ' ' + this.point.name.toLowerCase();
+                            this.point.y + ' ' + this.point.name ;
                         }
                     }
                 });
