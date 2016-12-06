@@ -140,7 +140,7 @@ public class FileController {
         }
         try {
             List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 0);
-            return ResultUtil.success(list);
+            return ResultUtil.success(list.get(0));
         } catch (Exception e) {
             logger.warn("read column title fail" + e.toString());
         }

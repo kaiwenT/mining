@@ -957,7 +957,7 @@
 	<div class="create-topic__file-list-wrapper" data-file-id="{{fileId}}">
 		<span class="create-topic__file-list-wrapper__span">
 			文件: <input class="create-topic__file-list-wrapper__span__file-name"
-					   		type="text" value="{{fileName}}" data-file-id="{{fileId}}">
+					   		type="file" value="{{fileName}}" data-file-id="{{fileId}}">
 		</span>
 		<span class="create-topic__file-list-wrapper__span">
 			URL列:
@@ -990,6 +990,9 @@
 				<option value="{{this.optionId}}">{{this.optionText}}</option>
 				{{/each}}
 			</select>
+		</span>
+		<span>
+			<button type="submit" class="create-topic__file-list-wrapper__preview-file">预览</button>
 		</span>
 		<span>
 			<button type="submit" class="create-topic__file-list-wrapper__upload-file">上传</button>
