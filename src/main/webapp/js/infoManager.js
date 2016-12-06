@@ -306,11 +306,22 @@ $(document)
                                 onClickResultListItem);
                         $changeableArea.on("click", "#checkTopicDetail",
                                 onClickCheckTopicDetail);
+                        $changeableArea.on("click", "#checkMiningData",
+                                onClickCheckMiningData);
+                        $changeableArea.on("click", "#checkResetData",
+                                onClickCheckResetData);
+                        $changeableArea.on("click", "#checkCombineFiles",
+                                onClickCombineFiles);
                         $changeableArea
                                 .on(
                                         "click",
                                         ".content-wrapper__topic-intro__file-list__delete",
                                         onClickDeleteFile);
+                        $changeableArea
+                        .on(
+                                "click",
+                                "#deleteIssueButton",
+                                onClickDeleteIssue);
 
                         $censusArea.on("click",
                                 ".topic-census-detail__table__item__checkbox",
@@ -522,6 +533,52 @@ $(document)
                             return;
                         }
                     }
+                    
+                    /**
+                     * 删除话题
+                     * @param event
+                     * @returns
+                     */
+                    function onClickDeleteIssue(event) {
+                        var $this = $(this);
+                        var issueId = $this.data('issueId');
+                        var confirmDelete = confirm("do you want to delete this issue?");
+                        if (confirmDelete) {
+                            $
+                            .ajax({
+                                type : 'post',
+                                url : 'http://localhost:8080/issue/delete',
+                                dataType : 'json',
+                                data : {
+                                    issueId : issueId,
+                                },
+                                beforeSend : function() {
+                                    $waitingMask.show();
+                                },
+                                success : function(data) {
+                                    if (data !== undefined
+                                            && data !== '') {
+                                        if (data.status === 'OK') {
+                                            alert('delete success');
+                                            var parent = $($this
+                                                    .parents()[1]);
+                                            parent.remove();
+                                        } else {
+                                            alert(data.result);
+                                        }
+                                    } else {
+                                        alert('delete fail');
+                                    }
+                                },
+                                error : function(data) {
+                                    alert(data.result);
+                                }
+                            });
+                            $waitingMask.hide();
+                        } else {
+                            return;
+                        }
+                    }
 
                     /**
                      * 点击事件内 查看结果详情按钮 响应事件
@@ -579,9 +636,107 @@ $(document)
                                         handleBarTemplate(showResult.domTemp,
                                                 showResult.target, mockData);
                                         appendContentInfoMessage("查看话题详情");
+                                    },
+                                    complete : function(data){
+                                        $waitingMask.hide();
                                     }
                                 });
-                        $waitingMask.hide();
+                    }
+                    /**
+                     * 执行处理数据
+                     * @returns
+                     */
+                    function onClickCheckMiningData() {
+                        var $waitingMask = $(".waiting-mask");
+                        $
+                        .ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/mining/cluster',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data) {
+                                if (data !== undefined && data !== '') {
+                                    if (data.status === 'OK') {
+                                        alert(data.result);
+                                    } else {
+                                        alert(data.result);
+                                    }
+                                }
+                            },
+                            error : function(XMLHttpRequest) {
+                                var text = XMLHttpRequest.responseText;
+                                var json = JSON.parse(text);
+                                alert(json.result);
+                            },
+                            complete : function(data){
+                                $waitingMask.hide();
+                            }
+                        });
+                    }
+                    /**
+                     * 执行重置数据
+                     * @returns
+                     */
+                    function onClickCheckResetData() {
+                        var $waitingMask = $(".waiting-mask");
+                        $
+                        .ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/issue/reset',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data) {
+                                if (data !== undefined && data !== '') {
+                                    if (data.status === 'OK') {
+                                        alert(data.result);
+                                    } else {
+                                        alert(data.result);
+                                    }
+                                }
+                            },
+                            error : function(XMLHttpRequest) {
+                                var text = XMLHttpRequest.responseText;
+                                var json = JSON.parse(text);
+                                alert(json.result);
+                            },
+                            complete : function(data){
+                                $waitingMask.hide();
+                            }
+                        });
+                    }
+                    /**
+                     * 组合文件
+                     * @returns
+                     */
+                    function onClickCombineFiles() {
+                        var $waitingMask = $(".waiting-mask");
+                        $
+                        .ajax({
+                            type : 'post',
+                            url : 'http://localhost:8080/issue/shuffle',
+                            beforeSend : function() {
+                                $waitingMask.show();
+                            },
+                            success : function(data) {
+                                if (data !== undefined && data !== '') {
+                                    if (data.status === 'OK') {
+                                        alert(data.result);
+                                    } else {
+                                        alert(data.result);
+                                    }
+                                }
+                            },
+                            error : function(XMLHttpRequest) {
+                                var text = XMLHttpRequest.responseText;
+                                var json = JSON.parse(text);
+                                alert(json.result);
+                            },
+                            complete : function(data){
+                                $waitingMask.hide();
+                            }
+                        });
                     }
 
                     /**

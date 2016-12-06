@@ -55,9 +55,11 @@ public class MiningController {
             return ResultUtil.errorWithMsg("query content from DB failed before cluster \t" + e.toString());
         }
         List<List<String[]>> clusterResult = clusterService.getClusterResult(content, Index.TITLE_INDEX);
+        List<String[]> origAndCountResult = statisticService.getOrigAndCount(clusterResult, Index.TIME_INDEX);
         try {
             issue.setClusterResult(ConvertUtil.convertToBytes(clusterResult));
             issue.setModifiedClusterResult(ConvertUtil.convertToBytes(clusterResult));
+            issue.setModifiedOrigCountResult(ConvertUtil.convertToBytes(origAndCountResult));
         } catch (Exception e) {
             logger.error("convert cluster result and origAndCount result to byte[] failed \t" + e.toString());
             return ResultUtil.unknowError();

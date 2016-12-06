@@ -281,6 +281,7 @@
 				<th>创建时间</th>
 				<th>最后修改人</th>
 				<th>最后修改时间</th>
+				<th>操作</th>
 			</tr>
 			</thead>
 			<tbody id="contentSearchResultList">
@@ -293,6 +294,12 @@
 					<td>{{this.createTime}}</td>
 					<td>{{this.modifier}}</td>
 					<td>{{this.modifyTime}}</td>
+					<td><button id="deleteIssueButton"
+								data-issue-id={{this.issueId}}
+								type="submit"
+						>
+							删除
+						</button></td>
 				</tr>
 				{{/each}}
 			</tbody>
@@ -314,8 +321,17 @@
 			</div>
 		</div>
 		<div class="content-wrapper__topic-intor__buttons">
+			<div id="checkCombineFiles" class="btn btn-primary">
+				合并文件
+			</div>
+			<div id="checkMiningData" class="btn btn-primary">
+				处理数据
+			</div>
 			<div id="checkTopicDetail" class="btn btn-primary">
 				查看话题聚类结果
+			</div>
+			<div id="checkResetData" class="btn btn-primary">
+				恢复初始结果
 			</div>
 		</div>
 		<div  class="content-wrapper__topic-intor__files">
@@ -375,7 +391,7 @@
 	</div>
 	<div class="topic-detail-result__result-list">
 		<div class="topic-detail-result__result-list__no-file-message" style="display: none">
-			没有文件
+			没有内容
 		</div>
 		{{#each topicDetialList}}
 		<div class="topic-detail-result__result-list__item">
