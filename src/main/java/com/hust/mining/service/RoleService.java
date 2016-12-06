@@ -11,7 +11,7 @@ public interface RoleService {
 
 	List<Role> selectOneRoleInfo(String roleName);
 
-	boolean insertRoleInfo(Role role);
+	boolean insertRoleInfo(String roleName);
 
 	boolean deleteRoleInfoById(int roleId);
 

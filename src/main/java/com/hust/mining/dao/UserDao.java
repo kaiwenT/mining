@@ -2,6 +2,7 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.UserMapper;
@@ -34,7 +35,7 @@ public class UserDao {
 	public List<User> selectByLikeUserName(String userName) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andUserNameLike(userName);
+		criteria.andUserNameLike("%" + userName + "%");
 		List<User> users = userMapper.selectByExample(example);
 		return users;
 	}
@@ -91,6 +92,9 @@ public class UserDao {
 	public List<User> selectByExample(UserQueryCondition userQueryCondition) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
+		if (!StringUtils.isBlank(userQueryCondition.getEmail())) {
+			
+		}
 		criteria.andUserNameEqualTo(userQueryCondition.getUserName());
 		criteria.andEmailEqualTo(userQueryCondition.getEmail());
 		criteria.andTelphoneEqualTo(userQueryCondition.getTelphone());

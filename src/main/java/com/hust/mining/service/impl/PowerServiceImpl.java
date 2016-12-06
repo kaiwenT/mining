@@ -26,12 +26,19 @@ public class PowerServiceImpl implements PowerService {
 	@Override
 	public List<Power> selectAllPower() {
 		List<Power> powers = powerDao.selectAllPowers();
+		if (powers.isEmpty()) {
+			logger.info("select powers is empty");
+		}
 		return powers;
 	}
 
+	
 	@Override
 	public List<Power> selectOnePowerInfo(String powerName) {
 		List<Power> powers = powerDao.selectByLikePowerName(powerName);
+		if (powers.isEmpty()) {
+			logger.info("powerName is not exist");
+		}
 		return powers;
 	}
 

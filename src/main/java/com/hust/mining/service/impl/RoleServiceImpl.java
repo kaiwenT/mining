@@ -33,6 +33,9 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public List<Role> selectAllRole() {
 		List<Role> roles = roleDao.selectRoles();
+		if (roles.isEmpty()) {
+			logger.info("role  is empty");
+		}
 		return roles;
 	}
 
@@ -40,19 +43,26 @@ public class RoleServiceImpl implements RoleService {
 	public List<Role> selectOneRoleInfo(String roleName) {
 		// 角色名必须是表已经存在的角色名
 		List<Role> role = roleDao.selectByLikeRoleName(roleName);
+		if (role.isEmpty()) {
+			logger.info("roleName is not exist");
+		}
 		return role;
 	}
 
 	@Override
-	public boolean insertRoleInfo(Role role) {
+	public boolean insertRoleInfo(String roleName) {
 		// 添加新的角色信息，信息不能重复
-		List<Role> roles = roleDao.selectRoleByName(role.getRoleName());
+		List<Role> roles = roleDao.selectRoleByName(roleName);
 		if (!roles.isEmpty()) {
 			logger.info("role table have been roelinfo");
 			return false;
 		}
-		//状态值
-		roleDao.insert(role);
+		// 状态值
+		int statue = roleDao.insertRole(roleName);
+		if (statue == 0) {
+			logger.info("insert role error");
+			return false;
+		}
 		return true;
 	}
 
@@ -61,11 +71,16 @@ public class RoleServiceImpl implements RoleService {
 		List<User> users = userDao.selectByRoleId(roleId);
 		for (User userInfo : users) {
 			userInfo.setRoleId(null);
-			userDao.updateByPrimaryKeySelective(userInfo);
+			int statue = userDao.updateByPrimaryKeySelective(userInfo);
+			if (statue == 0) {
+				logger.info("update user roleid(change is null) is error ");
+				return false;
+			}
 		}
 		int rolePowerStatus = rolePowerDao.deleteRolePowerByRoleId(roleId);
 		if (rolePowerStatus == 0) {
-			logger.info("rolepower table not have role");
+			logger.info("delete rolepower about roleidinfo is error");
+			return false;
 		}
 		int roleStatus = roleDao.deleteByPrimaryKey(roleId);
 		if (roleStatus == 0) {
@@ -84,8 +99,12 @@ public class RoleServiceImpl implements RoleService {
 		return true;
 	}
 
+	/**
+	 * 为角色添加权限 是从角色不具有的权限中添加
+	 */
 	@Override
 	public boolean insertPowerOfRole(int roleId, List<String> powerName) {
+
 		List<Integer> powerId = new ArrayList<>();
 		for (String powerNameIn : powerName) {
 			List<Power> power = powerDao.selectPowerByPowerName(powerNameIn);
@@ -104,6 +123,9 @@ public class RoleServiceImpl implements RoleService {
 		return true;
 	}
 
+	/**
+	 * 从角色中删除某些权限， 是根据角色中包含的权限进行删除
+	 */
 	@Override
 	public boolean deletePowerOfRole(int roleId, List<String> powerName) {
 		List<Integer> powerIds = new ArrayList<>();
@@ -121,6 +143,9 @@ public class RoleServiceImpl implements RoleService {
 		return true;
 	}
 
+	/**
+	 * 为用户添加角色时，要先查询用户不具有的角色新
+	 */
 	@Override
 	public List<Role> selectNotHaveRole(int roleId) {
 		List<Role> roles = roleDao.selectRoles();
@@ -133,6 +158,9 @@ public class RoleServiceImpl implements RoleService {
 		return role;
 	}
 
+	/**
+	 * 角色不包含的权限信息
+	 */
 	@Override
 	public List<Power> notIncludePowers(int roleId) {
 		// 在角色权限表中 把权限ID取出来 。然后再得到权限名字
@@ -153,6 +181,9 @@ public class RoleServiceImpl implements RoleService {
 		return notIncludePower;
 	}
 
+	/**
+	 * 角色包含的权限
+	 */
 	@Override
 	public List<Power> includePowers(int roleId) {
 		List<Integer> powerIds = new ArrayList<>();
