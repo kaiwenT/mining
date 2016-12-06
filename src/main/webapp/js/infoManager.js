@@ -25,19 +25,38 @@ $(document)
                     var $censusChangableArea = $(".content-wrapper__content__result-census");
 
                     mainInit();
-
+                    
                     function mainInit() {
                         getPageContent(1);
                         $originLink.addClass('active');
                     }
-
+                    
+                    function quit(){
+                        $.ajax({
+                            type : 'post',
+                            url : 'http://218.199.92.27:8080/logout',
+                            success : function(data){
+                                if (data !== undefined && data !== '') {
+                                    if (data.status === 'OK') {
+                                        alert('退出成功')
+                                    }else{
+                                        alert(data.result);
+                                    }
+                                }
+                            },
+                            error : function(XMLHttpRequest) {
+                                var text = XMLHttpRequest.responseText;
+                                var json = JSON.parse(text);
+                                alert(json.result);
+                            },
+                        });
+                    }
                     // ==================main template========================
                     function handleBarTemplate(tempDom, targetDom, context) {
                         // 用jquery获取模板
                         var source = $(tempDom).html();
                         // 预编译模板
                         var template = Handlebars.compile(source);
-
                         // var html = template(context);
                         // 输入模板
                         $(targetDom).html(template(context));
@@ -477,7 +496,10 @@ $(document)
                                             }
                                         }
                                     },
-                                    error : function() {
+                                    error : function(XMLHttpRequest) {
+                                        var text = XMLHttpRequest.responseText;
+                                        var json = JSON.parse(text);
+                                        alert(json.result);
                                         var topicIntroDomTemp = "#topicIntroduction";
                                         var topicIntorTarget = changableArea;
                                         var mockData = mockResultIntroData();
@@ -513,7 +535,6 @@ $(document)
                                             if (data !== undefined
                                                     && data !== '') {
                                                 if (data.status === 'OK') {
-                                                    alert('delete success');
                                                     var parent = $($this
                                                             .parents()[1]);
                                                     parent.remove();
@@ -524,9 +545,11 @@ $(document)
                                                 alert('delete fail');
                                             }
                                         },
-                                        error : function(data) {
-                                            alert(data.result);
-                                        }
+                                        error : function(XMLHttpRequest) {
+                                            var text = XMLHttpRequest.responseText;
+                                            var json = JSON.parse(text);
+                                            alert(json.result);
+                                        },
                                     });
                             $waitingMask.hide();
                         } else {
@@ -540,6 +563,7 @@ $(document)
                      * @returns
                      */
                     function onClickDeleteIssue(event) {
+                        event.stopPropagation();
                         var $this = $(this);
                         var issueId = $this.data('issueId');
                         var confirmDelete = confirm("do you want to delete this issue?");
@@ -559,7 +583,6 @@ $(document)
                                     if (data !== undefined
                                             && data !== '') {
                                         if (data.status === 'OK') {
-                                            alert('delete success');
                                             var parent = $($this
                                                     .parents()[1]);
                                             parent.remove();
@@ -570,11 +593,15 @@ $(document)
                                         alert('delete fail');
                                     }
                                 },
-                                error : function(data) {
-                                    alert(data.result);
+                                error : function(XMLHttpRequest) {
+                                    var text = XMLHttpRequest.responseText;
+                                    var json = JSON.parse(text);
+                                    alert(json.result);
+                                },
+                                complete :function(data){
+                                    $waitingMask.hide();
                                 }
                             });
-                            $waitingMask.hide();
                         } else {
                             return;
                         }
@@ -854,14 +881,17 @@ $(document)
                                                     .stringify(mockData));
                                         }
                                     },
-                                    error : function(data) {
+                                    error : function(XMLHttpRequest) {
+                                        var text = XMLHttpRequest.responseText;
+                                        var json = JSON.parse(text);
+                                        alert(json.result);
                                         var mockData = mockTopicCensusData();
                                         handleBarTemplate(showCensus.domTemp,
                                                 showCensus.target, mockData);
                                         appendContentInfoMessage("统计结果展示");
                                         sessionStorage.setItem("data", JSON
                                                 .stringify(mockData));
-                                    }
+                                    },
                                 });
                         $waitingMask.hide();
                     }
