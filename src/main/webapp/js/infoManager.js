@@ -82,7 +82,7 @@ $(document)
                         that.totalPages;
                         that.$waitingMask = $(".waiting-mask");
                         that.page = page;
-                        that.url = "http://localhost:8080/issue/queryOwnIssue";
+                        that.url = "http://218.199.92.27:8080/issue/queryOwnIssue";
                         that.type = "POST";
                         that.dataType = "json";
                         that.contentType = "application/json";
@@ -448,7 +448,7 @@ $(document)
                         $
                                 .ajax({
                                     type : 'POST',
-                                    url : 'http://localhost:8080/file/queryIssueFiles',
+                                    url : 'http://218.199.92.27:8080/file/queryIssueFiles',
                                     dataType : 'json',
                                     data : {
                                         issueId : issueId,
@@ -523,7 +523,7 @@ $(document)
                             $
                                     .ajax({
                                         type : 'post',
-                                        url : 'http://localhost:8080/file/deleteFileById',
+                                        url : 'http://218.199.92.27:8080/file/deleteFileById',
                                         dataType : 'json',
                                         data : {
                                             fileid : fileId,
@@ -571,7 +571,7 @@ $(document)
                             $
                             .ajax({
                                 type : 'post',
-                                url : 'http://localhost:8080/issue/delete',
+                                url : 'http://218.199.92.27:8080/issue/delete',
                                 dataType : 'json',
                                 data : {
                                     issueId : issueId,
@@ -621,7 +621,7 @@ $(document)
                         $
                                 .ajax({
                                     type : 'post',
-                                    url : 'http://localhost:8080/issue/queryOrigAndCountResult',
+                                    url : 'http://218.199.92.27:8080/issue/queryOrigAndCountResult',
                                     beforeSend : function() {
                                         $waitingMask.show();
                                     },
@@ -678,7 +678,7 @@ $(document)
                         $
                         .ajax({
                             type : 'post',
-                            url : 'http://localhost:8080/mining/cluster',
+                            url : 'http://218.199.92.27:8080/mining/cluster',
                             beforeSend : function() {
                                 $waitingMask.show();
                             },
@@ -710,7 +710,7 @@ $(document)
                         $
                         .ajax({
                             type : 'post',
-                            url : 'http://localhost:8080/issue/reset',
+                            url : 'http://218.199.92.27:8080/issue/reset',
                             beforeSend : function() {
                                 $waitingMask.show();
                             },
@@ -742,7 +742,7 @@ $(document)
                         $
                         .ajax({
                             type : 'post',
-                            url : 'http://localhost:8080/issue/shuffle',
+                            url : 'http://218.199.92.27:8080/issue/shuffle',
                             beforeSend : function() {
                                 $waitingMask.show();
                             },
@@ -831,7 +831,7 @@ $(document)
                         $
                                 .ajax({
                                     type : 'post',
-                                    url : 'http://localhost:8080/issue/queryClusterResult',
+                                    url : 'http://218.199.92.27:8080/issue/queryClusterResult',
                                     beforeSend : function() {
                                         $waitingMask.show();
                                     },
@@ -988,7 +988,7 @@ $(document)
                         $
                                 .ajax({
                                     type : 'post',
-                                    url : 'http://localhost:8080/issue/deleteSetsFromClusterResult',
+                                    url : 'http://218.199.92.27:8080/issue/deleteSetsFromClusterResult',
                                     dataType : 'json',
                                     traditional : true,
                                     data : {
@@ -1036,7 +1036,7 @@ $(document)
                         $.ajax({
                             type : 'post',
                             dataType : 'json',
-                            url : 'http://localhost:8080/issue/combineResult',
+                            url : 'http://218.199.92.27:8080/issue/combineResult',
                             traditional : true,
                             data : {
                                 indexSet : combineItems
@@ -1138,7 +1138,7 @@ $(document)
                             $
                                     .ajax({
                                         type : 'post',
-                                        url : 'http://localhost:8080/issue/create',
+                                        url : 'http://218.199.92.27:8080/issue/create',
                                         data : {
                                             issueName : topicName
                                         },
@@ -1200,7 +1200,7 @@ $(document)
                         var settings = {
                             "async" : true,
                             "crossDomain" : true,
-                            "url" : "http://localhost:8080/file/getColumnTitle",
+                            "url" : "http://218.199.92.27:8080/file/getColumnTitle",
                             "method" : "POST",
                             "headers" : {
                                 "cache-control" : "no-cache",
@@ -1288,7 +1288,7 @@ $(document)
                         var settings = {
                             "async" : true,
                             "crossDomain" : true,
-                            "url" : "http://localhost:8080/file/upload",
+                            "url" : "http://218.199.92.27:8080/file/upload",
                             "method" : "POST",
                             "headers" : {
                                 "cache-control" : "no-cache",
