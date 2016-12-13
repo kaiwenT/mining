@@ -49,20 +49,20 @@ public class StatisticServiceImpl implements StatisticService {
             if (origIndex == -1) {
                 origIndex = 0;
             }
-            String[] oldRow = tmpList.get(0);
+            String[] oldRow = tmpList.get(origIndex);
             String[] newRow = new String[oldRow.length + 1];
-            System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
-            newRow[0] = tmpList.size() + "";
+            System.arraycopy(oldRow, 0, newRow, 0, oldRow.length);
+            newRow[oldRow.length] = tmpList.size() + "";
             reList.add(newRow);
         }
-//        List<String[]> singleList = setList.get(setList.size() - 1);
-//        for (int i = 0; i < singleList.size(); i++) {
-//            String[] oldRow = singleList.get(i);
-//            String[] newRow = new String[oldRow.length + 1];
-//            System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
-//            newRow[0] = "1";
-//            reList.add(newRow);
-//        }
+        // List<String[]> singleList = setList.get(setList.size() - 1);
+        // for (int i = 0; i < singleList.size(); i++) {
+        // String[] oldRow = singleList.get(i);
+        // String[] newRow = new String[oldRow.length + 1];
+        // System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
+        // newRow[0] = "1";
+        // reList.add(newRow);
+        // }
         return reList;
     }
 
@@ -102,9 +102,9 @@ public class StatisticServiceImpl implements StatisticService {
                     typeMap = new HashMap<String, Integer>();
                     typeMap.put(type, 1);
                 } else {
-                    if(typeMap.get(type)==null){
+                    if (typeMap.get(type) == null) {
                         typeMap.put(type, 1);
-                    }else{
+                    } else {
                         typeMap.put(type, typeMap.get(type) + 1);
                     }
                 }
@@ -114,9 +114,9 @@ public class StatisticServiceImpl implements StatisticService {
                     levelMap = new HashMap<String, Integer>();
                     levelMap.put(level, 1);
                 } else {
-                    if(levelMap.get(level)==null){
+                    if (levelMap.get(level) == null) {
                         levelMap.put(level, 1);
-                    }else{
+                    } else {
                         levelMap.put(level, levelMap.get(level) + 1);
                     }
                 }
@@ -229,6 +229,32 @@ public class StatisticServiceImpl implements StatisticService {
             attention.put(entry.getKey(), atten);
         }
         return attention;
+    }
+
+    @Override
+    public List<int[]> count(List<List<Integer>> clusterResult, List<String[]> content) {
+        // TODO Auto-generated method stub
+        List<int[]> reList = new ArrayList<int[]>();
+        for (int i = 0; i < clusterResult.size(); i++) {
+            List<Integer> tmpList = clusterResult.get(i);
+            int origIndex = -1;
+            String origTime = "9999-12-12 23:59:59";
+            for (int j = 0; j < tmpList.size(); j++) {
+                String[] row = content.get(tmpList.get(j));
+                if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
+                    origTime = row[Index.TIME_INDEX];
+                    origIndex = j;
+                }
+            }
+            if (origIndex == -1) {
+                origIndex = 0;
+            }
+            int[] item = new int[2];
+            item[Index.COUNT_ITEM_INDEX] = origIndex;
+            item[Index.COUNT_ITEM_AMOUNT] = tmpList.size();
+            reList.add(item);
+        }
+        return reList;
     }
 
 }

@@ -3,9 +3,19 @@ package com.hust.mining.model;
 import java.util.Date;
 
 public class Result extends ResultKey {
+    private String issueId;
+
     private String creator;
 
     private Date createTime;
+
+    public String getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(String issueId) {
+        this.issueId = issueId == null ? null : issueId.trim();
+    }
 
     public String getCreator() {
         return creator;

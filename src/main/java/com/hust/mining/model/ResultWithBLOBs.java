@@ -7,9 +7,11 @@ public class ResultWithBLOBs extends Result {
 
     private byte[] modifiedResult;
 
-    private byte[] statResult;
+    private byte[] countResult;
 
-    private byte[] modifiedStatResult;
+    private byte[] modifiedCountResult;
+
+    private byte[] statResult;
 
     public byte[] getContent() {
         return content;
@@ -35,19 +37,27 @@ public class ResultWithBLOBs extends Result {
         this.modifiedResult = modifiedResult;
     }
 
+    public byte[] getCountResult() {
+        return countResult;
+    }
+
+    public void setCountResult(byte[] countResult) {
+        this.countResult = countResult;
+    }
+
+    public byte[] getModifiedCountResult() {
+        return modifiedCountResult;
+    }
+
+    public void setModifiedCountResult(byte[] modifiedCountResult) {
+        this.modifiedCountResult = modifiedCountResult;
+    }
+
     public byte[] getStatResult() {
         return statResult;
     }
 
     public void setStatResult(byte[] statResult) {
         this.statResult = statResult;
-    }
-
-    public byte[] getModifiedStatResult() {
-        return modifiedStatResult;
-    }
-
-    public void setModifiedStatResult(byte[] modifiedStatResult) {
-        this.modifiedStatResult = modifiedStatResult;
     }
 }

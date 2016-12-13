@@ -28,6 +28,7 @@ public class Constant {
     public final static String CLUSTER_RESULT_10ROW_EN = "clusterResult10row";
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
     public final static String ISSUE_ID = "issueId";
+    public final static String RESULT_ID = "resultId";
     public final static String TYPE_ORIG = "orig";
     public final static String TYPE_MODIFIED = "modified";
 
@@ -37,6 +38,8 @@ public class Constant {
         public static final int TIME_INDEX = 2;
         public static final int CLICK_INDEX = 3;
         public static final int REPLY_INDEX = 4;
+        public static final int COUNT_ITEM_INDEX = 0;
+        public static final int COUNT_ITEM_AMOUNT = 1;
     }
 
     // 情感

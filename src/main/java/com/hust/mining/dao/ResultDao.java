@@ -1,0 +1,46 @@
+package com.hust.mining.dao;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.hust.mining.dao.mapper.ResultMapper;
+import com.hust.mining.model.ResultKey;
+import com.hust.mining.model.ResultWithBLOBs;
+import com.hust.mining.util.ConvertUtil;
+
+public class ResultDao {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ResultDao.class);
+
+    @Autowired
+    private ResultMapper resultMapper;
+
+    @SuppressWarnings("unchecked")
+    public List<int[]> getCountResultById(String resultId) {
+        ResultKey key = new ResultKey();
+        key.setRid(resultId);
+        List<int[]> list = null;
+        try {
+            list = (List<int[]>) ConvertUtil
+                    .convertBytesToObject(resultMapper.selectByPrimaryKey(key).getModifiedCountResult());
+        } catch (Exception e) {
+            logger.warn("convert countresult error：{}", e.toString());
+        }
+        return list;
+    }
+
+    public ResultWithBLOBs getResultWithBLOBsById(String resultId) {
+        ResultKey key = new ResultKey();
+        key.setRid(resultId);
+        return resultMapper.selectByPrimaryKey(key);
+    }
+
+    public int updateResultWithBLOBs(ResultWithBLOBs result) {
+        return resultMapper.updateByPrimaryKeyWithBLOBs(result);
+    }
+}

@@ -3,6 +3,7 @@
 <mapper namespace="com.hust.mining.dao.mapper.ResultMapper">
   <resultMap id="BaseResultMap" type="com.hust.mining.model.Result">
     <id column="rid" jdbcType="VARCHAR" property="rid" />
+    <result column="issue_id" jdbcType="VARCHAR" property="issueId" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    rid, creator, create_time
+    rid, issue_id, creator, create_time
   </sql>
   <sql id="Blob_Column_List">
     content, orig_result, modified_result, stat_result, modified_stat_result
@@ -126,20 +127,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.hust.mining.model.ResultWithBLOBs">
-    insert into result (rid, creator, create_time, 
-      content, orig_result, modified_result, 
-      stat_result, modified_stat_result
-      )
-    values (#{rid,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARBINARY}, #{origResult,jdbcType=LONGVARBINARY}, #{modifiedResult,jdbcType=LONGVARBINARY}, 
-      #{statResult,jdbcType=LONGVARBINARY}, #{modifiedStatResult,jdbcType=LONGVARBINARY}
-      )
+    insert into result (rid, issue_id, creator, 
+      create_time, content, orig_result, 
+      modified_result, stat_result, 
+      modified_stat_result)
+    values (#{rid,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARBINARY}, #{origResult,jdbcType=LONGVARBINARY}, 
+      #{modifiedResult,jdbcType=LONGVARBINARY}, #{statResult,jdbcType=LONGVARBINARY}, 
+      #{modifiedStatResult,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
     insert into result
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="rid != null">
         rid,
+      </if>
+      <if test="issueId != null">
+        issue_id,
       </if>
       <if test="creator != null">
         creator,
@@ -166,6 +170,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="rid != null">
         #{rid,jdbcType=VARCHAR},
+      </if>
+      <if test="issueId != null">
+        #{issueId,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -202,6 +209,9 @@
       <if test="record.rid != null">
         rid = #{record.rid,jdbcType=VARCHAR},
       </if>
+      <if test="record.issueId != null">
+        issue_id = #{record.issueId,jdbcType=VARCHAR},
+      </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
       </if>
@@ -231,6 +241,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update result
     set rid = #{record.rid,jdbcType=VARCHAR},
+      issue_id = #{record.issueId,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARBINARY},
@@ -245,6 +256,7 @@
   <update id="updateByExample" parameterType="map">
     update result
     set rid = #{record.rid,jdbcType=VARCHAR},
+      issue_id = #{record.issueId,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -254,6 +266,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
     update result
     <set>
+      <if test="issueId != null">
+        issue_id = #{issueId,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -280,7 +295,8 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.ResultWithBLOBs">
     update result
-    set creator = #{creator,jdbcType=VARCHAR},
+    set issue_id = #{issueId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARBINARY},
       orig_result = #{origResult,jdbcType=LONGVARBINARY},
@@ -291,7 +307,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Result">
     update result
-    set creator = #{creator,jdbcType=VARCHAR},
+    set issue_id = #{issueId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where rid = #{rid,jdbcType=VARCHAR}
   </update>

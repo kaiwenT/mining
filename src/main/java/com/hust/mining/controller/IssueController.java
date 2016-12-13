@@ -59,6 +59,7 @@ public class IssueController {
         issue.setCreator(user);
         issue.setCreateTime(new Date());
         issue.setLastOperator(user);
+        issue.setLastUpdateTime(issue.getLastUpdateTime());
         if (issueService.createIssue(issue) == 0) {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("create issue fail");
