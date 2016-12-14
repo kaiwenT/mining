@@ -108,7 +108,7 @@ public class ResultController {
     public Object statistic(@RequestBody StatisticParams params, HttpServletRequest request) {
         String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isBlank(resultId)) {
-            return ResultUtil.errorWithMsg("get current result failed,please create or select a issue");
+            return ResultUtil.errorWithMsg("请重新选择话题");
         }
         Map<String, Object> map = resultService.statistic(params, request);
         if (null == map || map.isEmpty()) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.service.UserService;
 
 @Controller
@@ -20,16 +21,13 @@ public class AuthController {
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(@RequestParam(value = "form-username", required = true) String userName,
 			@RequestParam(value = "form-password", required = true) String passwd, HttpServletRequest request) {
-		// ModelAndView mav = new ModelAndView();
-		if (userService.login(userName, passwd)) {
-			request.getSession().setAttribute("username", userName);
-			// mav.setViewName("page/upload.html");
-			// return mav;
-			return "redirect:page/infoManager.html";
-		}
-		// mav.setViewName("page/error.html");
-		// return mav;
-		return "redirect:page/error.jsp";
+	    request.getSession().setAttribute(KEY.USER_NAME, userName);
+	    return "redirect:page/infoManager.html";
+//		if (userService.login(userName, passwd)) {
+//			request.getSession().setAttribute("username", userName);
+//			return "redirect:page/infoManager.html";
+//		}
+//		return "redirect:page/error.jsp";
 	}
 
 	@RequestMapping(value = "logout")

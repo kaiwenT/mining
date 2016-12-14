@@ -3,6 +3,7 @@ package com.hust.mining.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,7 @@ public class FileServiceImpl implements FileService {
         issueFile.setCreator(user);
         issueFile.setIssueId(issueId);
         issueFile.setLineNumber(list.size());
+        issueFile.setUploadTime(new Date());
         issueFile.setSize((int) (file.getSize() / 1024));
         issueFile.setSourceType(con.getSourceType());
         try {

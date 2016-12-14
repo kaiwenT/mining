@@ -59,9 +59,12 @@ public class IssueServiceImpl implements IssueService {
         issue.setCreator(user);
         issue.setCreateTime(new Date());
         issue.setLastOperator(user);
-        issue.setLastUpdateTime(issue.getLastUpdateTime());
-        request.getSession().setAttribute(KEY.ISSUE_ID, issue.getIssueId());
-        return issueDao.insert(issue);
+        issue.setLastUpdateTime(issue.getCreateTime());
+        int insert = issueDao.insert(issue);
+        if (insert > 0) {
+            request.getSession().setAttribute(KEY.ISSUE_ID, issue.getIssueId());
+        }
+        return insert;
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,12 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/deleteFileById")
-    public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId) {
+    public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId,
+            HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+        }
         int i = fileService.deleteById(fileId);
         if (i > 0) {
             return ResultUtil.success("删除成功");

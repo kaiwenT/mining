@@ -58,7 +58,7 @@ public class IssueController {
     public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
         if (issueService.deleteIssueById(issueId, request) > 0) {
-            return ResultUtil.errorWithMsg("删除话题失败");
+            return ResultUtil.success("删除话题成功");
         }
         return ResultUtil.errorWithMsg("删除话题失败");
     }
