@@ -1,39 +1,29 @@
 package com.hust.mining.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.hust.mining.model.Issue;
-import com.hust.mining.model.IssueWithBLOBs;
-import com.hust.mining.model.params.DeleteItemsParams;
 import com.hust.mining.model.params.IssueQueryCondition;
 
 public interface IssueService {
 
-    int createIssue(IssueWithBLOBs issue);
-    
-    int deleteIssueById(String issueId);
+    int createIssue(String issueName,HttpServletRequest request);
 
-    int combineFiles(String issueId, String user);
+    int deleteIssueById(String issueId);
 
     String getCurrentIssueId(HttpServletRequest request);
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
-    IssueWithBLOBs queryIssueWithBLOBsById(String issueId);
+    Issue queryIssueById(String issueId);
+
+    int updateIssueInfo(Issue issue, HttpServletRequest request);
+
+    List<int[]> miningByTime(Date start, Date end, HttpServletRequest request);
+
+    List<int[]> miningByFileIds(List<String> fileIds, HttpServletRequest request);
     
-    boolean deleteItemsFromClusterResult(DeleteItemsParams params, HttpServletRequest request);
-
-    boolean combineCountResult(int[] indexes, HttpServletRequest request);
-
-    int updateIssueInfo(IssueWithBLOBs issue, HttpServletRequest request);
-
-    List<List<String[]>> queryClusterResult(String issueId);
-
-    boolean deleteSetsFromClusterResult(int[] set, HttpServletRequest request);
-
-    long countIssues(IssueQueryCondition con);
-
-    boolean reset(HttpServletRequest request);
 }

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,10 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hust.mining.constant.Constant;
+import com.google.common.collect.Maps;
 import com.hust.mining.constant.Constant.Index;
+import com.hust.mining.constant.Constant.KEY;
+import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
+import com.hust.mining.model.Issue;
 import com.hust.mining.model.ResultWithBLOBs;
+import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.util.ConvertUtil;
@@ -30,11 +36,13 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     private ResultDao resultDao;
     @Autowired
+    private IssueDao issueDao;
+    @Autowired
     private StatisticService statService;
 
     @Override
     public String getCurrentResultId(HttpServletRequest request) {
-        Object result = request.getSession().getAttribute(Constant.RESULT_ID);
+        Object result = request.getSession().getAttribute(KEY.RESULT_ID);
         if (result == null) {
             return StringUtils.EMPTY;
         }
@@ -71,7 +79,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public boolean deleteSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(Constant.RESULT_ID).toString();
+        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
         if (null == result) {
             return false;
@@ -88,20 +96,27 @@ public class ResultServiceImpl implements ResultService {
             result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
             result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
             int update = resultDao.updateResultWithBLOBs(result);
-            if (update > 0) {
-                return true;
+            if (update <= 0) {
+                return false;
             }
+            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+            Issue issue = new Issue();
+            issue.setIssueId(issueId);
+            issue.setLastOperator(user);
+            issue.setLastUpdateTime(new Date());
+            issueDao.updateIssueInfo(issue);
         } catch (Exception e) {
             logger.error("sth failed when delete sets:{}" + e.toString());
         }
-        return false;
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean combineSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(Constant.RESULT_ID).toString();
+        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
         if (null == result) {
             return false;
@@ -132,19 +147,26 @@ public class ResultServiceImpl implements ResultService {
             result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
             result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
             int update = resultDao.updateResultWithBLOBs(result);
-            if (update > 0) {
-                return true;
+            if (update <= 0) {
+                return false;
             }
+            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+            Issue issue = new Issue();
+            issue.setIssueId(issueId);
+            issue.setLastOperator(user);
+            issue.setLastUpdateTime(new Date());
+            issueDao.updateIssueInfo(issue);
         } catch (Exception e) {
             logger.error("sth failed when combine sets:{}" + e.toString());
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean reset(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(Constant.RESULT_ID).toString();
+        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
         if (null == result) {
             return false;
@@ -152,17 +174,24 @@ public class ResultServiceImpl implements ResultService {
         result.setModifiedResult(result.getOrigResult());
         result.setModifiedCountResult(result.getCountResult());
         int update = resultDao.updateResultWithBLOBs(result);
-        if (update > 0) {
-            return true;
+        if (update <= 0) {
+            return false;
         }
-        return false;
+        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        Issue issue = new Issue();
+        issue.setIssueId(issueId);
+        issue.setLastOperator(user);
+        issue.setLastUpdateTime(new Date());
+        issueDao.updateIssueInfo(issue);
+        return true;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<String[]> getItemsInSets(int set, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(Constant.RESULT_ID).toString();
+        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
         if (result == null) {
             return null;
@@ -184,4 +213,37 @@ public class ResultServiceImpl implements ResultService {
         return list;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        try {
+            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
+            List<List<Integer>> clusterResult =
+                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
+            List<Integer> set = clusterResult.get(params.getCurrentSet());
+            Map<String, Map<String, Map<String, Integer>>> timeMap =
+                    statService.statistic(content, set, params.getInterval());
+            Map<String, Integer> typeMap = statService.getTypeCount(timeMap);
+            Map<String, Integer> levelMap = statService.getLevelCount(timeMap);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("time", timeMap);
+            Map<String, Object> countMap = Maps.newHashMap();
+            countMap.put("type", typeMap);
+            countMap.put("level", levelMap);
+            map.put("count", countMap);
+            return map;
+        } catch (Exception e) {
+            logger.error("exception occur when statistic:{}", e.toString());
+        }
+        return null;
+    }
+
+    @Override
+    public int delResultById(String resultId) {
+        // TODO Auto-generated method stub
+        return resultDao.delResultById(resultId);
+    }
 }

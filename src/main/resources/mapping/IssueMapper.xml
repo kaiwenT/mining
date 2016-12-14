@@ -10,21 +10,6 @@
 		<result column="last_update_time" jdbcType="TIMESTAMP"
 			property="lastUpdateTime" />
 	</resultMap>
-	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-		type="com.hust.mining.model.IssueWithBLOBs">
-		<result column="filtered_content" jdbcType="LONGVARBINARY"
-			property="filteredContent" />
-		<result column="cluster_result" jdbcType="LONGVARBINARY"
-			property="clusterResult" />
-		<result column="modified_cluster_result" jdbcType="LONGVARBINARY"
-			property="modifiedClusterResult" />
-		<result column="orig_count_result" jdbcType="LONGVARBINARY"
-			property="origCountResult" />
-		<result column="modified_orig_count_result" jdbcType="LONGVARBINARY"
-			property="modifiedOrigCountResult" />
-		<result column="statistic_result" jdbcType="LONGVARBINARY"
-			property="statisticResult" />
-	</resultMap>
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -94,40 +79,12 @@
 		issue_id, issue_name, create_time, creator, last_operator,
 		last_update_time
 	</sql>
-	<sql id="Blob_Column_List">
-		filtered_content, cluster_result, modified_cluster_result,
-		orig_count_result,
-		modified_orig_count_result,
-		statistic_result
-	</sql>
-	<select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.IssueExample"
-		resultMap="ResultMapWithBLOBs">
-		select
-		<if test="distinct">
-			distinct
-		</if>
-		'true' as QUERYID,
-		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
-		from issue
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-		<if test="orderByClause != null">
-			order by ${orderByClause}
-		</if>
-		<if test="start !=0 or limit!=0">
-			limit #{start},#{limit}
-		</if>
-	</select>
 	<select id="selectByExample" parameterType="com.hust.mining.model.IssueExample"
 		resultMap="BaseResultMap">
 		select
 		<if test="distinct">
 			distinct
 		</if>
-		'true' as QUERYID,
 		<include refid="Base_Column_List" />
 		from issue
 		<if test="_parameter != null">
@@ -140,16 +97,14 @@
 			limit #{start},#{limit}
 		</if>
 	</select>
-	<select id="selectByPrimaryKey" parameterType="java.lang.String"
-		resultMap="ResultMapWithBLOBs">
-		select
+	<select id="selectByPrimaryKey" parameterType="com.hust.mining.model.IssueKey"
+		resultMap="BaseResultMap">
+		select 'true' as QUERYID,
 		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
 		from issue
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+	<delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.IssueKey">
 		delete from issue
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</delete>
@@ -159,30 +114,19 @@
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.mining.model.IssueWithBLOBs">
+	<insert id="insert" parameterType="com.hust.mining.model.Issue">
 		insert into issue (issue_id,
 		issue_name, create_time,
-		creator, last_operator, last_update_time,
-		filtered_content, cluster_result,
-		modified_cluster_result,
-		orig_count_result,
-		modified_orig_count_result, statistic_result
+		creator, last_operator, last_update_time
 		)
-		values
-		(#{issueId,jdbcType=VARCHAR}, #{issueName,jdbcType=VARCHAR},
+		values (#{issueId,jdbcType=VARCHAR}, #{issueName,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP},
 		#{creator,jdbcType=VARCHAR},
 		#{lastOperator,jdbcType=VARCHAR},
-		#{lastUpdateTime,jdbcType=TIMESTAMP},
-		#{filteredContent,jdbcType=LONGVARBINARY},
-		#{clusterResult,jdbcType=LONGVARBINARY},
-		#{modifiedClusterResult,jdbcType=LONGVARBINARY},
-		#{origCountResult,jdbcType=LONGVARBINARY},
-		#{modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-		#{statisticResult,jdbcType=LONGVARBINARY}
+		#{lastUpdateTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueWithBLOBs">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.Issue">
 		insert into issue
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="issueId != null">
@@ -203,24 +147,6 @@
 			<if test="lastUpdateTime != null">
 				last_update_time,
 			</if>
-			<if test="filteredContent != null">
-				filtered_content,
-			</if>
-			<if test="clusterResult != null">
-				cluster_result,
-			</if>
-			<if test="modifiedClusterResult != null">
-				modified_cluster_result,
-			</if>
-			<if test="origCountResult != null">
-				orig_count_result,
-			</if>
-			<if test="modifiedOrigCountResult != null">
-				modified_orig_count_result,
-			</if>
-			<if test="statisticResult != null">
-				statistic_result,
-			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="issueId != null">
@@ -240,24 +166,6 @@
 			</if>
 			<if test="lastUpdateTime != null">
 				#{lastUpdateTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="filteredContent != null">
-				#{filteredContent,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="clusterResult != null">
-				#{clusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="modifiedClusterResult != null">
-				#{modifiedClusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="origCountResult != null">
-				#{origCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="modifiedOrigCountResult != null">
-				#{modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="statisticResult != null">
-				#{statisticResult,jdbcType=LONGVARBINARY},
 			</if>
 		</trim>
 	</insert>
@@ -290,57 +198,7 @@
 				last_update_time =
 				#{record.lastUpdateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="record.filteredContent != null">
-				filtered_content =
-				#{record.filteredContent,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="record.clusterResult != null">
-				cluster_result =
-				#{record.clusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="record.modifiedClusterResult != null">
-				modified_cluster_result =
-				#{record.modifiedClusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="record.origCountResult != null">
-				orig_count_result =
-				#{record.origCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="record.modifiedOrigCountResult != null">
-				modified_orig_count_result =
-				#{record.modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="record.statisticResult != null">
-				statistic_result =
-				#{record.statisticResult,jdbcType=LONGVARBINARY},
-			</if>
 		</set>
-		<if test="_parameter != null">
-			<include refid="Update_By_Example_Where_Clause" />
-		</if>
-	</update>
-	<update id="updateByExampleWithBLOBs" parameterType="map">
-		update issue
-		set issue_id = #{record.issueId,jdbcType=VARCHAR},
-		issue_name = #{record.issueName,jdbcType=VARCHAR},
-		create_time =
-		#{record.createTime,jdbcType=TIMESTAMP},
-		creator =
-		#{record.creator,jdbcType=VARCHAR},
-		last_operator =
-		#{record.lastOperator,jdbcType=VARCHAR},
-		last_update_time =
-		#{record.lastUpdateTime,jdbcType=TIMESTAMP},
-		filtered_content =
-		#{record.filteredContent,jdbcType=LONGVARBINARY},
-		cluster_result =
-		#{record.clusterResult,jdbcType=LONGVARBINARY},
-		modified_cluster_result =
-		#{record.modifiedClusterResult,jdbcType=LONGVARBINARY},
-		orig_count_result = #{record.origCountResult,jdbcType=LONGVARBINARY},
-		modified_orig_count_result =
-		#{record.modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-		statistic_result = #{record.statisticResult,jdbcType=LONGVARBINARY}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -361,7 +219,7 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueWithBLOBs">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.Issue">
 		update issue
 		<set>
 			<if test="issueName != null">
@@ -379,58 +237,8 @@
 			<if test="lastUpdateTime != null">
 				last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="filteredContent != null">
-				filtered_content =
-				#{filteredContent,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="clusterResult != null">
-				cluster_result = #{clusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="modifiedClusterResult != null">
-				modified_cluster_result =
-				#{modifiedClusterResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="origCountResult != null">
-				orig_count_result =
-				#{origCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="modifiedOrigCountResult != null">
-				modified_orig_count_result =
-				#{modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-			</if>
-			<if test="statisticResult != null">
-				statistic_result =
-				#{statisticResult,jdbcType=LONGVARBINARY},
-			</if>
 		</set>
 		where issue_id = #{issueId,jdbcType=VARCHAR}
-	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.IssueWithBLOBs">
-		update
-		issue
-		set issue_name = #{issueName,jdbcType=VARCHAR},
-		create_time =
-		#{createTime,jdbcType=TIMESTAMP},
-		creator =
-		#{creator,jdbcType=VARCHAR},
-		last_operator =
-		#{lastOperator,jdbcType=VARCHAR},
-		last_update_time =
-		#{lastUpdateTime,jdbcType=TIMESTAMP},
-		filtered_content =
-		#{filteredContent,jdbcType=LONGVARBINARY},
-		cluster_result =
-		#{clusterResult,jdbcType=LONGVARBINARY},
-		modified_cluster_result =
-		#{modifiedClusterResult,jdbcType=LONGVARBINARY},
-		orig_count_result =
-		#{origCountResult,jdbcType=LONGVARBINARY},
-		modified_orig_count_result =
-		#{modifiedOrigCountResult,jdbcType=LONGVARBINARY},
-		statistic_result =
-		#{statisticResult,jdbcType=LONGVARBINARY}
-		where issue_id =
-		#{issueId,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Issue">
 		update issue

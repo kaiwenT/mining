@@ -2,9 +2,7 @@ package com.hust.mining.model;
 
 import java.util.Date;
 
-public class Issue {
-    private String issueId;
-
+public class Issue extends IssueKey {
     private String issueName;
 
     private Date createTime;
@@ -14,14 +12,6 @@ public class Issue {
     private String lastOperator;
 
     private Date lastUpdateTime;
-
-    public String getIssueId() {
-        return issueId;
-    }
-
-    public void setIssueId(String issueId) {
-        this.issueId = issueId == null ? null : issueId.trim();
-    }
 
     public String getIssueName() {
         return issueName;

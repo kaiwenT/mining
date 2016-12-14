@@ -12,6 +12,7 @@ import com.hust.datamining.convertor.Convertor;
 import com.hust.datamining.convertor.DigitalConvertor;
 import com.hust.datamining.distance.AcrossDistance;
 import com.hust.mining.constant.Config;
+import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.service.ClusterService;
 import com.hust.mining.service.SegmentService;
 import com.hust.mining.util.ConvertUtil;
@@ -48,5 +49,26 @@ public class ClusterServiceImpl implements ClusterService {
         return ConvertUtil.convertToStringSet(list, resultIndexSetList, targetIndex);
     }
 
-    
+    @Override
+    public List<List<Integer>> cluster(List<String[]> list) {
+        // TODO Auto-generated method stub
+        List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 1);
+        Convertor convertor = new DigitalConvertor();
+        convertor.setList(segmentList);
+        List<double[]> vectors = convertor.getVector();
+        Canopy canopy = new Canopy();
+        canopy.setVectors(vectors);
+        canopy.setDis(new AcrossDistance(vectors));
+        canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
+        try {
+            canopy.clustering();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            logger.error("error occur during clustering" + e.toString());
+            return null;
+        }
+        List<List<Integer>> resultIndexSetList = canopy.getResultIndex();
+        return resultIndexSetList;
+    }
+
 }

@@ -43,4 +43,16 @@ public class ResultDao {
     public int updateResultWithBLOBs(ResultWithBLOBs result) {
         return resultMapper.updateByPrimaryKeyWithBLOBs(result);
     }
+
+    public int delResultById(String resultId) {
+        ResultKey key = new ResultKey();
+        key.setRid(resultId);
+        int del = resultMapper.deleteByPrimaryKey(key);
+        return del;
+    }
+
+    public int insert(ResultWithBLOBs result) {
+        int insert = resultMapper.insert(result);
+        return insert;
+    }
 }

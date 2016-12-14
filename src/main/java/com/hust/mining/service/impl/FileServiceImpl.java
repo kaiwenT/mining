@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.mining.constant.Constant;
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.IssueFileWithBLOBs;
@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
         }
 
         String user = userService.getCurrentUser(request);
-        String issueId = request.getSession().getAttribute(Constant.ISSUE_ID).toString();
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
         IssueFileWithBLOBs issueFile = new IssueFileWithBLOBs();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());

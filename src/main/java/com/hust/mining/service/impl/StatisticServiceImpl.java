@@ -32,41 +32,6 @@ public class StatisticServiceImpl implements StatisticService {
     private WeightDao weightDao;
 
     @Override
-    public List<String[]> getOrigAndCount(List<List<String[]>> setList, int timeIndex) {
-        // TODO Auto-generated method stub
-        List<String[]> reList = new ArrayList<String[]>();
-        for (int i = 0; i < setList.size(); i++) {
-            List<String[]> tmpList = setList.get(i);
-            int origIndex = -1;
-            String origTime = "9999-12-12 23:59:59";
-            for (int j = 0; j < tmpList.size(); j++) {
-                String[] row = tmpList.get(j);
-                if (origTime.compareTo(row[timeIndex]) > 0) {
-                    origTime = row[timeIndex];
-                    origIndex = j;
-                }
-            }
-            if (origIndex == -1) {
-                origIndex = 0;
-            }
-            String[] oldRow = tmpList.get(origIndex);
-            String[] newRow = new String[oldRow.length + 1];
-            System.arraycopy(oldRow, 0, newRow, 0, oldRow.length);
-            newRow[oldRow.length] = tmpList.size() + "";
-            reList.add(newRow);
-        }
-        // List<String[]> singleList = setList.get(setList.size() - 1);
-        // for (int i = 0; i < singleList.size(); i++) {
-        // String[] oldRow = singleList.get(i);
-        // String[] newRow = new String[oldRow.length + 1];
-        // System.arraycopy(oldRow, 0, newRow, 1, oldRow.length);
-        // newRow[0] = "1";
-        // reList.add(newRow);
-        // }
-        return reList;
-    }
-
-    @Override
     public Map<String, Map<String, Map<String, Integer>>> processAll(List<String[]> list, int interval) {
         Map<String, Map<String, Map<String, Integer>>> map =
                 new TreeMap<String, Map<String, Map<String, Integer>>>(new Comparator<String>() {
@@ -83,6 +48,76 @@ public class StatisticServiceImpl implements StatisticService {
                 continue;
             }
             Website website = websiteDao.queryByUrl(array[Index.URL_INDEX]);
+            String level = website.getLevel();
+            String type = website.getType();
+            String timeKey = getTimeKey(array[Index.TIME_INDEX], interval);
+            Map<String, Map<String, Integer>> timeMap = map.get(timeKey);
+            if (timeMap == null) {
+                timeMap = new HashMap<String, Map<String, Integer>>();
+                Map<String, Integer> typeMap = new HashMap<String, Integer>();
+                Map<String, Integer> levelMap = new HashMap<String, Integer>();
+                typeMap.put(type, 1);
+                levelMap.put(level, 1);
+                timeMap.put(Constant.MEDIA_EN, levelMap);
+                timeMap.put(Constant.INFOTYPE_EN, typeMap);
+                map.put(timeKey, timeMap);
+            } else {
+                Map<String, Integer> typeMap = timeMap.get(Constant.INFOTYPE_EN);
+                if (null == typeMap) {
+                    typeMap = new HashMap<String, Integer>();
+                    typeMap.put(type, 1);
+                } else {
+                    if (typeMap.get(type) == null) {
+                        typeMap.put(type, 1);
+                    } else {
+                        typeMap.put(type, typeMap.get(type) + 1);
+                    }
+                }
+
+                Map<String, Integer> levelMap = timeMap.get(Constant.MEDIA_EN);
+                if (null == levelMap) {
+                    levelMap = new HashMap<String, Integer>();
+                    levelMap.put(level, 1);
+                } else {
+                    if (levelMap.get(level) == null) {
+                        levelMap.put(level, 1);
+                    } else {
+                        levelMap.put(level, levelMap.get(level) + 1);
+                    }
+                }
+                timeMap.put(Constant.MEDIA_EN, levelMap);
+                timeMap.put(Constant.INFOTYPE_EN, typeMap);
+                map.put(timeKey, timeMap);
+            }
+        }
+        for (String time : map.keySet()) {
+            Map<String, Map<String, Integer>> timeMap = map.get(time);
+            Map<String, Integer> mediaAttention = calculateAttention(timeMap.get(Constant.MEDIA_EN));
+            Map<String, Integer> netizenAttention = calculateAttention(timeMap.get(Constant.INFOTYPE_EN));
+            timeMap.put(Constant.NETIZENATTENTION_EN, netizenAttention);
+            timeMap.put(Constant.MEDIAATTENTION_EN, mediaAttention);
+        }
+        return map;
+    }
+
+    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, List<Integer> list,
+            int interval) {
+        Map<String, Map<String, Map<String, Integer>>> map =
+                new TreeMap<String, Map<String, Map<String, Integer>>>(new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        return o1.compareTo(o2);
+                    }
+                });
+        if (null == list || 0 == list.size()) {
+            return map;
+        }
+        for (int item : list) {
+            String[] array = content.get(item);
+            if (CommonUtil.isEmptyArray(array)) {
+                continue;
+            }
+            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(array[Index.URL_INDEX]));
             String level = website.getLevel();
             String type = website.getType();
             String timeKey = getTimeKey(array[Index.TIME_INDEX], interval);

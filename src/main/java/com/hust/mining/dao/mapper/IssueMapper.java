@@ -1,38 +1,31 @@
 package com.hust.mining.dao.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
-
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
-import com.hust.mining.model.IssueWithBLOBs;
+import com.hust.mining.model.IssueKey;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface IssueMapper {
     long countByExample(IssueExample example);
 
     int deleteByExample(IssueExample example);
 
-    int deleteByPrimaryKey(String issueId);
+    int deleteByPrimaryKey(IssueKey key);
 
-    int insert(IssueWithBLOBs record);
+    int insert(Issue record);
 
-    int insertSelective(IssueWithBLOBs record);
-
-    List<IssueWithBLOBs> selectByExampleWithBLOBs(IssueExample example);
+    int insertSelective(Issue record);
 
     List<Issue> selectByExample(IssueExample example);
 
-    IssueWithBLOBs selectByPrimaryKey(String issueId);
+    Issue selectByPrimaryKey(IssueKey key);
 
-    int updateByExampleSelective(@Param("record") IssueWithBLOBs record, @Param("example") IssueExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") IssueWithBLOBs record, @Param("example") IssueExample example);
+    int updateByExampleSelective(@Param("record") Issue record, @Param("example") IssueExample example);
 
     int updateByExample(@Param("record") Issue record, @Param("example") IssueExample example);
 
-    int updateByPrimaryKeySelective(IssueWithBLOBs record);
-
-    int updateByPrimaryKeyWithBLOBs(IssueWithBLOBs record);
+    int updateByPrimaryKeySelective(Issue record);
 
     int updateByPrimaryKey(Issue record);
 }

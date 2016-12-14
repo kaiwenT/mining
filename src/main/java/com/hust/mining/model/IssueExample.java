@@ -11,9 +11,9 @@ public class IssueExample {
 
     protected List<Criteria> oredCriteria;
 
-    protected int start;
+    protected long start;
 
-    protected int limit;
+    protected long limit;
 
     public IssueExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -508,7 +508,6 @@ public class IssueExample {
             addCriterion("last_update_time not between", value1, value2, "lastUpdateTime");
             return (Criteria) this;
         }
-
     }
 
     public static class Criteria extends GeneratedCriteria {
@@ -534,10 +533,6 @@ public class IssueExample {
         private boolean listValue;
 
         private String typeHandler;
-
-        public Criterion() {
-            super();
-        }
 
         public String getCondition() {
             return condition;
@@ -569,6 +564,11 @@ public class IssueExample {
 
         public String getTypeHandler() {
             return typeHandler;
+        }
+
+        
+        protected Criterion() {
+            super();
         }
 
         protected Criterion(String condition) {
@@ -606,22 +606,21 @@ public class IssueExample {
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-
     }
 
-    public int getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(int start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public int getLimit() {
+    public long getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(long limit) {
         this.limit = limit;
     }
 }

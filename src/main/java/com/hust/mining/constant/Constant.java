@@ -27,10 +27,14 @@ public class Constant {
     public final static String SHULIANG_CH = "数量";
     public final static String CLUSTER_RESULT_10ROW_EN = "clusterResult10row";
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
-    public final static String ISSUE_ID = "issueId";
-    public final static String RESULT_ID = "resultId";
     public final static String TYPE_ORIG = "orig";
     public final static String TYPE_MODIFIED = "modified";
+
+    public static class KEY {
+        public final static String ISSUE_ID = "issueId";
+        public final static String RESULT_ID = "resultId";
+        public static final String USER_NAME = "username";
+    }
 
     public static class Index {
         public static final int URL_INDEX = 0;

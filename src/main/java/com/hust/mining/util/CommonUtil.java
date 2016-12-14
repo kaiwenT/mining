@@ -15,4 +15,12 @@ public class CommonUtil {
         }
         return true;
     }
+
+    public static String getPrefixUrl(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return StringUtils.EMPTY;
+        }
+        String prefix = url.substring(0, url.indexOf("/", url.indexOf("://") + 3));
+        return prefix;
+    }
 }

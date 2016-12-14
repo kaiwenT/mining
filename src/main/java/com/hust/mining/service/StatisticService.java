@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface StatisticService {
-    public List<String[]> getOrigAndCount(List<List<String[]>> list, int timeIndex);
-
     /**
      * 根据聚类结果对一个类中的信息进行统计 结果形式如下： "2016-09-18": { "emotion": { "positive": 32, "negative": 32, "neutral": 40 },
      * "intoType": { "weizhi": 90, "xinwen": 32, "baozhi": 90, "luntan": 89, "wenda": 30, "boke": 20, "weixin": 20,
@@ -29,5 +27,8 @@ public interface StatisticService {
     public Map<String, Integer> calculateAttention(Map<String, Integer> map);
 
     public List<int[]> count(List<List<Integer>> clusterResult, List<String[]> content);
+    
+    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, List<Integer> list,
+            int interval);
 
 }

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hust.mining.dao.mapper.IssueMapper;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
-import com.hust.mining.model.IssueWithBLOBs;
 import com.hust.mining.model.IssueExample.Criteria;
+import com.hust.mining.model.IssueKey;
 import com.hust.mining.model.params.IssueQueryCondition;
 
 public class IssueDao {
@@ -17,19 +17,21 @@ public class IssueDao {
     @Autowired
     private IssueMapper issueMapper;
 
-    public int insert(IssueWithBLOBs issueInfo) {
+    public int insert(Issue issueInfo) {
         return issueMapper.insert(issueInfo);
     }
 
-    public int insertSelective(IssueWithBLOBs issueInfo) {
+    public int insertSelective(Issue issueInfo) {
         return issueMapper.insertSelective(issueInfo);
     }
 
-    public IssueWithBLOBs selectByUUID(String UUID) {
-        return issueMapper.selectByPrimaryKey(UUID);
+    public Issue selectById(String issueId) {
+        IssueKey key = new IssueKey();
+        key.setIssueId(issueId);
+        return issueMapper.selectByPrimaryKey(key);
     }
 
-    public int updateIssueInfo(IssueWithBLOBs issue) {
+    public int updateIssueInfo(Issue issue) {
         if (StringUtils.isBlank(issue.getIssueId())) {
             return 0;
         }
@@ -69,32 +71,10 @@ public class IssueDao {
         return issueMapper.selectByExample(example);
     }
 
-    public long countIssues(IssueQueryCondition con) {
-        IssueExample example = new IssueExample();
-        Criteria criteria = example.createCriteria();
-        if (!StringUtils.isBlank(con.getUser())) {
-            criteria.andCreatorEqualTo(con.getUser());
-        }
-        if (!StringUtils.isBlank(con.getIssueName())) {
-            criteria.andIssueNameEqualTo(con.getIssueName());
-        }
-        if (null != con.getCreateStartTime()) {
-            criteria.andCreateTimeGreaterThanOrEqualTo(con.getCreateStartTime());
-        }
-        if (null != con.getCreateEndTime()) {
-            criteria.andCreateTimeLessThanOrEqualTo(con.getCreateEndTime());
-        }
-        if (null != con.getLastUpdateStartTime()) {
-            criteria.andLastUpdateTimeGreaterThanOrEqualTo(con.getLastUpdateStartTime());
-        }
-        if (null != con.getLastUpdateEndTime()) {
-            criteria.andLastUpdateTimeLessThanOrEqualTo(con.getLastUpdateEndTime());
-        }
-        example.setOrderByClause("last_update_time desc");
-        return issueMapper.countByExample(example);
-    }
-    
-    public int deleteIssueById(String issueId){
-        return issueMapper.deleteByPrimaryKey(issueId);
+
+    public int deleteIssueById(String issueId) {
+        IssueKey key = new IssueKey();
+        key.setIssueId(issueId);
+        return issueMapper.deleteByPrimaryKey(key);
     }
 }
