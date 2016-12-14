@@ -210,12 +210,29 @@ public class IssueServiceImpl implements IssueService {
         if (content.size() == 0) {
             return null;
         }
-        List<List<Integer>> clusterResult = clusterService.cluster(content);
-        List<int[]> countResult = statService.count(clusterResult, content);
+        //去重开始
+        List<String[]> list = new ArrayList<String[]>();
+        List<String> urllist = new ArrayList<String>();
+        for (String[] row : content) {
+            int exitIndex = urllist.indexOf(row[Index.URL_INDEX]);
+            if (exitIndex != -1) {
+                if (row[Index.TIME_INDEX].compareTo(list.get(exitIndex)[Index.TIME_INDEX]) < 0) {
+                    list.set(exitIndex, row);
+                }
+            } else {
+                list.add(row);
+                urllist.add(row[Index.URL_INDEX]);
+            }
+        }
+        //去重结束
+        //聚类
+        List<List<Integer>> clusterResult = clusterService.cluster(list);
+        //统计
+        List<int[]> countResult = statService.count(clusterResult, list);
         ResultWithBLOBs result = new ResultWithBLOBs();
         result.setRid(UUID.randomUUID().toString());
         try {
-            result.setContent(ConvertUtil.convertToBytes(content));
+            result.setContent(ConvertUtil.convertToBytes(list));
             result.setOrigResult(ConvertUtil.convertToBytes(clusterResult));
             result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
             result.setCountResult(ConvertUtil.convertToBytes(countResult));
