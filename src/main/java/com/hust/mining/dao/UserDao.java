@@ -40,14 +40,6 @@ public class UserDao {
 		return users;
 	}
 
-	public List<User> selectByRoleId(int roleId) {
-		UserExample example = new UserExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andRoleIdEqualTo(roleId);
-		List<User> user = userMapper.selectByExample(example);
-		return user;
-	}
-
 	public List<User> checkLogin(String userName, String password) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
@@ -99,7 +91,6 @@ public class UserDao {
 		criteria.andEmailEqualTo(userQueryCondition.getEmail());
 		criteria.andTelphoneEqualTo(userQueryCondition.getTelphone());
 		criteria.andTrueNameEqualTo(userQueryCondition.getTrueName());
-		criteria.andRoleIdEqualTo(userQueryCondition.getRoleId());
 		example.setPage(userQueryCondition.getPage());
 		example.setRow(userQueryCondition.getRow());
 		List<User> users = userMapper.selectByExample(example);

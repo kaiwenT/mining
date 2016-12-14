@@ -17,7 +17,7 @@ public interface UserService {
 
 	boolean updateUserInfo(User user);
 
-	boolean insertUserInfo(User user);
+	boolean insertUserInfo(User user, List<String> roleName);
 
 	boolean login(String userName, String password);
 

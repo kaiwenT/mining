@@ -24,7 +24,7 @@ public class SourceTypeDao {
 	public List<SourceType> selectSourceTypeByName(String name) {
 		SourceTypeExample example = new SourceTypeExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andNameEqualTo(name);
+		criteria.andNameLike(name);
 		List<SourceType> sourceType = sourceTypeMapper.selectByExample(example);
 		return sourceType;
 	}
