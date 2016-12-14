@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,9 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/delete")
-    public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId) {
-        if (issueService.deleteIssueById(issueId) > 0) {
+    public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
+            HttpServletRequest request) {
+        if (issueService.deleteIssueById(issueId, request) > 0) {
             return ResultUtil.errorWithMsg("删除话题失败");
         }
         return ResultUtil.errorWithMsg("删除话题失败");
@@ -91,6 +93,10 @@ public class IssueController {
     @RequestMapping("/miningByTime")
     public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择话题");
+        }
         List<String[]> count = issueService.miningByTime(startTime, endTime, request);
         if (count == null) {
             return ResultUtil.unknowError();
@@ -102,6 +108,10 @@ public class IssueController {
     @RequestMapping("/miningByFileIds")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择话题");
+        }
         List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();

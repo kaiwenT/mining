@@ -96,9 +96,10 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int deleteIssueById(String issueId) {
+    public int deleteIssueById(String issueId, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        return issueDao.deleteIssueById(issueId);
+        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        return issueDao.deleteIssueById(issueId, user);
     }
 
     @SuppressWarnings("unchecked")
@@ -209,7 +210,7 @@ public class IssueServiceImpl implements IssueService {
         if (content.size() == 0) {
             return null;
         }
-        //去重开始
+        // 去重开始
         List<String[]> list = new ArrayList<String[]>();
         List<String> urllist = new ArrayList<String>();
         for (String[] row : content) {
@@ -223,10 +224,10 @@ public class IssueServiceImpl implements IssueService {
                 urllist.add(row[Index.URL_INDEX]);
             }
         }
-        //去重结束
-        //聚类
+        // 去重结束
+        // 聚类
         List<List<Integer>> clusterResult = clusterService.cluster(list);
-        //统计
+        // 统计
         List<int[]> countResult = statService.count(clusterResult, list);
         ResultWithBLOBs result = new ResultWithBLOBs();
         result.setRid(UUID.randomUUID().toString());

@@ -64,44 +64,46 @@ public class FileController {
         return ResultUtil.success("上传成功");
     }
 
-//    @SuppressWarnings("unchecked")
-//    @RequestMapping("/download")
-//    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        Object uuidObj = request.getSession().getAttribute(KEY.ISSUE_ID);
-//        String uuid = uuidObj == null ? StringUtils.EMPTY : uuidObj.toString();
-//        if (StringUtils.isBlank(uuid)) {
-//            response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
-//            logger.info("从session中无法获得文件uuid");
-//            return;
-//        }
-//        OutputStream outputStream = null;
-//        try {
-//            Issue issue = issueService.queryIssueWithBLOBsById(uuid);
-//            List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
-//            List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
-//            outputStream = response.getOutputStream();
-//            response.setCharacterEncoding("utf-8");
-//            response.setContentType("multipart/form-data");
-//            response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
-//            HSSFWorkbook workbook = ExcelUtil.exportToExcel(relist, origlist);
-//            workbook.write(outputStream);
-//        } catch (Exception e) {
-//            logger.info("excel 导出失败\t" + e.toString());
-//        } finally {
-//            try {
-//                outputStream.close();
-//            } catch (IOException e) {
-//                logger.info("导出excel时，关闭outputstream失败");
-//            }
-//        }
-//    }
+    // @SuppressWarnings("unchecked")
+    // @RequestMapping("/download")
+    // public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Object uuidObj = request.getSession().getAttribute(KEY.ISSUE_ID);
+    // String uuid = uuidObj == null ? StringUtils.EMPTY : uuidObj.toString();
+    // if (StringUtils.isBlank(uuid)) {
+    // response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
+    // logger.info("从session中无法获得文件uuid");
+    // return;
+    // }
+    // OutputStream outputStream = null;
+    // try {
+    // Issue issue = issueService.queryIssueWithBLOBsById(uuid);
+    // List<String[]> relist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getClusterResult());
+    // List<String[]> origlist = (List<String[]>) ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
+    // outputStream = response.getOutputStream();
+    // response.setCharacterEncoding("utf-8");
+    // response.setContentType("multipart/form-data");
+    // response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
+    // HSSFWorkbook workbook = ExcelUtil.exportToExcel(relist, origlist);
+    // workbook.write(outputStream);
+    // } catch (Exception e) {
+    // logger.info("excel 导出失败\t" + e.toString());
+    // } finally {
+    // try {
+    // outputStream.close();
+    // } catch (IOException e) {
+    // logger.info("导出excel时，关闭outputstream失败");
+    // }
+    // }
+    // }
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
     public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
+        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         IssueQueryCondition con = new IssueQueryCondition();
         con.setIssueId(issueId);
+        con.setUser(user);
         List<Issue> issues = issueService.queryIssue(con);
         if (issues.isEmpty()) {
             return ResultUtil.errorWithMsg("查询话题文件失败");

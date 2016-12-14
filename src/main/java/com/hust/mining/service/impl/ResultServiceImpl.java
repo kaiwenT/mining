@@ -52,9 +52,9 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> getCountResultById(String resultId) {
+    public List<String[]> getCountResultById(String resultId,String issueId) {
         // TODO Auto-generated method stub
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         if (result == null) {
             return null;
         }
@@ -81,7 +81,8 @@ public class ResultServiceImpl implements ResultService {
     public boolean deleteSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         if (null == result) {
             return false;
         }
@@ -101,7 +102,6 @@ public class ResultServiceImpl implements ResultService {
                 return false;
             }
             String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
-            String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -119,7 +119,8 @@ public class ResultServiceImpl implements ResultService {
     public boolean combineSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         if (null == result) {
             return false;
         }
@@ -153,7 +154,6 @@ public class ResultServiceImpl implements ResultService {
                 return false;
             }
             String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
-            String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -169,7 +169,8 @@ public class ResultServiceImpl implements ResultService {
     public boolean reset(HttpServletRequest request) {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         if (null == result) {
             return false;
         }
@@ -180,7 +181,6 @@ public class ResultServiceImpl implements ResultService {
             return false;
         }
         String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -194,7 +194,8 @@ public class ResultServiceImpl implements ResultService {
     public List<String[]> getItemsInSets(int set, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         if (result == null) {
             return null;
         }
@@ -220,7 +221,8 @@ public class ResultServiceImpl implements ResultService {
     public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId);
+        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
         try {
             List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
             List<List<Integer>> clusterResult =

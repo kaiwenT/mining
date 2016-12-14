@@ -71,10 +71,11 @@ public class IssueDao {
         return issueMapper.selectByExample(example);
     }
 
-
-    public int deleteIssueById(String issueId) {
-        IssueKey key = new IssueKey();
-        key.setIssueId(issueId);
-        return issueMapper.deleteByPrimaryKey(key);
+    public int deleteIssueById(String issueId, String user) {
+        IssueExample example = new IssueExample();
+        Criteria cri = example.createCriteria();
+        cri.andIssueIdEqualTo(issueId);
+        cri.andCreatorEqualTo(user);
+        return issueMapper.deleteByExample(example);
     }
 }

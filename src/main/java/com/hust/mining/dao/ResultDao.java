@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hust.mining.dao.mapper.ResultMapper;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultExample;
+import com.hust.mining.model.ResultExample.Criteria;
 import com.hust.mining.model.ResultKey;
 import com.hust.mining.model.ResultWithBLOBs;
 import com.hust.mining.util.ConvertUtil;
@@ -36,10 +37,16 @@ public class ResultDao {
         return list;
     }
 
-    public ResultWithBLOBs getResultWithBLOBsById(String resultId) {
-        ResultKey key = new ResultKey();
-        key.setRid(resultId);
-        return resultMapper.selectByPrimaryKey(key);
+    public ResultWithBLOBs getResultWithBLOBsById(String resultId, String issueId) {
+        ResultExample example = new ResultExample();
+        Criteria cri = example.createCriteria();
+        cri.andRidEqualTo(resultId);
+        cri.andIssueIdEqualTo(issueId);
+        List<ResultWithBLOBs> list = resultMapper.selectByExampleWithBLOBs(example);
+        if (null == list || list.size() > 0) {
+            return null;
+        }
+        return list.get(0);
     }
 
     public int updateResultWithBLOBs(ResultWithBLOBs result) {

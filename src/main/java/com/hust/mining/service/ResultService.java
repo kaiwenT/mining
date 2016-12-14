@@ -12,7 +12,7 @@ public interface ResultService {
 
     public String getCurrentResultId(HttpServletRequest request);
 
-    public List<String[]> getCountResultById(String resultId);
+    public List<String[]> getCountResultById(String resultId, String issueId);
 
     public List<String[]> getItemsInSets(int set, HttpServletRequest request);
 
@@ -25,6 +25,6 @@ public interface ResultService {
     Map<String, Object> statistic(StatisticParams params, HttpServletRequest request);
 
     public int delResultById(String resultId);
-    
+
     public List<Result> queryResultsByIssueId(String issueId);
 }

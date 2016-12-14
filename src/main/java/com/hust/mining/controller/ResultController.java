@@ -30,17 +30,29 @@ public class ResultController {
     @RequestMapping("/getCountResult")
     public Object getCountResult(@RequestParam(value = "resultId", required = true) String resultId,
             HttpServletRequest request) {
-        List<String[]> list = resultService.getCountResultById(resultId);
-        request.getSession().setAttribute(KEY.RESULT_ID, resultId);
-        if (null == list || list.size() == 0) {
-            return ResultUtil.errorWithMsg("不存在该记录");
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择话题");
         }
+        List<String[]> list = resultService.getCountResultById(resultId, issueId);
+        if (null == list || list.size() == 0) {
+            return ResultUtil.errorWithMsg("不存在记录");
+        }
+        request.getSession().setAttribute(KEY.RESULT_ID, resultId);
         return ResultUtil.success(list);
     }
 
     @ResponseBody
     @RequestMapping("/deleteSets")
     public Object delSets(@RequestParam(value = "sets", required = true) int[] sets, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择话题");
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isEmpty(resultId)) {
+            return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
+        }
         boolean result = resultService.deleteSets(sets, request);
         if (result) {
             return ResultUtil.success("删除成功");
@@ -51,6 +63,14 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/combineSets")
     public Object combineSets(int[] sets, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择话题");
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isEmpty(resultId)) {
+            return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
+        }
         boolean result = resultService.combineSets(sets, request);
         if (result) {
             return ResultUtil.success("合并成功");
@@ -66,6 +86,9 @@ public class ResultController {
             return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
         }
         List<Result> list = resultService.queryResultsByIssueId(issueId);
+        if (null == list || list.size() == 0) {
+            return ResultUtil.errorWithMsg("查询失败");
+        }
         return ResultUtil.success(list);
     }
 
