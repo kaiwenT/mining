@@ -22,8 +22,8 @@ public interface IssueService {
 
     int updateIssueInfo(Issue issue, HttpServletRequest request);
 
-    List<int[]> miningByTime(Date start, Date end, HttpServletRequest request);
+    List<String[]> miningByTime(Date start, Date end, HttpServletRequest request);
 
-    List<int[]> miningByFileIds(List<String> fileIds, HttpServletRequest request);
+    List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request);
     
 }

@@ -1,14 +1,20 @@
 package com.hust.mining.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,6 +66,9 @@ public class IssueController {
     @RequestMapping("/queryOwnIssue")
     public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
+        if (StringUtils.isEmpty(user)) {
+            return ResultUtil.errorWithMsg("请重新登录");
+        }
         con.setUser(user);
         List<Issue> list = issueService.queryIssue(con);
         long count = list.size();
@@ -80,8 +89,8 @@ public class IssueController {
     @ResponseBody
     @RequestMapping("/miningByTime")
     public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
-            @RequestParam(value = "startTime", required = true) Date endTime, HttpServletRequest request) {
-        List<int[]> count = issueService.miningByTime(startTime, endTime, request);
+            @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
+        List<String[]> count = issueService.miningByTime(startTime, endTime, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -92,11 +101,18 @@ public class IssueController {
     @RequestMapping("/miningByFileIds")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
-        List<int[]> count = issueService.miningByFileIds(fileIds, request);
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
         return ResultUtil.success(count);
+    }
+
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        CustomDateEditor editor = new CustomDateEditor(df, false);
+        binder.registerCustomEditor(Date.class, editor);
     }
 
 }

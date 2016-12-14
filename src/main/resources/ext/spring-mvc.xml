@@ -14,7 +14,7 @@
 			expression="com.hust.mining.*" />
 	</context:component-scan>
 
-	<mvc:interceptors>
+	<!-- <mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/img/**" />
@@ -22,12 +22,12 @@
 			<mvc:exclude-mapping path="/css/**" />
 			<mvc:exclude-mapping path="/ico/**" />
 			<mvc:exclude-mapping path="/libs/**" />
-	<!-- <mvc:exclude-mapping path="/index.html" /> -->
+			<mvc:exclude-mapping path="/index.html" />
 			<mvc:exclude-mapping path="/login" />
 			<mvc:exclude-mapping path="/page/error.html" />
 			<bean class="com.hust.mining.interceptor.PermissionInterceptor" />
 		</mvc:interceptor>
-	</mvc:interceptors>
+	</mvc:interceptors> -->
 
 	<!--RequestMappingHandlerAdapter -->
 	<mvc:annotation-driven>
@@ -98,6 +98,21 @@
 			</map>
 		</property>
 	</bean>
+
+	<!-- 第三步：注册处理器映射器/处理器适配器 ，添加conversion-service属性 -->
+	<mvc:annotation-driven conversion-service="conversionService" />
+
+	<!-- 第二步： 创建convertion-Service ，并注入dateConvert -->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<ref bean="dateConvert" />
+			</set>
+		</property>
+	</bean>
+	<!-- 第一步: 创建自定义日期转换规则 -->
+	<bean id="dateConvert" class="com.hust.mining.util.DateConverter" />
 
 </beans>
     

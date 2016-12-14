@@ -104,7 +104,7 @@ public class FileController {
         con.setIssueId(issueId);
         List<Issue> issues = issueService.queryIssue(con);
         if (issues.isEmpty()) {
-            return ResultUtil.errorWithMsg("query issue info failed");
+            return ResultUtil.errorWithMsg("查询话题文件失败");
         }
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
         request.getSession().setAttribute(KEY.ISSUE_ID, issueId);
@@ -119,16 +119,16 @@ public class FileController {
     public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId) {
         int i = fileService.deleteById(fileId);
         if (i > 0) {
-            return ResultUtil.successWithoutMsg();
+            return ResultUtil.success("删除成功");
         }
-        return ResultUtil.errorWithMsg("delete fail");
+        return ResultUtil.errorWithMsg("删除失败");
     }
 
     @ResponseBody
     @RequestMapping("/getColumnTitle")
     public Object getColumnTime(@RequestParam(value = "file", required = true) MultipartFile file) {
         if (file.isEmpty()) {
-            return ResultUtil.errorWithMsg("file is empty");
+            return ResultUtil.errorWithMsg("文件是空的");
         }
         try {
             List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 0);
@@ -136,6 +136,6 @@ public class FileController {
         } catch (Exception e) {
             logger.warn("read column title fail" + e.toString());
         }
-        return ResultUtil.errorWithMsg("get column title fail");
+        return ResultUtil.errorWithMsg("获取列表题失败");
     }
 }

@@ -11,8 +11,6 @@ public class ResultWithBLOBs extends Result {
 
     private byte[] modifiedCountResult;
 
-    private byte[] statResult;
-
     public byte[] getContent() {
         return content;
     }
@@ -51,13 +49,5 @@ public class ResultWithBLOBs extends Result {
 
     public void setModifiedCountResult(byte[] modifiedCountResult) {
         this.modifiedCountResult = modifiedCountResult;
-    }
-
-    public byte[] getStatResult() {
-        return statResult;
-    }
-
-    public void setStatResult(byte[] statResult) {
-        this.statResult = statResult;
     }
 }

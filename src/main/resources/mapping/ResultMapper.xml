@@ -11,8 +11,8 @@
     <result column="content" jdbcType="LONGVARBINARY" property="content" />
     <result column="orig_result" jdbcType="LONGVARBINARY" property="origResult" />
     <result column="modified_result" jdbcType="LONGVARBINARY" property="modifiedResult" />
-    <result column="stat_result" jdbcType="LONGVARBINARY" property="statResult" />
-    <result column="modified_stat_result" jdbcType="LONGVARBINARY" property="modifiedStatResult" />
+    <result column="count_result" jdbcType="LONGVARBINARY" property="countResult" />
+    <result column="modified_count_result" jdbcType="LONGVARBINARY" property="modifiedCountResult" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +76,7 @@
     rid, issue_id, creator, create_time
   </sql>
   <sql id="Blob_Column_List">
-    content, orig_result, modified_result, stat_result, modified_stat_result
+    content, orig_result, modified_result, count_result, modified_count_result
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.ResultExample" resultMap="ResultMapWithBLOBs">
     select
@@ -129,12 +129,12 @@
   <insert id="insert" parameterType="com.hust.mining.model.ResultWithBLOBs">
     insert into result (rid, issue_id, creator, 
       create_time, content, orig_result, 
-      modified_result, stat_result, 
-      modified_stat_result)
+      modified_result, count_result, 
+      modified_count_result)
     values (#{rid,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARBINARY}, #{origResult,jdbcType=LONGVARBINARY}, 
-      #{modifiedResult,jdbcType=LONGVARBINARY}, #{statResult,jdbcType=LONGVARBINARY}, 
-      #{modifiedStatResult,jdbcType=LONGVARBINARY})
+      #{modifiedResult,jdbcType=LONGVARBINARY}, #{countResult,jdbcType=LONGVARBINARY}, 
+      #{modifiedCountResult,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
     insert into result
@@ -160,11 +160,11 @@
       <if test="modifiedResult != null">
         modified_result,
       </if>
-      <if test="statResult != null">
-        stat_result,
+      <if test="countResult != null">
+        count_result,
       </if>
-      <if test="modifiedStatResult != null">
-        modified_stat_result,
+      <if test="modifiedCountResult != null">
+        modified_count_result,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -189,11 +189,11 @@
       <if test="modifiedResult != null">
         #{modifiedResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="statResult != null">
-        #{statResult,jdbcType=LONGVARBINARY},
+      <if test="countResult != null">
+        #{countResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="modifiedStatResult != null">
-        #{modifiedStatResult,jdbcType=LONGVARBINARY},
+      <if test="modifiedCountResult != null">
+        #{modifiedCountResult,jdbcType=LONGVARBINARY},
       </if>
     </trim>
   </insert>
@@ -227,11 +227,11 @@
       <if test="record.modifiedResult != null">
         modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="record.statResult != null">
-        stat_result = #{record.statResult,jdbcType=LONGVARBINARY},
+      <if test="record.countResult != null">
+        count_result = #{record.countResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="record.modifiedStatResult != null">
-        modified_stat_result = #{record.modifiedStatResult,jdbcType=LONGVARBINARY},
+      <if test="record.modifiedCountResult != null">
+        modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY},
       </if>
     </set>
     <if test="_parameter != null">
@@ -247,8 +247,8 @@
       content = #{record.content,jdbcType=LONGVARBINARY},
       orig_result = #{record.origResult,jdbcType=LONGVARBINARY},
       modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
-      stat_result = #{record.statResult,jdbcType=LONGVARBINARY},
-      modified_stat_result = #{record.modifiedStatResult,jdbcType=LONGVARBINARY}
+      count_result = #{record.countResult,jdbcType=LONGVARBINARY},
+      modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -284,11 +284,11 @@
       <if test="modifiedResult != null">
         modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="statResult != null">
-        stat_result = #{statResult,jdbcType=LONGVARBINARY},
+      <if test="countResult != null">
+        count_result = #{countResult,jdbcType=LONGVARBINARY},
       </if>
-      <if test="modifiedStatResult != null">
-        modified_stat_result = #{modifiedStatResult,jdbcType=LONGVARBINARY},
+      <if test="modifiedCountResult != null">
+        modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY},
       </if>
     </set>
     where rid = #{rid,jdbcType=VARCHAR}
@@ -301,8 +301,8 @@
       content = #{content,jdbcType=LONGVARBINARY},
       orig_result = #{origResult,jdbcType=LONGVARBINARY},
       modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
-      stat_result = #{statResult,jdbcType=LONGVARBINARY},
-      modified_stat_result = #{modifiedStatResult,jdbcType=LONGVARBINARY}
+      count_result = #{countResult,jdbcType=LONGVARBINARY},
+      modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY}
     where rid = #{rid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Result">

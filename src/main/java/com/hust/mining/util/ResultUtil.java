@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
 
-import com.hust.mining.constant.Result;
+import com.hust.mining.constant.ResultVal;
 
 import net.sf.json.JSONObject;
 
@@ -40,17 +40,17 @@ public class ResultUtil {
 
     public static Object unknowError() {
         JSONObject object = new JSONObject();
-        object.put("status", Result.ERROR_CODE);
-        object.put("result", Result.UNKNOW_ERROR);
-        logger.info("status：{}，result：{}", Result.ERROR_CODE, Result.UNKNOW_ERROR);
+        object.put("status", ResultVal.ERROR_CODE);
+        object.put("result", ResultVal.UNKNOW_ERROR);
+        logger.info("status：{}，result：{}", ResultVal.ERROR_CODE, ResultVal.UNKNOW_ERROR);
         return object;
     }
 
     public static Object errorWithMsg(Object msg) {
         JSONObject object = new JSONObject();
-        object.put("status", Result.ERROR_CODE);
+        object.put("status", ResultVal.ERROR_CODE);
         object.put("result", msg);
-        logger.info("status：{}，result：{}", Result.ERROR_CODE, msg);
+        logger.info("status：{}，result：{}", ResultVal.ERROR_CODE, msg);
         return object;
     }
 }

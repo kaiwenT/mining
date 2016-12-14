@@ -21,6 +21,7 @@ import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
 import com.hust.mining.model.Issue;
+import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithBLOBs;
 import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.ResultService;
@@ -108,6 +109,7 @@ public class ResultServiceImpl implements ResultService {
             issueDao.updateIssueInfo(issue);
         } catch (Exception e) {
             logger.error("sth failed when delete sets:{}" + e.toString());
+            return false;
         }
         return true;
     }
@@ -246,4 +248,11 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         return resultDao.delResultById(resultId);
     }
+
+    @Override
+    public List<Result> queryResultsByIssueId(String issueId) {
+        // TODO Auto-generated method stub
+        return resultDao.queryResultsByIssueId(issueId);
+    }
+
 }

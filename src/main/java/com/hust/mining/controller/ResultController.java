@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.constant.Constant.KEY;
+import com.hust.mining.model.Result;
 import com.hust.mining.model.params.StatisticParams;
+import com.hust.mining.service.IssueService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.util.ResultUtil;
 
@@ -21,6 +23,8 @@ import com.hust.mining.util.ResultUtil;
 public class ResultController {
     @Autowired
     private ResultService resultService;
+    @Autowired
+    private IssueService issueService;
 
     @ResponseBody
     @RequestMapping("/getCountResult")
@@ -28,6 +32,9 @@ public class ResultController {
             HttpServletRequest request) {
         List<String[]> list = resultService.getCountResultById(resultId);
         request.getSession().setAttribute(KEY.RESULT_ID, resultId);
+        if (null == list || list.size() == 0) {
+            return ResultUtil.errorWithMsg("不存在该记录");
+        }
         return ResultUtil.success(list);
     }
 
@@ -36,7 +43,7 @@ public class ResultController {
     public Object delSets(@RequestParam(value = "sets", required = true) int[] sets, HttpServletRequest request) {
         boolean result = resultService.deleteSets(sets, request);
         if (result) {
-            return ResultUtil.successWithoutMsg();
+            return ResultUtil.success("删除成功");
         }
         return ResultUtil.unknowError();
     }
@@ -52,14 +59,25 @@ public class ResultController {
     }
 
     @ResponseBody
-    @RequestMapping("/getAllStatResult")
-    public Object getAllStatResult(HttpServletRequest request) {
-        return null;
+    @RequestMapping("/queryResultList")
+    public Object queryResultList(HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+        }
+        List<Result> list = resultService.queryResultsByIssueId(issueId);
+        return ResultUtil.success(list);
     }
 
-    public Object delResultById(@RequestParam(value = "resultId", required = true) String[] resultIds,
+    @ResponseBody
+    @RequestMapping("/delResultById")
+    public Object delResultById(@RequestParam(value = "resultId", required = true) String resultId,
             HttpServletRequest request) {
-        return null;
+        int del = resultService.delResultById(resultId);
+        if (del <= 0) {
+            return ResultUtil.errorWithMsg("删除失败");
+        }
+        return ResultUtil.success("删除成功");
     }
 
     @ResponseBody

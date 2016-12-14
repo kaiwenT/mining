@@ -1,6 +1,6 @@
 package com.hust.mining.constant;
 
-public class Result {
+public class ResultVal {
 
     // 错误码
     public static final int ERROR_CODE = -1;

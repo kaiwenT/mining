@@ -1,5 +1,7 @@
 package com.hust.mining.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -68,6 +70,14 @@ public class ClusterServiceImpl implements ClusterService {
             return null;
         }
         List<List<Integer>> resultIndexSetList = canopy.getResultIndex();
+        Collections.sort(resultIndexSetList, new Comparator<List<Integer>>() {
+
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                // TODO Auto-generated method stub
+                return o2.size() - o1.size();
+            }
+        });
         return resultIndexSetList;
     }
 

@@ -278,11 +278,11 @@ public class StatisticServiceImpl implements StatisticService {
                 String[] row = content.get(tmpList.get(j));
                 if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
                     origTime = row[Index.TIME_INDEX];
-                    origIndex = j;
+                    origIndex = tmpList.get(j);
                 }
             }
             if (origIndex == -1) {
-                origIndex = 0;
+                origIndex = tmpList.get(0);
             }
             int[] item = new int[2];
             item[Index.COUNT_ITEM_INDEX] = origIndex;

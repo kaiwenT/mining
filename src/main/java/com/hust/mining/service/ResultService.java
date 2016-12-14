@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.hust.mining.model.Result;
 import com.hust.mining.model.params.StatisticParams;
 
 public interface ResultService {
@@ -24,4 +25,6 @@ public interface ResultService {
     Map<String, Object> statistic(StatisticParams params, HttpServletRequest request);
 
     public int delResultById(String resultId);
+    
+    public List<Result> queryResultsByIssueId(String issueId);
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.dao.IssueDao;
@@ -102,7 +103,7 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<int[]> miningByTime(Date start, Date end, HttpServletRequest request) {
+    public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
         QueryFileCondition con = new QueryFileCondition();
@@ -111,12 +112,18 @@ public class IssueServiceImpl implements IssueService {
         con.setEnd(end);
         List<IssueFileWithBLOBs> files = fileDao.queryFilesByCondition(con);
         ResultWithBLOBs result = mining(files);
+        if (null == result) {
+            return null;
+        }
+        String user = "gaoyan";
+        result.setIssueId(issueId);
+        result.setCreator(user);
+        result.setCreateTime(new Date());
         int update = resultDao.insert(result);
         if (update <= 0) {
             return null;
         }
         request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -124,7 +131,16 @@ public class IssueServiceImpl implements IssueService {
         issueDao.updateIssueInfo(issue);
         try {
             List<int[]> count = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
-            return count;
+            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
+            List<String[]> list = new ArrayList<String[]>();
+            for (int[] array : count) {
+                String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
+                String[] row = new String[old.length + 1];
+                System.arraycopy(old, 0, row, 0, old.length);
+                row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
+                list.add(row);
+            }
+            return list;
         } catch (Exception e) {
             logger.info("exception occur when convert:{}", e.toString());
         }
@@ -133,7 +149,7 @@ public class IssueServiceImpl implements IssueService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<int[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
+    public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
         QueryFileCondition con = new QueryFileCondition();
@@ -141,12 +157,19 @@ public class IssueServiceImpl implements IssueService {
         con.setFileIds(fileIds);
         List<IssueFileWithBLOBs> files = fileDao.queryFilesByCondition(con);
         ResultWithBLOBs result = mining(files);
+        if (null == result) {
+            return null;
+        }
+        String user = "gaoyan";
+        result.setIssueId(issueId);
+        result.setCreator(user);
+        result.setCreateTime(new Date());
         int update = resultDao.insert(result);
         if (update <= 0) {
             return null;
         }
         request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        // String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -154,7 +177,16 @@ public class IssueServiceImpl implements IssueService {
         issueDao.updateIssueInfo(issue);
         try {
             List<int[]> count = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
-            return count;
+            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
+            List<String[]> list = new ArrayList<String[]>();
+            for (int[] array : count) {
+                String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
+                String[] row = new String[old.length + 1];
+                System.arraycopy(old, 0, row, 0, old.length);
+                row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
+                list.add(row);
+            }
+            return list;
         } catch (Exception e) {
             logger.info("exception occur when convert:{}", e.toString());
         }
@@ -185,7 +217,7 @@ public class IssueServiceImpl implements IssueService {
         try {
             result.setContent(ConvertUtil.convertToBytes(content));
             result.setOrigResult(ConvertUtil.convertToBytes(clusterResult));
-            result.setModifiedCountResult(ConvertUtil.convertToBytes(clusterResult));
+            result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
             result.setCountResult(ConvertUtil.convertToBytes(countResult));
             result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
         } catch (Exception e) {
