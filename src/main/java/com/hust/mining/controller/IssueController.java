@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +65,6 @@ public class IssueController {
     @RequestMapping("/queryOwnIssue")
     public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
-        if (StringUtils.isEmpty(user)) {
-            return ResultUtil.errorWithMsg("请重新登录");
-        }
         con.setUser(user);
         List<Issue> list = issueService.queryIssue(con);
         long count = list.size();

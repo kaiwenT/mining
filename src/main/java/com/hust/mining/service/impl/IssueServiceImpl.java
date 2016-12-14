@@ -115,7 +115,7 @@ public class IssueServiceImpl implements IssueService {
         if (null == result) {
             return null;
         }
-        String user = "gaoyan";
+        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
@@ -160,7 +160,7 @@ public class IssueServiceImpl implements IssueService {
         if (null == result) {
             return null;
         }
-        String user = "gaoyan";
+        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
@@ -169,7 +169,6 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
-        // String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
