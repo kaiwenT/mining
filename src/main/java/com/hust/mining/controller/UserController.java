@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.model.Role;
 import com.hust.mining.model.User;
+import com.hust.mining.model.UserRole;
 import com.hust.mining.model.params.UserQueryCondition;
 import com.hust.mining.service.RoleService;
+import com.hust.mining.service.UserRoleService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ResultUtil;
 
@@ -28,6 +30,8 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private UserRoleService userRoleService;
 
 	/**
 	 * 获取所有用户的信息 显示信息为：用户编号、用户名、角色、邮箱、电话、真实姓名
@@ -47,9 +51,14 @@ public class UserController {
 		if (null == roles || roles.size() == 0) {
 			return ResultUtil.errorWithMsg("select all role empty");
 		}
+		List<UserRole> userRole = userRoleService.selectUserRole();
+		if (userRole.isEmpty() || userRole.size() == 0) {
+			return ResultUtil.errorWithMsg("select userRole empty");
+		}
 		Map<Object, Object> map = new HashMap<>();
 		map.put("user", users);
 		map.put("role", roles);
+		map.put("userRole", userRole);
 		return ResultUtil.success(map);
 	}
 
@@ -110,8 +119,9 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/insertUserInfo")
-	public Object insertUserInfo(@RequestBody User user, HttpServletRequest request) {
-		boolean statue = userService.insertUserInfo(user);
+	public Object insertUserInfo(@RequestBody User user,
+			@RequestParam(value = "roleName", required = true) List<String> roleName, HttpServletRequest request) {
+		boolean statue = userService.insertUserInfo(user,roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("insert userinfo erro ");
 		}

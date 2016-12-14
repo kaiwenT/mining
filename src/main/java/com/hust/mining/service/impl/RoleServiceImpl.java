@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import com.hust.mining.dao.PowerDao;
 import com.hust.mining.dao.RoleDao;
 import com.hust.mining.dao.RolePowerDao;
-import com.hust.mining.dao.UserDao;
+import com.hust.mining.dao.UserRoleDao;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
 import com.hust.mining.model.RolePower;
-import com.hust.mining.model.User;
 import com.hust.mining.service.RoleService;
 
 @Service
@@ -28,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RolePowerDao rolePowerDao;
 	@Autowired
-	private UserDao userDao;
+	private UserRoleDao userRoleDao;
 
 	@Override
 	public List<Role> selectAllRole() {
@@ -68,14 +67,10 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public boolean deleteRoleInfoById(int roleId) {
-		List<User> users = userDao.selectByRoleId(roleId);
-		for (User userInfo : users) {
-			userInfo.setRoleId(null);
-			int statue = userDao.updateByPrimaryKeySelective(userInfo);
-			if (statue == 0) {
-				logger.info("update user roleid(change is null) is error ");
-				return false;
-			}
+		int statue = userRoleDao.deleteUserRoleByRoleId(roleId);
+		if (statue == 0) {
+			logger.info("delete userRole is error");
+			return false;
 		}
 		int rolePowerStatus = rolePowerDao.deleteRolePowerByRoleId(roleId);
 		if (rolePowerStatus == 0) {

@@ -1,11 +1,9 @@
 package com.hust.mining.dao.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.hust.mining.model.User;
 import com.hust.mining.model.UserExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     long countByExample(UserExample example);

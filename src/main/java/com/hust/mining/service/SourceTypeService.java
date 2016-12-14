@@ -9,6 +9,9 @@ public interface SourceTypeService {
 	List<SourceType> selectSourceType();
 
 	List<SourceType> selectSourceTypeByName(String name);
-	
-	
+
+	int deleteSourceTypeById(int id);
+
+	int insertSourceType(String name);
+
 }

@@ -46,13 +46,16 @@ public class PermissionInterceptor implements HandlerInterceptor {
 					return true;
 				}
 			} else {
-				if (null != request.getSession().getAttribute("username")) {
+				// 请求页面的时候会判断 用户是否登录了，假如登陆了就再去判断权限，否则直接跳转到登录界面
+				if (request.getSession().getAttribute("username") != null) {
 					if (request.getSession().getAttribute("userPowerUrl") != null) {
 						request.getSession().removeAttribute("userPowerUrl");
 					}
 					// 在这里可以重新获取
 					List<String> userPowerUrl = userService
 							.selectUserPowerUrl(request.getSession().getAttribute("username").toString());
+					System.out.println(
+							"用户权限" + request.getSession().getAttribute("username").toString() + userPowerUrl.size());
 					request.getSession().setAttribute("userPowerUrl", userPowerUrl);
 					if (userPowerUrl.contains(requestPath)) {
 						return true;
