@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class IssueKey {
+import java.io.Serializable;
+
+public class IssueKey implements Serializable{
     private String issueId;
 
     public String getIssueId() {

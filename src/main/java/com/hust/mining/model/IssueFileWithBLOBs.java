@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class IssueFileWithBLOBs extends IssueFile {
+import java.io.Serializable;
+
+public class IssueFileWithBLOBs extends IssueFile implements Serializable{
     private byte[] content;
 
     public byte[] getContent() {

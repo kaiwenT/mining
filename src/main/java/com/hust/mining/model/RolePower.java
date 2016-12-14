@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class RolePower {
+import java.io.Serializable;
+
+public class RolePower implements Serializable{
     private Integer id;
 
     private Integer roleId;

@@ -1,315 +1,332 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.ResultMapper">
-  <resultMap id="BaseResultMap" type="com.hust.mining.model.Result">
-    <id column="rid" jdbcType="VARCHAR" property="rid" />
-    <result column="issue_id" jdbcType="VARCHAR" property="issueId" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hust.mining.model.ResultWithBLOBs">
-    <result column="content" jdbcType="LONGVARBINARY" property="content" />
-    <result column="orig_result" jdbcType="LONGVARBINARY" property="origResult" />
-    <result column="modified_result" jdbcType="LONGVARBINARY" property="modifiedResult" />
-    <result column="count_result" jdbcType="LONGVARBINARY" property="countResult" />
-    <result column="modified_count_result" jdbcType="LONGVARBINARY" property="modifiedCountResult" />
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    rid, issue_id, creator, create_time
-  </sql>
-  <sql id="Blob_Column_List">
-    content, orig_result, modified_result, count_result, modified_count_result
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.ResultExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from result
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByExample" parameterType="com.hust.mining.model.ResultExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from result
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="com.hust.mining.model.ResultKey" resultMap="ResultMapWithBLOBs">
-    select 'true' as QUERYID,
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from result
-    where rid = #{rid,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.ResultKey">
-    delete from result
-    where rid = #{rid,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.hust.mining.model.ResultExample">
-    delete from result
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.hust.mining.model.ResultWithBLOBs">
-    insert into result (rid, issue_id, creator, 
-      create_time, content, orig_result, 
-      modified_result, count_result, 
-      modified_count_result)
-    values (#{rid,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARBINARY}, #{origResult,jdbcType=LONGVARBINARY}, 
-      #{modifiedResult,jdbcType=LONGVARBINARY}, #{countResult,jdbcType=LONGVARBINARY}, 
-      #{modifiedCountResult,jdbcType=LONGVARBINARY})
-  </insert>
-  <insert id="insertSelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
-    insert into result
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="rid != null">
-        rid,
-      </if>
-      <if test="issueId != null">
-        issue_id,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="origResult != null">
-        orig_result,
-      </if>
-      <if test="modifiedResult != null">
-        modified_result,
-      </if>
-      <if test="countResult != null">
-        count_result,
-      </if>
-      <if test="modifiedCountResult != null">
-        modified_count_result,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="rid != null">
-        #{rid,jdbcType=VARCHAR},
-      </if>
-      <if test="issueId != null">
-        #{issueId,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="origResult != null">
-        #{origResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="modifiedResult != null">
-        #{modifiedResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="countResult != null">
-        #{countResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="modifiedCountResult != null">
-        #{modifiedCountResult,jdbcType=LONGVARBINARY},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.hust.mining.model.ResultExample" resultType="java.lang.Long">
-    select count(*) from result
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update result
-    <set>
-      <if test="record.rid != null">
-        rid = #{record.rid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.issueId != null">
-        issue_id = #{record.issueId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="record.origResult != null">
-        orig_result = #{record.origResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="record.modifiedResult != null">
-        modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="record.countResult != null">
-        count_result = #{record.countResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="record.modifiedCountResult != null">
-        modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update result
-    set rid = #{record.rid,jdbcType=VARCHAR},
-      issue_id = #{record.issueId,jdbcType=VARCHAR},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      content = #{record.content,jdbcType=LONGVARBINARY},
-      orig_result = #{record.origResult,jdbcType=LONGVARBINARY},
-      modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
-      count_result = #{record.countResult,jdbcType=LONGVARBINARY},
-      modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update result
-    set rid = #{record.rid,jdbcType=VARCHAR},
-      issue_id = #{record.issueId,jdbcType=VARCHAR},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
-    update result
-    <set>
-      <if test="issueId != null">
-        issue_id = #{issueId,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="origResult != null">
-        orig_result = #{origResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="modifiedResult != null">
-        modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="countResult != null">
-        count_result = #{countResult,jdbcType=LONGVARBINARY},
-      </if>
-      <if test="modifiedCountResult != null">
-        modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY},
-      </if>
-    </set>
-    where rid = #{rid,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.ResultWithBLOBs">
-    update result
-    set issue_id = #{issueId,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARBINARY},
-      orig_result = #{origResult,jdbcType=LONGVARBINARY},
-      modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
-      count_result = #{countResult,jdbcType=LONGVARBINARY},
-      modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY}
-    where rid = #{rid,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Result">
-    update result
-    set issue_id = #{issueId,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where rid = #{rid,jdbcType=VARCHAR}
-  </update>
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	<resultMap id="BaseResultMap" type="com.hust.mining.model.Result">
+		<id column="rid" jdbcType="VARCHAR" property="rid" />
+		<result column="issue_id" jdbcType="VARCHAR" property="issueId" />
+		<result column="creator" jdbcType="VARCHAR" property="creator" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="com.hust.mining.model.ResultWithBLOBs">
+		<result column="content" jdbcType="LONGVARBINARY" property="content" />
+		<result column="orig_result" jdbcType="LONGVARBINARY" property="origResult" />
+		<result column="modified_result" jdbcType="LONGVARBINARY"
+			property="modifiedResult" />
+		<result column="count_result" jdbcType="LONGVARBINARY"
+			property="countResult" />
+		<result column="modified_count_result" jdbcType="LONGVARBINARY"
+			property="modifiedCountResult" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		rid, issue_id, creator, create_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content, orig_result, modified_result, count_result, modified_count_result
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.ResultExample"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.hust.mining.model.ResultExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="com.hust.mining.model.ResultKey"
+		resultMap="ResultMapWithBLOBs">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from result
+		where rid = #{rid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.ResultKey">
+		delete from result
+		where rid = #{rid,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.hust.mining.model.ResultExample">
+		delete from result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.hust.mining.model.ResultWithBLOBs">
+		insert into result (rid, issue_id, creator,
+		create_time, content, orig_result,
+		modified_result, count_result,
+		modified_count_result)
+		values (#{rid,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARBINARY},
+		#{origResult,jdbcType=LONGVARBINARY},
+		#{modifiedResult,jdbcType=LONGVARBINARY},
+		#{countResult,jdbcType=LONGVARBINARY},
+		#{modifiedCountResult,jdbcType=LONGVARBINARY})
+	</insert>
+	<insert id="insertSelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
+		insert into result
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rid != null">
+				rid,
+			</if>
+			<if test="issueId != null">
+				issue_id,
+			</if>
+			<if test="creator != null">
+				creator,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="origResult != null">
+				orig_result,
+			</if>
+			<if test="modifiedResult != null">
+				modified_result,
+			</if>
+			<if test="countResult != null">
+				count_result,
+			</if>
+			<if test="modifiedCountResult != null">
+				modified_count_result,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rid != null">
+				#{rid,jdbcType=VARCHAR},
+			</if>
+			<if test="issueId != null">
+				#{issueId,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				#{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="origResult != null">
+				#{origResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="modifiedResult != null">
+				#{modifiedResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="countResult != null">
+				#{countResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="modifiedCountResult != null">
+				#{modifiedCountResult,jdbcType=LONGVARBINARY},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.hust.mining.model.ResultExample"
+		resultType="java.lang.Long">
+		select count(*) from result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update result
+		<set>
+			<if test="record.rid != null">
+				rid = #{record.rid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.issueId != null">
+				issue_id = #{record.issueId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.creator != null">
+				creator = #{record.creator,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="record.origResult != null">
+				orig_result = #{record.origResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="record.modifiedResult != null">
+				modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="record.countResult != null">
+				count_result = #{record.countResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="record.modifiedCountResult != null">
+				modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update result
+		set rid = #{record.rid,jdbcType=VARCHAR},
+		issue_id = #{record.issueId,jdbcType=VARCHAR},
+		creator = #{record.creator,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		content = #{record.content,jdbcType=LONGVARBINARY},
+		orig_result = #{record.origResult,jdbcType=LONGVARBINARY},
+		modified_result = #{record.modifiedResult,jdbcType=LONGVARBINARY},
+		count_result = #{record.countResult,jdbcType=LONGVARBINARY},
+		modified_count_result = #{record.modifiedCountResult,jdbcType=LONGVARBINARY}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update result
+		set rid = #{record.rid,jdbcType=VARCHAR},
+		issue_id = #{record.issueId,jdbcType=VARCHAR},
+		creator = #{record.creator,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.ResultWithBLOBs">
+		update result
+		<set>
+			<if test="issueId != null">
+				issue_id = #{issueId,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null">
+				creator = #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="origResult != null">
+				orig_result = #{origResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="modifiedResult != null">
+				modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="countResult != null">
+				count_result = #{countResult,jdbcType=LONGVARBINARY},
+			</if>
+			<if test="modifiedCountResult != null">
+				modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY},
+			</if>
+		</set>
+		where rid = #{rid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.ResultWithBLOBs">
+		update result
+		set issue_id = #{issueId,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARBINARY},
+		orig_result = #{origResult,jdbcType=LONGVARBINARY},
+		modified_result = #{modifiedResult,jdbcType=LONGVARBINARY},
+		count_result = #{countResult,jdbcType=LONGVARBINARY},
+		modified_count_result = #{modifiedCountResult,jdbcType=LONGVARBINARY}
+		where rid = #{rid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Result">
+		update result
+		set issue_id = #{issueId,jdbcType=VARCHAR},
+		creator = #{creator,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where rid = #{rid,jdbcType=VARCHAR}
+	</update>
 </mapper>

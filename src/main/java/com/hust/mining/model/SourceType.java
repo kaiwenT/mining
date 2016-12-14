@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class SourceType {
+import java.io.Serializable;
+
+public class SourceType implements Serializable{
     private Integer id;
 
     private String name;

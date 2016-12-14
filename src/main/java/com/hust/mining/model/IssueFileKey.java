@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class IssueFileKey {
+import java.io.Serializable;
+
+public class IssueFileKey implements Serializable{
     private String fileId;
 
     public String getFileId() {

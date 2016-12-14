@@ -1,8 +1,9 @@
 package com.hust.mining.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Result extends ResultKey {
+public class Result extends ResultKey implements Serializable{
     private String issueId;
 
     private String creator;

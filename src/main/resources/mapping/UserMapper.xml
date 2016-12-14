@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.UserMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.User">
 		<id column="user_id" jdbcType="INTEGER" property="userId" />
 		<result column="user_name" jdbcType="VARCHAR" property="userName" />
@@ -25,7 +26,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -57,7 +59,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -75,7 +78,8 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		user_id, user_name, password, email, telphone, true_name, role_id, create_date
+		user_id, user_name, password, email, telphone, true_name,
+		role_id, create_date
 	</sql>
 	<select id="selectByExample" parameterType="com.hust.mining.model.UserExample"
 		resultMap="BaseResultMap">
@@ -114,12 +118,14 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.User">
-		insert into user (user_id, user_name, password,
+		insert into user (user_id,
+		user_name, password,
 		email, telphone, true_name,
 		role_id, create_date)
 		values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
 		#{password,jdbcType=VARCHAR},
-		#{email,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, #{trueName,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{telphone,jdbcType=VARCHAR}, #{trueName,jdbcType=VARCHAR},
 		#{roleId,jdbcType=INTEGER}, #{createDate,jdbcType=DATE})
 	</insert>
 	<insert id="insertSelective" parameterType="com.hust.mining.model.User">
@@ -219,13 +225,20 @@
 	<update id="updateByExample" parameterType="map">
 		update user
 		set user_id = #{record.userId,jdbcType=INTEGER},
-		user_name = #{record.userName,jdbcType=VARCHAR},
-		password = #{record.password,jdbcType=VARCHAR},
-		email = #{record.email,jdbcType=VARCHAR},
-		telphone = #{record.telphone,jdbcType=VARCHAR},
-		true_name = #{record.trueName,jdbcType=VARCHAR},
-		role_id = #{record.roleId,jdbcType=INTEGER},
-		create_date = #{record.createDate,jdbcType=DATE}
+		user_name =
+		#{record.userName,jdbcType=VARCHAR},
+		password =
+		#{record.password,jdbcType=VARCHAR},
+		email =
+		#{record.email,jdbcType=VARCHAR},
+		telphone =
+		#{record.telphone,jdbcType=VARCHAR},
+		true_name =
+		#{record.trueName,jdbcType=VARCHAR},
+		role_id =
+		#{record.roleId,jdbcType=INTEGER},
+		create_date =
+		#{record.createDate,jdbcType=DATE}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -259,13 +272,17 @@
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.User">
 		update user
-		set user_name = #{userName,jdbcType=VARCHAR},
-		password = #{password,jdbcType=VARCHAR},
+		set
+		user_name = #{userName,jdbcType=VARCHAR},
+		password =
+		#{password,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
 		telphone = #{telphone,jdbcType=VARCHAR},
-		true_name = #{trueName,jdbcType=VARCHAR},
+		true_name =
+		#{trueName,jdbcType=VARCHAR},
 		role_id = #{roleId,jdbcType=INTEGER},
 		create_date = #{createDate,jdbcType=DATE}
-		where user_id = #{userId,jdbcType=INTEGER}
+		where user_id =
+		#{userId,jdbcType=INTEGER}
 	</update>
 </mapper>

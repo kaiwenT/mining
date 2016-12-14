@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.WebsiteMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.Website">
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="url" jdbcType="VARCHAR" property="url" />
@@ -22,7 +23,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -54,7 +56,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -101,7 +104,8 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from website
+		delete from
+		website
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	<delete id="deleteByExample" parameterType="com.hust.mining.model.WebsiteExample">
@@ -111,9 +115,11 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.Website">
-		insert into website (id, url, name,
+		insert into website (id, url,
+		name,
 		level, type)
-		values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR},
+		values (#{id,jdbcType=BIGINT},
+		#{url,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
 		#{level,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
 	</insert>
@@ -187,10 +193,12 @@
 	<update id="updateByExample" parameterType="map">
 		update website
 		set id = #{record.id,jdbcType=BIGINT},
-		url = #{record.url,jdbcType=VARCHAR},
+		url =
+		#{record.url,jdbcType=VARCHAR},
 		name = #{record.name,jdbcType=VARCHAR},
 		level = #{record.level,jdbcType=VARCHAR},
-		type = #{record.type,jdbcType=VARCHAR}
+		type =
+		#{record.type,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -215,10 +223,13 @@
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Website">
 		update website
-		set url = #{url,jdbcType=VARCHAR},
+		set
+		url = #{url,jdbcType=VARCHAR},
 		name = #{name,jdbcType=VARCHAR},
-		level = #{level,jdbcType=VARCHAR},
+		level =
+		#{level,jdbcType=VARCHAR},
 		type = #{type,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=BIGINT}
+		where id =
+		#{id,jdbcType=BIGINT}
 	</update>
 </mapper>

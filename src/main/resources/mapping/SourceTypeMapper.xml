@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.SourceTypeMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.SourceType">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
@@ -19,7 +20,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -51,7 +53,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -98,7 +101,8 @@
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from source_type
+		delete from
+		source_type
 		where id = #{id,jdbcType=INTEGER}
 	</delete>
 	<delete id="deleteByExample" parameterType="com.hust.mining.model.SourceTypeExample">
@@ -108,7 +112,8 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.SourceType">
-		insert into source_type (id, name)
+		insert into source_type (id,
+		name)
 		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.hust.mining.model.SourceType">
@@ -154,7 +159,8 @@
 	<update id="updateByExample" parameterType="map">
 		update source_type
 		set id = #{record.id,jdbcType=INTEGER},
-		name = #{record.name,jdbcType=VARCHAR}
+		name =
+		#{record.name,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>

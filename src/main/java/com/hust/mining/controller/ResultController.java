@@ -45,7 +45,7 @@ public class ResultController {
         if (result) {
             return ResultUtil.success("删除成功");
         }
-        return ResultUtil.unknowError();
+        return ResultUtil.errorWithMsg("删除失败");
     }
 
     @ResponseBody
@@ -53,9 +53,9 @@ public class ResultController {
     public Object combineSets(int[] sets, HttpServletRequest request) {
         boolean result = resultService.combineSets(sets, request);
         if (result) {
-            return ResultUtil.successWithoutMsg();
+            return ResultUtil.success("合并成功");
         }
-        return ResultUtil.unknowError();
+        return ResultUtil.errorWithMsg("合并失败");
     }
 
     @ResponseBody
@@ -88,7 +88,7 @@ public class ResultController {
             return ResultUtil.errorWithMsg("get current result failed,please create or select a issue");
         }
         Map<String, Object> map = resultService.statistic(params, request);
-        if (map.isEmpty()) {
+        if (null == map || map.isEmpty()) {
             return ResultUtil.errorWithMsg("统计失败");
         }
         return ResultUtil.success(map);

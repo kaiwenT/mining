@@ -83,7 +83,12 @@ public class IssueController {
     @RequestMapping("/queryAllIssue")
     public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         List<Issue> list = issueService.queryIssue(con);
-        return ResultUtil.success(list);
+        long count = list.size();
+        JSONObject result = new JSONObject();
+        long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
+        result.put("pageTotal", pageTotal);
+        result.put("list", list);
+        return ResultUtil.success(result);
     }
 
     @ResponseBody

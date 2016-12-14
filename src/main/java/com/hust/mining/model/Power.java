@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class Power {
+import java.io.Serializable;
+
+public class Power implements Serializable{
     private Integer powerId;
 
     private String powerName;

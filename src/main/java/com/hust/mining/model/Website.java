@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class Website {
+import java.io.Serializable;
+
+public class Website implements Serializable {
     private Long id;
 
     private String url;

@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class Weight {
+import java.io.Serializable;
+
+public class Weight implements Serializable{
     private Integer id;
 
     private String name;

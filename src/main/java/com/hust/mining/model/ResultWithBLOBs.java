@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class ResultWithBLOBs extends Result {
+import java.io.Serializable;
+
+public class ResultWithBLOBs extends Result implements Serializable{
     private byte[] content;
 
     private byte[] origResult;
