@@ -105,7 +105,7 @@ public class IssueController {
     }
 
     @ResponseBody
-    @RequestMapping("/miningByFileIds")
+    @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);

@@ -43,7 +43,7 @@ public class ResultDao {
         cri.andRidEqualTo(resultId);
         cri.andIssueIdEqualTo(issueId);
         List<ResultWithBLOBs> list = resultMapper.selectByExampleWithBLOBs(example);
-        if (null == list || list.size() > 0) {
+        if (null == list || list.size() == 0) {
             return null;
         }
         return list.get(0);

@@ -43,7 +43,7 @@ public class FileDao {
     public List<IssueFileWithBLOBs> queryFilesByCondition(QueryFileCondition con) {
         IssueFileExample example = new IssueFileExample();
         Criteria criteria = example.createCriteria();
-        if (StringUtils.isEmpty(con.getIssueId())) {
+        if (!StringUtils.isEmpty(con.getIssueId())) {
             criteria.andIssueIdEqualTo(con.getIssueId());
         }
         if (null != con.getStart()) {
