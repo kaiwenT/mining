@@ -21,13 +21,13 @@ public class AuthController {
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(@RequestParam(value = "form-username", required = true) String userName,
 			@RequestParam(value = "form-password", required = true) String passwd, HttpServletRequest request) {
-	    request.getSession().setAttribute(KEY.USER_NAME, userName);
-	    return "redirect:page/infoManager.html";
-//		if (userService.login(userName, passwd)) {
-//			request.getSession().setAttribute("username", userName);
-//			return "redirect:page/infoManager.html";
-//		}
-//		return "redirect:page/error.jsp";
+//	    request.getSession().setAttribute(KEY.USER_NAME, userName);
+//	    return "redirect:page/infoManager.html";
+        if (userService.login(userName, passwd)) {
+            request.getSession().setAttribute(KEY.USER_NAME, userName);
+            return "redirect:page/infoManager.html";
+        }
+        return "redirect:page/error.jsp";
 	}
 
 	@RequestMapping(value = "logout")
