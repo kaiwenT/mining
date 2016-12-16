@@ -52,9 +52,9 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> getCountResultById(String resultId,String issueId) {
+    public List<String[]> getCountResultById(String resultId, String issueId) {
         // TODO Auto-generated method stub
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (result == null) {
             return null;
         }
@@ -82,7 +82,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
         }
@@ -120,7 +120,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
         }
@@ -170,7 +170,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
         }
@@ -195,7 +195,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (result == null) {
             return null;
         }
@@ -222,7 +222,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId,issueId);
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         try {
             List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
             List<List<Integer>> clusterResult =
@@ -255,6 +255,46 @@ public class ResultServiceImpl implements ResultService {
     public List<Result> queryResultsByIssueId(String issueId) {
         // TODO Auto-generated method stub
         return resultDao.queryResultsByIssueId(issueId);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, List<String[]>> exportService(String issueId, String resultId) {
+        // TODO Auto-generated method stub
+        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
+            List<String[]> cluster = new ArrayList<String[]>();
+            List<List<Integer>> clusterResult =
+                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
+            for (List<Integer> set : clusterResult) {
+                for (int index : set) {
+                    String[] row = content.get(index);
+                    cluster.add(row);
+                }
+                cluster.add(new String[1]);
+            }
+            List<String[]> count = new ArrayList<String[]>();
+            List<int[]> countResult = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
+            for (int[] row : countResult) {
+                String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
+                String[] nRow = new String[oldRow.length + 1];
+                System.arraycopy(oldRow, 0, nRow, 1, oldRow.length);
+                nRow[0] = row[Index.COUNT_ITEM_AMOUNT] + "";
+                count.add(nRow);
+            }
+            Map<String, List<String[]>> map = Maps.newHashMap();
+            map.put("cluster", cluster);
+            map.put("count", count);
+            return map;
+        } catch (Exception e) {
+            logger.error("exception occur when get export result:{}", e.toString());
+            return null;
+        }
     }
 
 }
