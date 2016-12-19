@@ -75,4 +75,14 @@ public class WebsiteServiceImpl implements WebsiteService {
 		return true;
 	}
 
+	@Override
+	public List<Website> selectByCondition(Website website) {
+		List<Website> websites = websiteDao.selectByCondition(website);
+		if (websites.isEmpty()) {
+			logger.info("website is empty");
+			return websites;
+		}
+		return websites;
+	}
+
 }

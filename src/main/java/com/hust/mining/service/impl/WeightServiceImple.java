@@ -59,4 +59,14 @@ public class WeightServiceImple implements WeightService {
 		return true;
 	}
 
+	@Override
+	public List<Weight> selectByCondition(Weight weight) {
+		List<Weight> weights = weightDao.selectByCondition(weight);
+		if (weights.isEmpty()) {
+			logger.info("weights is empty");
+			return weights;
+		}
+		return weights;
+	}
+
 }

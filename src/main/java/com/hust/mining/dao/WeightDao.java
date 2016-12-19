@@ -2,6 +2,7 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.WeightMapper;
@@ -48,4 +49,16 @@ public class WeightDao {
 		return weightMapper.updateByPrimaryKeySelective(weight);
 	}
 
+	public List<Weight> selectByCondition(Weight weight) {
+		WeightExample example = new WeightExample();
+		Criteria criteria = example.createCriteria();
+		if (!StringUtils.isBlank(weight.getName())) {
+			criteria.andNameEqualTo(weight.getName());
+		}
+		if (weight.getWeight() != null) {
+			criteria.andWeightEqualTo(weight.getWeight());
+		}
+		List<Weight> weights = weightMapper.selectByExample(example);
+		return weights;
+	}
 }

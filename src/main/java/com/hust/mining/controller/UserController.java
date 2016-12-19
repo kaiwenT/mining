@@ -108,7 +108,7 @@ public class UserController {
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update user error ");
 		}
-		return ResultUtil.success("update user seuucee");
+		return ResultUtil.success("update user success");
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class UserController {
 	@RequestMapping("/insertUserInfo")
 	public Object insertUserInfo(@RequestBody User user,
 			@RequestParam(value = "roleName", required = true) List<String> roleName, HttpServletRequest request) {
-		boolean statue = userService.insertUserInfo(user,roleName);
+		boolean statue = userService.insertUserInfo(user, roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("insert userinfo erro ");
 		}
@@ -140,9 +140,21 @@ public class UserController {
 	public Object getUserInfoByPageLimit(@RequestBody UserQueryCondition userQueryCondition,
 			HttpServletRequest request) {
 		List<User> userInfo = userService.selectUserByPageLimit(userQueryCondition);
+		List<Role> roles = roleService.selectAllRole();
+		if (null == roles || roles.size() == 0) {
+			return ResultUtil.errorWithMsg("select all role empty");
+		}
+		List<UserRole> userRole = userRoleService.selectUserRole();
+		if (userRole.isEmpty() || userRole.size() == 0) {
+			return ResultUtil.errorWithMsg("select userRole empty");
+		}
 		if (null == userInfo || userInfo.size() == 0) {
 			return ResultUtil.errorWithMsg("select userInfo empty");
 		}
-		return ResultUtil.success(userInfo);
+		Map<Object, Object> map = new HashMap<>();
+		map.put("userQueryCondition", userInfo);
+		map.put("role", roles);
+		map.put("userRole", userRole);
+		return ResultUtil.success(map);
 	}
 }

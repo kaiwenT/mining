@@ -21,7 +21,7 @@ public class WebsiteController {
 	private WebsiteService websiteService;
 
 	@ResponseBody
-	@RequestMapping("selectAllWebsite")
+	@RequestMapping("/selectAllWebsite")
 	public Object selectAllWebsite() {
 		List<Website> website = websiteService.selectAllWebsite();
 		if (website.isEmpty()) {
@@ -37,7 +37,7 @@ public class WebsiteController {
 		if (status == false) {
 			return ResultUtil.errorWithMsg("insert error");
 		}
-		return ResultUtil.success("insert website success");
+		return ResultUtil.success("insert data success");
 	}
 
 	@ResponseBody
@@ -47,7 +47,7 @@ public class WebsiteController {
 		if (status == false) {
 			return ResultUtil.errorWithMsg("delete website error ");
 		}
-		return ResultUtil.success(status);
+		return ResultUtil.success("delete data success");
 	}
 
 	@ResponseBody
@@ -57,7 +57,17 @@ public class WebsiteController {
 		if (status == false) {
 			return ResultUtil.errorWithMsg("update is error");
 		}
-		return ResultUtil.success(status);
+		return ResultUtil.success("update data success");
+	}
+
+	@ResponseBody
+	@RequestMapping("/selectByCondition")
+	public Object selectByCondition(@RequestBody Website website) {
+		List<Website> websites = websiteService.selectByCondition(website);
+		if (websites.isEmpty()) {
+			return ResultUtil.errorWithMsg("website is empty");
+		}
+		return ResultUtil.success(websites);
 	}
 
 }

@@ -56,4 +56,14 @@ public class SourceTypeServiceImple implements SourceTypeService {
 		}
 		return status;
 	}
+
+	@Override
+	public int updateSourceType(SourceType sourceType) {
+		int status = sourceTypeDao.updateSourceType(sourceType);
+		if (status == 0) {
+			logger.info("update sourcetype is error");
+			return status;
+		}
+		return status;
+	}
 }

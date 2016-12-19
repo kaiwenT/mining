@@ -1,5 +1,6 @@
 package com.hust.mining.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.hust.mining.model.User;
 import com.hust.mining.model.UserRole;
 import com.hust.mining.model.params.UserQueryCondition;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.TimeUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,12 +54,13 @@ public class UserServiceImpl implements UserService {
 				roleId.add(userRoleInfo.getRoleId());
 			}
 		}
-		// 如果登录的用户是普通用户 只能查询自己的角色
-		if (!roleId.contains(1) || !roleId.contains(2)) {
-			user = userDao.selectByUserName(loginName);
+		// 如果登录的用户是普通用户 只能查询自己的角色，得到的是这个登录用户的角色ID
+		// 假如此用户的角色ID不是管理员和超级管理员，也就是说
+		if (roleId.contains(1) || roleId.contains(2)) {
+			user = userDao.selectAllUserInfo();
 			return user;
 		}
-		user = userDao.selectAllUserInfo();
+		user = userDao.selectByUserName(loginName);
 		if (user.isEmpty()) {
 			logger.info("user is empty");
 			return user;
@@ -127,6 +130,12 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean insertUserInfo(User user, List<String> roleName) {
+		try {
+			user.setCreateDate(TimeUtil.getSystemDate());
+		} catch (ParseException e) {
+			logger.info("get systemdate is error ");
+			e.printStackTrace();
+		}
 		int statue = userDao.insert(user);
 		if (statue == 0) {
 			logger.info("insert user error ");
@@ -238,6 +247,5 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
-
 
 }

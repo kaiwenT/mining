@@ -2,6 +2,7 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.WebsiteMapper;
@@ -51,6 +52,25 @@ public class WebsiteDao {
 
 	public int insertWebsite(Website werbsite) {
 		return websiteMapper.insert(werbsite);
+	}
+
+	public List<Website> selectByCondition(Website webSite) {
+		WebsiteExample example = new WebsiteExample();
+		Criteria criteria = example.createCriteria();
+		if (!StringUtils.isBlank(webSite.getUrl())) {
+			criteria.andUrlLike(webSite.getUrl());
+		}
+		if (!StringUtils.isBlank(webSite.getLevel())) {
+			criteria.andLevelLike(webSite.getLevel());
+		}
+		if (!StringUtils.isBlank(webSite.getName())) {
+			criteria.andNameLike(webSite.getName());
+		}
+		if (!StringUtils.isBlank(webSite.getType())) {
+			criteria.andTypeLike(webSite.getType());
+		}
+		List<Website> websites = websiteMapper.selectByExample(example);
+		return websites;
 	}
 
 	public int deleteWebsiteById(long id) {

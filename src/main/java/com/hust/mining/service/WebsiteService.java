@@ -8,6 +8,8 @@ public interface WebsiteService {
 
 	List<Website> selectAllWebsite();
 
+	List<Website> selectByCondition(Website website);
+
 	boolean deleteWebsiteById(long id);
 
 	boolean updateWebsite(Website website);
