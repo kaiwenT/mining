@@ -2,6 +2,7 @@ package com.hust.mining.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.hust.mining.util.ResultUtil;
 @RequestMapping("/weight")
 public class WeightController {
 
+	@Autowired
 	private WeightService weightService;
 
 	@ResponseBody
@@ -29,13 +31,23 @@ public class WeightController {
 	}
 
 	@ResponseBody
+	@RequestMapping("/selectByCondition")
+	public Object selectByCondition(@RequestBody Weight weight) {
+		List<Weight> weights = weightService.selectByCondition(weight);
+		if (weights.isEmpty()) {
+			return ResultUtil.errorWithMsg("the condition not exist");
+		}
+		return ResultUtil.success(weights);
+	}
+
+	@ResponseBody
 	@RequestMapping("/insertWeight")
 	public Object insertWeight(Weight weight) {
 		boolean status = weightService.insertWeight(weight);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("insert is error");
 		}
-		return ResultUtil.success("insert is success");
+		return ResultUtil.success("insert data success");
 	}
 
 	@ResponseBody
@@ -45,7 +57,7 @@ public class WeightController {
 		if (status == false) {
 			return ResultUtil.errorWithMsg("delete is error");
 		}
-		return ResultUtil.success("delete is success");
+		return ResultUtil.success("delete date success");
 	}
 
 	@ResponseBody
@@ -55,6 +67,6 @@ public class WeightController {
 		if (status == false) {
 			return ResultUtil.errorWithMsg("update weight error");
 		}
-		return ResultUtil.success("update weight success");
+		return ResultUtil.success("update date success");
 	}
 }

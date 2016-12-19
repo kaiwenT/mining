@@ -84,15 +84,24 @@ public class UserDao {
 	public List<User> selectByExample(UserQueryCondition userQueryCondition) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
-		if (!StringUtils.isBlank(userQueryCondition.getEmail())) {
-			
+		if (!StringUtils.isBlank(userQueryCondition.getUserName())) {
+			criteria.andUserNameEqualTo(userQueryCondition.getUserName());
 		}
-		criteria.andUserNameEqualTo(userQueryCondition.getUserName());
-		criteria.andEmailEqualTo(userQueryCondition.getEmail());
-		criteria.andTelphoneEqualTo(userQueryCondition.getTelphone());
-		criteria.andTrueNameEqualTo(userQueryCondition.getTrueName());
-		example.setPage(userQueryCondition.getPage());
-		example.setRow(userQueryCondition.getRow());
+		if (!StringUtils.isBlank(userQueryCondition.getEmail())) {
+			criteria.andEmailEqualTo(userQueryCondition.getEmail());
+		}
+		if (!StringUtils.isBlank(userQueryCondition.getTelphone())) {
+			criteria.andTelphoneEqualTo(userQueryCondition.getTelphone());
+		}
+		if (!StringUtils.isBlank(userQueryCondition.getTrueName())) {
+			criteria.andTrueNameEqualTo(userQueryCondition.getTrueName());
+		}
+		if (userQueryCondition.getPage() != 0) {
+			example.setPage(userQueryCondition.getPage());
+		}
+		if (userQueryCondition.getRow() != 0) {
+			example.setRow(userQueryCondition.getRow());
+		}
 		List<User> users = userMapper.selectByExample(example);
 		return users;
 	}

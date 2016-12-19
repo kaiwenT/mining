@@ -38,4 +38,8 @@ public class SourceTypeDao {
 		sourceType.setName(name);
 		return sourceTypeMapper.insert(sourceType);
 	}
+
+	public int updateSourceType(SourceType sourceType) {
+		return sourceTypeMapper.updateByPrimaryKey(sourceType);
+	}
 }

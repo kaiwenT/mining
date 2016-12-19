@@ -105,7 +105,7 @@ public class RoleController {
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update roleinfo error,unknow error");
 		}
-		return ResultUtil.success("update roleinfo success");
+		return ResultUtil.success("update roleInfo success");
 	}
 
 	/**
