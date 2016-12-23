@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> selectAllUserInfo(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		String loginName = (String) session.getAttribute("username");
+		String loginName = "gaoyan";
 		List<User> users = userDao.selectByUserName(loginName);
 		List<User> user = new ArrayList<>();
 		// 要根据userID 去判断找到对应的ROleid
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> selectSingleUserInfo(String userName, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		String loginName = (String) session.getAttribute("username");
+		String loginName = "gaoyan";
 		List<User> users = userDao.selectByUserName(loginName);
 		List<User> user = new ArrayList<>();
 		List<Integer> roleId = new ArrayList<>();
@@ -233,7 +233,7 @@ public class UserServiceImpl implements UserService {
 		if (null == session) {
 			return null;
 		}
-		return (String) session.getAttribute("username");
+		return "gaoyan";
 	}
 
 	@Override

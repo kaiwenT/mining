@@ -56,9 +56,9 @@ public class FileController {
 			@RequestParam(value = "timeIndex", required = true) int[] timeIndex,
 			@RequestParam(value = "urlIndex", required = true) int[] urlIndex,
 			@RequestParam(value = "sourceType", required = true) String[] sourceType, HttpServletRequest request) {
-		if (request.getSession().getAttribute(KEY.ISSUE_ID) == null) {
-			return ResultUtil.errorWithMsg("请选择或者创建一个话题");
-		}
+//		if (request.getSession().getAttribute(KEY.ISSUE_ID) == null) {
+//			return ResultUtil.errorWithMsg("请选择或者创建一个话题");
+//		}
 		// 数组之间必须是一一对应关系
 		List<String> info = new ArrayList<>();
 		for (int i = 0; i < file.length; i++) {
@@ -162,7 +162,7 @@ public class FileController {
 	@RequestMapping(value = "/queryIssueFiles")
 	public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId,
 			HttpServletRequest request) {
-		String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+		String user = "gaoyan";
 		IssueQueryCondition con = new IssueQueryCondition();
 		con.setIssueId(issueId);
 		con.setUser(user);

@@ -80,8 +80,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public boolean deleteSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = "89882e09-0c9f-40a7-86f7-4feacd619b71";
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
@@ -101,7 +101,7 @@ public class ResultServiceImpl implements ResultService {
             if (update <= 0) {
                 return false;
             }
-            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String user = "gaoyan";
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -118,8 +118,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public boolean combineSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = "89882e09-0c9f-40a7-86f7-4feacd619b71";
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
@@ -153,7 +153,7 @@ public class ResultServiceImpl implements ResultService {
             if (update <= 0) {
                 return false;
             }
-            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String user = "gaoyan";
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -168,8 +168,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public boolean reset(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = "89882e09-0c9f-40a7-86f7-4feacd619b71";
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (null == result) {
             return false;
@@ -180,7 +180,7 @@ public class ResultServiceImpl implements ResultService {
         if (update <= 0) {
             return false;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = "gaoyan";
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -193,8 +193,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public List<String[]> getItemsInSets(int set, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = "89882e09-0c9f-40a7-86f7-4feacd619b71";
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         if (result == null) {
             return null;
@@ -220,8 +220,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = "89882e09-0c9f-40a7-86f7-4feacd619b71";
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
         try {
             List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());

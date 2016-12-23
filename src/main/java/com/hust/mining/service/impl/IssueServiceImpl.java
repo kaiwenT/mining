@@ -52,7 +52,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public int createIssue(String issueName, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = "gaoyan";
         Issue issue = new Issue();
         issue.setIssueId(UUID.randomUUID().toString());
         issue.setIssueName(issueName);
@@ -74,7 +74,7 @@ public class IssueServiceImpl implements IssueService {
         if (null == obj) {
             return StringUtils.EMPTY;
         }
-        return obj.toString();
+        return "15cc68df-8b93-4273-9932-acf853b95131";
     }
 
     @Override
@@ -101,7 +101,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public int deleteIssueById(String issueId, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = "gaoyan";
         return issueDao.deleteIssueById(issueId, user);
     }
 
@@ -109,7 +109,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setStart(start);
@@ -119,7 +119,7 @@ public class IssueServiceImpl implements IssueService {
         if (null == result) {
             return null;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = "gaoyan";
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
@@ -155,7 +155,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setFileIds(fileIds);
@@ -164,7 +164,7 @@ public class IssueServiceImpl implements IssueService {
         if (null == result) {
             return null;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = "gaoyan";
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());

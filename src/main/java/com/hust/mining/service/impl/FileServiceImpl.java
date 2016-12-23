@@ -53,7 +53,7 @@ public class FileServiceImpl implements FileService {
         }
 
         String user = userService.getCurrentUser(request);
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         IssueFileWithBLOBs issueFile = new IssueFileWithBLOBs();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());
