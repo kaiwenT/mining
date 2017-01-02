@@ -18,35 +18,35 @@
     	<constructor-arg   index="1"  value="${redis1.ip}" />
         <constructor-arg   index="2"  value="${redis.port}"  type="int" />
         <constructor-arg   index="3"  value="${redis.timeout}"  type="int" />
-       <!--   <constructor-arg   index="4"  value="${redis.password}" />-->
+         <constructor-arg   index="4"  value="${redis.password}" />
 	</bean>  
 	<bean  id="master2Instance"  class="redis.clients.jedis.JedisPool" >  
     	<constructor-arg   index="0"  ref="jedisPoolConfig" />  
     	<constructor-arg   index="1"  value="${redis2.ip}" />
         <constructor-arg   index="2"  value="${redis.port}"  type="int" />
         <constructor-arg   index="3"  value="${redis.timeout}"  type="int" />
-       <!--   <constructor-arg   index="4"  value="${redis.password}" />-->
+         <constructor-arg   index="4"  value="${redis.password}" />
 	</bean>  
 	<bean  id="master3Instance"  class="redis.clients.jedis.JedisPool" >  
     	<constructor-arg   index="0"  ref="jedisPoolConfig" />  
     	<constructor-arg   index="1"  value="${redis3.ip}" />
         <constructor-arg   index="2"  value="${redis.port}"  type="int" />
         <constructor-arg   index="3"  value="${redis.timeout}"  type="int" />
-         <!-- <constructor-arg   index="4"  value="${redis.password}" />-->
+         <constructor-arg   index="4"  value="${redis.password}" />
 	</bean>  
 	<bean  id="master4Instance"  class="redis.clients.jedis.JedisPool" >  
     	<constructor-arg   index="0"  ref="jedisPoolConfig" />  
     	<constructor-arg   index="1"  value="${redis4.ip}" />
         <constructor-arg   index="2"  value="${redis.port}"  type="int" />
         <constructor-arg   index="3"  value="${redis.timeout}"  type="int" />
-        <!--<constructor-arg   index="4"  value="${redis.password}" />-->
+        <constructor-arg   index="4"  value="${redis.password}" />
 	</bean>  
 	<bean  id="master5Instance"  class="redis.clients.jedis.JedisPool" >  
     	<constructor-arg   index="0"  ref="jedisPoolConfig" />  
     	<constructor-arg   index="1"  value="${redis5.ip}" />
         <constructor-arg   index="2"  value="${redis.port}"  type="int" />
         <constructor-arg   index="3"  value="${redis.timeout}"  type="int" />
-        <!--<constructor-arg   index="4"  value="${redis.password}" />-->
+        <constructor-arg   index="4"  value="${redis.password}" />
 	</bean>  
 	
 </beans>
