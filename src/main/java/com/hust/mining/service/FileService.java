@@ -15,4 +15,6 @@ public interface FileService {
     List<IssueFile> queryFilesByIssueId(String issueId);
 
     List<String[]> combineFilesContentOnSameIssueId(String issueId);
+    
+    
 }

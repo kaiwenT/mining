@@ -1,5 +1,7 @@
 package com.hust.mining.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +16,18 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
+
+    public static List<String[]> read(String filename) throws IOException {
+        InputStream inputStream = new FileInputStream(new File(filename));
+        return read(filename, inputStream, -1);
+    }
+
+    public static List<String[]> read(String filename, InputStream inputStream, int startRow) throws IOException {
+        if (inputStream == null) {
+            inputStream = new FileInputStream(new File(filename));
+        }
+        return read(filename, inputStream, startRow);
+    }
 
     public static List<String[]> read(String filename, InputStream inputStream, int rows, Integer...indexes)
             throws FileNotFoundException, IOException {

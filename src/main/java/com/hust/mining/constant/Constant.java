@@ -1,5 +1,7 @@
 package com.hust.mining.constant;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class Constant {
 
     public final static String INVALID_TIME = "1970-01-01";
@@ -82,6 +84,17 @@ public class Constant {
         public static final String SHIPING = "视频";
         public static final String WEIBO = "微博";
         public static final String WEIZHI = "未知";
+    }
+
+    public static class DIRECTORY {
+        @Value("upload_file")
+        public static String UPLOAD;
+        @Value("orig_cluster")
+        public static String ORIG_CLUSTER;
+        @Value("orig_count")
+        public static String ORIG_COUNT;
+        @Value("modify_count")
+        public static String MODIFY_COUNT;
     }
 
 }
