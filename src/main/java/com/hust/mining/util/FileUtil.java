@@ -2,6 +2,7 @@ package com.hust.mining.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -52,6 +53,15 @@ public class FileUtil {
         }
         WriteThread write = new FileUtil().new WriteThread(filename, content);
         write.run();
+    }
+
+    public static boolean delete(String filename) {
+        File file = new File(filename);
+        if (file.exists() && file.isFile()) {
+            file.delete();
+            return true;
+        }
+        return false;
     }
 
     class ReadThread implements Callable<List<String[]>> {

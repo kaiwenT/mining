@@ -1,14 +1,23 @@
 package com.hust.mining.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Result extends ResultKey implements Serializable{
+public class Result {
+    private String rid;
+
     private String issueId;
 
     private String creator;
 
     private Date createTime;
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid == null ? null : rid.trim();
+    }
 
     public String getIssueId() {
         return issueId;

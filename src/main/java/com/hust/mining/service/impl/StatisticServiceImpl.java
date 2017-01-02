@@ -21,6 +21,7 @@ import com.hust.mining.dao.WeightDao;
 import com.hust.mining.model.Website;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.util.CommonUtil;
+import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.TimeUtil;
 
 @Service
@@ -100,7 +101,7 @@ public class StatisticServiceImpl implements StatisticService {
         return map;
     }
 
-    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, List<Integer> list,
+    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, int[] list,
             int interval) {
         Map<String, Map<String, Map<String, Integer>>> map =
                 new TreeMap<String, Map<String, Map<String, Integer>>>(new Comparator<String>() {
@@ -109,7 +110,7 @@ public class StatisticServiceImpl implements StatisticService {
                         return o1.compareTo(o2);
                     }
                 });
-        if (null == list || 0 == list.size()) {
+        if (null == list || 0 == list.length) {
             return map;
         }
         for (int item : list) {
@@ -278,15 +279,41 @@ public class StatisticServiceImpl implements StatisticService {
                 String[] row = content.get(tmpList.get(j));
                 if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
                     origTime = row[Index.TIME_INDEX];
-                    origIndex = tmpList.get(j);
+                    origIndex = j;
                 }
             }
             if (origIndex == -1) {
-                origIndex = tmpList.get(0);
+                origIndex = 0;
             }
             int[] item = new int[2];
             item[Index.COUNT_ITEM_INDEX] = origIndex;
             item[Index.COUNT_ITEM_AMOUNT] = tmpList.size();
+            reList.add(item);
+        }
+        return reList;
+    }
+
+    @Override
+    public List<int[]> countx(List<String[]> cluster, List<String[]> content) {
+        List<int[]> clusterInt = ConvertUtil.toIntList(cluster);
+        List<int[]> reList = new ArrayList<int[]>();
+        for (int i = 0; i < clusterInt.size(); i++) {
+            int[] tmpList = clusterInt.get(i);
+            int origIndex = -1;
+            String origTime = "9999-12-12 23:59:59";
+            for (int j = 0; j < tmpList.length; j++) {
+                String[] row = content.get(tmpList[j]);
+                if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
+                    origTime = row[Index.TIME_INDEX];
+                    origIndex = j;
+                }
+            }
+            if (origIndex == -1) {
+                origIndex = 0;
+            }
+            int[] item = new int[2];
+            item[Index.COUNT_ITEM_INDEX] = origIndex;
+            item[Index.COUNT_ITEM_AMOUNT] = tmpList.length;
             reList.add(item);
         }
         return reList;

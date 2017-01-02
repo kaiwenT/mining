@@ -27,8 +27,10 @@ public interface StatisticService {
     public Map<String, Integer> calculateAttention(Map<String, Integer> map);
 
     public List<int[]> count(List<List<Integer>> clusterResult, List<String[]> content);
-    
-    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, List<Integer> list,
+
+    public List<int[]> countx(List<String[]> cluster, List<String[]> content);
+
+    public Map<String, Map<String, Map<String, Integer>>> statistic(List<String[]> content, int[] list,
             int interval);
 
 }

@@ -1,9 +1,10 @@
 package com.hust.mining.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class IssueFile extends IssueFileKey implements Serializable{
+public class IssueFile {
+    private String fileId;
+
     private String fileName;
 
     private String sourceType;
@@ -17,6 +18,14 @@ public class IssueFile extends IssueFileKey implements Serializable{
     private Date uploadTime;
 
     private String creator;
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId == null ? null : fileId.trim();
+    }
 
     public String getFileName() {
         return fileName;

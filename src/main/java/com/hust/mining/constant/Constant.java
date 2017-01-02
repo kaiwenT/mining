@@ -36,6 +36,9 @@ public class Constant {
         public final static String ISSUE_ID = "issueId";
         public final static String RESULT_ID = "resultId";
         public static final String USER_NAME = "username";
+        public static final String RESULT_CLUSTER = "resultCluster";
+        public static final String RESULT_COUNT = "resultCount";
+        public static final String RESULT_CONTENT = "resultContent";
     }
 
     public static class Index {
@@ -88,13 +91,17 @@ public class Constant {
 
     public static class DIRECTORY {
         @Value("upload_file")
-        public static String UPLOAD;
+        public static String FILE;
         @Value("orig_cluster")
         public static String ORIG_CLUSTER;
         @Value("orig_count")
         public static String ORIG_COUNT;
+        @Value("modify_cluster")
+        public static String MODIFY_CLUSTER;
         @Value("modify_count")
         public static String MODIFY_COUNT;
+        @Value("content")
+        public static String CONTENT;
     }
 
 }

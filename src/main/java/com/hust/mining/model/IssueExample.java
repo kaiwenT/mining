@@ -11,9 +11,9 @@ public class IssueExample {
 
     protected List<Criteria> oredCriteria;
 
-    protected long start;
+    protected int start;
 
-    protected long limit;
+    protected int limit;
 
     public IssueExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -566,11 +566,6 @@ public class IssueExample {
             return typeHandler;
         }
 
-        
-        protected Criterion() {
-            super();
-        }
-
         protected Criterion(String condition) {
             super();
             this.condition = condition;
@@ -608,19 +603,19 @@ public class IssueExample {
         }
     }
 
-    public long getStart() {
+    public int getStart() {
         return start;
     }
 
-    public void setStart(long start) {
+    public void setStart(int start) {
         this.start = start;
     }
 
-    public long getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public void setLimit(long limit) {
+    public void setLimit(int limit) {
         this.limit = limit;
     }
 }

@@ -9,7 +9,6 @@ import com.hust.mining.dao.mapper.IssueMapper;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
 import com.hust.mining.model.IssueExample.Criteria;
-import com.hust.mining.model.IssueKey;
 import com.hust.mining.model.params.IssueQueryCondition;
 
 public class IssueDao {
@@ -26,9 +25,7 @@ public class IssueDao {
     }
 
     public Issue selectById(String issueId) {
-        IssueKey key = new IssueKey();
-        key.setIssueId(issueId);
-        return issueMapper.selectByPrimaryKey(key);
+        return issueMapper.selectByPrimaryKey(issueId);
     }
 
     public int updateIssueInfo(Issue issue) {

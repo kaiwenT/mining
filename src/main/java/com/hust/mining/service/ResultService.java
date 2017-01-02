@@ -14,8 +14,6 @@ public interface ResultService {
 
     public List<String[]> getCountResultById(String resultId, String issueId);
 
-    public List<String[]> getItemsInSets(int set, HttpServletRequest request);
-
     public boolean deleteSets(int[] sets, HttpServletRequest request);
 
     public boolean combineSets(int[] sets, HttpServletRequest request);

@@ -2,66 +2,69 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.dao.mapper.ResultMapper;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultExample;
 import com.hust.mining.model.ResultExample.Criteria;
-import com.hust.mining.model.ResultKey;
-import com.hust.mining.model.ResultWithBLOBs;
-import com.hust.mining.util.ConvertUtil;
+import com.hust.mining.model.ResultWithContent;
+import com.hust.mining.util.FileUtil;
 
 public class ResultDao {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ResultDao.class);
 
     @Autowired
     private ResultMapper resultMapper;
 
-    @SuppressWarnings("unchecked")
-    public List<int[]> getCountResultById(String resultId) {
-        ResultKey key = new ResultKey();
-        key.setRid(resultId);
-        List<int[]> list = null;
-        try {
-            list = (List<int[]>) ConvertUtil
-                    .convertBytesToObject(resultMapper.selectByPrimaryKey(key).getModifiedCountResult());
-        } catch (Exception e) {
-            logger.warn("convert countresult error：{}", e.toString());
-        }
-        return list;
-    }
-
-    public ResultWithBLOBs getResultWithBLOBsById(String resultId, String issueId) {
+    public List<String[]> getResultConentById(String resultId, String issueId, String path) {
         ResultExample example = new ResultExample();
         Criteria cri = example.createCriteria();
         cri.andRidEqualTo(resultId);
         cri.andIssueIdEqualTo(issueId);
-        List<ResultWithBLOBs> list = resultMapper.selectByExampleWithBLOBs(example);
+        List<Result> list = resultMapper.selectByExample(example);
         if (null == list || list.size() == 0) {
             return null;
         }
-        return list.get(0);
+        List<String[]> clusterResult = FileUtil.read(path + resultId);
+        return clusterResult;
     }
 
-    public int updateResultWithBLOBs(ResultWithBLOBs result) {
-        return resultMapper.updateByPrimaryKeyWithBLOBs(result);
+    public int updateResult(ResultWithContent rc) {
+        String name = rc.getResult().getRid();
+        if (rc.getModiCluster() != null) {
+            FileUtil.write(DIRECTORY.MODIFY_CLUSTER + name, rc.getModiCluster());
+        }
+        if (rc.getModiCount() != null) {
+            FileUtil.write(DIRECTORY.MODIFY_COUNT + name, rc.getModiCount());
+        }
+        Result result = rc.getResult();
+        return resultMapper.updateByPrimaryKey(result);
     }
 
     public int delResultById(String resultId) {
-        ResultKey key = new ResultKey();
-        key.setRid(resultId);
-        int del = resultMapper.deleteByPrimaryKey(key);
+        FileUtil.delete(DIRECTORY.CONTENT + resultId);
+        FileUtil.delete(DIRECTORY.MODIFY_CLUSTER + resultId);
+        FileUtil.delete(DIRECTORY.MODIFY_COUNT + resultId);
+        FileUtil.delete(DIRECTORY.ORIG_CLUSTER + resultId);
+        FileUtil.delete(DIRECTORY.ORIG_COUNT + resultId);
+        int del = resultMapper.deleteByPrimaryKey(resultId);
         return del;
     }
 
-    public int insert(ResultWithBLOBs result) {
-        int insert = resultMapper.insert(result);
+    public int insert(ResultWithContent rc) {
+        String name = rc.getResult().getRid();
+        String contentpath = DIRECTORY.CONTENT + name;
+        FileUtil.write(contentpath, rc.getContent());
+        String clusterpath = DIRECTORY.ORIG_CLUSTER + name;
+        FileUtil.write(clusterpath, rc.getOrigCluster());
+        String countpath = DIRECTORY.ORIG_COUNT + name;
+        FileUtil.write(countpath, rc.getOrigCount());
+        String modicluster = DIRECTORY.MODIFY_CLUSTER + name;
+        FileUtil.write(modicluster, rc.getModiCluster());
+        String modicount = DIRECTORY.MODIFY_COUNT + name;
+        FileUtil.write(modicount, rc.getModiCount());
+        int insert = resultMapper.insert(rc.getResult());
         return insert;
     }
 

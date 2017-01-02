@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.IssueMapper">
-	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.Issue">
+		<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 		<id column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="issue_name" jdbcType="VARCHAR" property="issueName" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -25,8 +25,7 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
+									and ${criterion.condition} #{criterion.value} and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -58,8 +57,7 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
+									and ${criterion.condition} #{criterion.value} and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -77,8 +75,7 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		issue_id, issue_name, create_time, creator, last_operator,
-		last_update_time
+		issue_id, issue_name, create_time, creator, last_operator, last_update_time
 	</sql>
 	<select id="selectByExample" parameterType="com.hust.mining.model.IssueExample"
 		resultMap="BaseResultMap">
@@ -98,14 +95,14 @@
 			limit #{start},#{limit}
 		</if>
 	</select>
-	<select id="selectByPrimaryKey" parameterType="com.hust.mining.model.IssueKey"
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
 		select 'true' as QUERYID,
 		<include refid="Base_Column_List" />
 		from issue
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.IssueKey">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from issue
 		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</delete>
@@ -116,14 +113,12 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.Issue">
-		insert into issue (issue_id,
-		issue_name, create_time,
+		insert into issue (issue_id, issue_name, create_time,
 		creator, last_operator, last_update_time
 		)
 		values (#{issueId,jdbcType=VARCHAR}, #{issueName,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP},
-		#{creator,jdbcType=VARCHAR},
-		#{lastOperator,jdbcType=VARCHAR},
+		#{creator,jdbcType=VARCHAR}, #{lastOperator,jdbcType=VARCHAR},
 		#{lastUpdateTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
@@ -196,8 +191,7 @@
 				last_operator = #{record.lastOperator,jdbcType=VARCHAR},
 			</if>
 			<if test="record.lastUpdateTime != null">
-				last_update_time =
-				#{record.lastUpdateTime,jdbcType=TIMESTAMP},
+				last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
 			</if>
 		</set>
 		<if test="_parameter != null">
@@ -208,14 +202,10 @@
 		update issue
 		set issue_id = #{record.issueId,jdbcType=VARCHAR},
 		issue_name = #{record.issueName,jdbcType=VARCHAR},
-		create_time =
-		#{record.createTime,jdbcType=TIMESTAMP},
-		creator =
-		#{record.creator,jdbcType=VARCHAR},
-		last_operator =
-		#{record.lastOperator,jdbcType=VARCHAR},
-		last_update_time =
-		#{record.lastUpdateTime,jdbcType=TIMESTAMP}
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		creator = #{record.creator,jdbcType=VARCHAR},
+		last_operator = #{record.lastOperator,jdbcType=VARCHAR},
+		last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -243,17 +233,11 @@
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Issue">
 		update issue
-		set
-		issue_name = #{issueName,jdbcType=VARCHAR},
-		create_time =
-		#{createTime,jdbcType=TIMESTAMP},
-		creator =
-		#{creator,jdbcType=VARCHAR},
-		last_operator =
-		#{lastOperator,jdbcType=VARCHAR},
-		last_update_time =
-		#{lastUpdateTime,jdbcType=TIMESTAMP}
-		where issue_id =
-		#{issueId,jdbcType=VARCHAR}
+		set issue_name = #{issueName,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		creator = #{creator,jdbcType=VARCHAR},
+		last_operator = #{lastOperator,jdbcType=VARCHAR},
+		last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+		where issue_id = #{issueId,jdbcType=VARCHAR}
 	</update>
 </mapper>

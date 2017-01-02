@@ -10,20 +10,23 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Maps;
+import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.Result;
-import com.hust.mining.model.ResultWithBLOBs;
+import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.StatisticParams;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.util.ConvertUtil;
@@ -50,27 +53,23 @@ public class ResultServiceImpl implements ResultService {
         return result.toString();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<String[]> getCountResultById(String resultId, String issueId) {
         // TODO Auto-generated method stub
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (result == null) {
-            return null;
-        }
+        List<String[]> modiCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_COUNT);
         List<String[]> list = new ArrayList<String[]>();
         try {
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<int[]> count = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
+            List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+            List<int[]> count = ConvertUtil.toIntList(modiCount);
             for (int[] item : count) {
                 String[] old = content.get(item[Index.COUNT_ITEM_INDEX]);
                 String[] ne = new String[old.length + 1];
-                System.arraycopy(old, 0, ne, 0, old.length);
-                ne[old.length] = item[Index.COUNT_ITEM_AMOUNT] + "";
+                System.arraycopy(old, 0, ne, 1, old.length);
+                ne[0] = item[Index.COUNT_ITEM_AMOUNT] + "";
                 list.add(ne);
             }
         } catch (Exception e) {
-            logger.error("convert result fail:{}" + e.toString());
+            logger.error("get count result failed:{}" + e.toString());
             return null;
         }
         return list;
@@ -82,22 +81,25 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (null == result) {
-            return false;
-        }
+        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<List<Integer>> clusterResult =
-                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
-            List<int[]> countResult = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
+            List<int[]> count = (List<int[]>) redis.getObject(KEY.RESULT_COUNT);
+            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.RESULT_CLUSTER);
             Arrays.sort(sets);
             for (int i = sets.length - 1; i >= 0; i--) {
-                clusterResult.remove(sets[i]);
-                countResult.remove(sets[i]);
+                cluster.remove(sets[i]);
+                count.remove(sets[i]);
             }
-            result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
-            result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
-            int update = resultDao.updateResultWithBLOBs(result);
+            redis.setObject(KEY.RESULT_CLUSTER, cluster);
+            redis.setObject(KEY.RESULT_COUNT, count);
+            Result result = new Result();
+            result.setRid(resultId);
+            result.setIssueId(issueId);
+            ResultWithContent rc = new ResultWithContent();
+            rc.setResult(result);
+            rc.setModiCluster(cluster);
+            rc.setModiCount(ConvertUtil.toStringList(count));
+            int update = resultDao.updateResult(rc);
             if (update <= 0) {
                 return false;
             }
@@ -120,36 +122,39 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (null == result) {
-            return false;
-        }
+        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<List<Integer>> clusterResult =
-                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
-            List<Integer> combineList = new ArrayList<Integer>();
-            for (int i : sets) {
-                combineList.addAll(clusterResult.get(i));
+            List<String[]> content = (List<String[]>) redis.getObject(KEY.RESULT_CONTENT);
+            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.RESULT_CLUSTER);
+            String[] newrow = cluster.get(sets[0]);
+            for (int i = 1; i < sets.length; i++) {
+                newrow = (String[]) ArrayUtils.addAll(newrow, cluster.get(sets[i]));
             }
             Arrays.sort(sets);
             for (int i = sets.length - 1; i >= 0; i--) {
-                clusterResult.remove(sets[i]);
+                cluster.remove(sets[i]);
             }
-            clusterResult.add(combineList);
-            Collections.sort(clusterResult, new Comparator<List<Integer>>() {
+            cluster.add(newrow);
+            Collections.sort(cluster, new Comparator<String[]>() {
 
                 @Override
-                public int compare(List<Integer> o1, List<Integer> o2) {
+                public int compare(String[] o1, String[] o2) {
                     // TODO Auto-generated method stub
-                    return o2.size() - o1.size();
+                    return o2.length - o1.length;
                 }
             });
             // TODO:重构统计
-            List<int[]> countResult = statService.count(clusterResult, content);
-            result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
-            result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
-            int update = resultDao.updateResultWithBLOBs(result);
+            List<int[]> count = statService.countx(cluster, content);
+            redis.setObject(KEY.RESULT_CLUSTER, cluster);
+            redis.setObject(KEY.RESULT_COUNT, count);
+            Result result = new Result();
+            result.setRid(resultId);
+            result.setIssueId(issueId);
+            ResultWithContent rc = new ResultWithContent();
+            rc.setResult(result);
+            rc.setModiCluster(cluster);
+            rc.setModiCount(ConvertUtil.toStringList(count));
+            int update = resultDao.updateResult(rc);
             if (update <= 0) {
                 return false;
             }
@@ -170,13 +175,17 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
         String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (null == result) {
-            return false;
-        }
-        result.setModifiedResult(result.getOrigResult());
-        result.setModifiedCountResult(result.getCountResult());
-        int update = resultDao.updateResultWithBLOBs(result);
+        List<String[]> origCluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_CLUSTER);
+        List<String[]> origCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_COUNT);
+
+        Result result = new Result();
+        result.setRid(resultId);
+        result.setIssueId(issueId);
+        ResultWithContent rc = new ResultWithContent();
+        rc.setResult(result);
+        rc.setModiCluster(origCluster);
+        rc.setModiCount(origCount);
+        int update = resultDao.updateResult(rc);
         if (update <= 0) {
             return false;
         }
@@ -191,43 +200,13 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> getItemsInSets(int set, HttpServletRequest request) {
-        // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (result == null) {
-            return null;
-        }
-        List<String[]> list = new ArrayList<String[]>();
-        try {
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<List<Integer>> clusterResult =
-                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
-            List<Integer> indexSet = clusterResult.get(set);
-            for (int item : indexSet) {
-                String[] row = content.get(item);
-                list.add(row);
-            }
-        } catch (Exception e) {
-            logger.error("sth error:{}" + e.toString());
-            return null;
-        }
-        return list;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
     public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
+        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<List<Integer>> clusterResult =
-                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
-            List<Integer> set = clusterResult.get(params.getCurrentSet());
+            List<String[]> content = (List<String[]>) redis.getObject(KEY.RESULT_CONTENT);
+            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.RESULT_CLUSTER);
+            int[] set = ConvertUtil.toIntArray(cluster.get(params.getCurrentSet()));
             Map<String, Map<String, Map<String, Integer>>> timeMap =
                     statService.statistic(content, set, params.getInterval());
             Map<String, Integer> typeMap = statService.getTypeCount(timeMap);
@@ -261,17 +240,12 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public Map<String, List<String[]>> exportService(String issueId, String resultId) {
         // TODO Auto-generated method stub
-        ResultWithBLOBs result = resultDao.getResultWithBLOBsById(resultId, issueId);
-        if (result == null) {
-            return null;
-        }
-
+        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
+            List<String[]> content = (List<String[]>) redis.getObject(KEY.RESULT_CONTENT);
             List<String[]> cluster = new ArrayList<String[]>();
-            List<List<Integer>> clusterResult =
-                    (List<List<Integer>>) ConvertUtil.convertBytesToObject(result.getModifiedResult());
-            for (List<Integer> set : clusterResult) {
+            List<int[]> clusterIndex = ConvertUtil.toIntList((List<String[]>) redis.getObject(KEY.RESULT_CLUSTER));
+            for (int[] set : clusterIndex) {
                 for (int index : set) {
                     String[] row = content.get(index);
                     cluster.add(row);
@@ -279,7 +253,7 @@ public class ResultServiceImpl implements ResultService {
                 cluster.add(new String[1]);
             }
             List<String[]> count = new ArrayList<String[]>();
-            List<int[]> countResult = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
+            List<int[]> countResult = (List<int[]>) redis.getObject(KEY.RESULT_COUNT);
             for (int[] row : countResult) {
                 String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
                 String[] nRow = new String[oldRow.length + 1];

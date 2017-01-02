@@ -74,8 +74,8 @@ public class FileController {
 			condition.setTitleIndex(titleIndex[i]);
 			condition.setSourceType(sourceType[i]);
 			if (fileService.insert(condition, request) == 0) {
-				logger.info("file insert faile");
-				info.add("file insert faile");
+				logger.info("file insert failed");
+				info.add("file insert failed");
 				continue;
 			}
 		}

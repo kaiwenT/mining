@@ -46,12 +46,12 @@ public class ConvertUtil {
             }
         });
         List<List<String[]>> listStrSet = new ArrayList<List<String[]>>();
-//        List<String[]> singleDataList = new ArrayList<String[]>();
+        // List<String[]> singleDataList = new ArrayList<String[]>();
         for (List<Integer> set : resultIndexSet) {
-//            if (set.size() == 1) {
-//                singleDataList.add(list.get(set.get(0) + 1));
-//                continue;
-//            }
+            // if (set.size() == 1) {
+            // singleDataList.add(list.get(set.get(0) + 1));
+            // continue;
+            // }
             List<String[]> setDataList = new ArrayList<String[]>();
             for (int i : set) {
                 setDataList.add(list.get(i + 1));
@@ -63,12 +63,12 @@ public class ConvertUtil {
             });
             listStrSet.add(setDataList);
         }
-//        Collections.sort(singleDataList, new Comparator<String[]>() {
-//            public int compare(String[] o1, String[] o2) {
-//                return o1[targetIndex].compareTo(o2[targetIndex]);
-//            }
-//        });
-//        listStrSet.add(singleDataList);
+        // Collections.sort(singleDataList, new Comparator<String[]>() {
+        // public int compare(String[] o1, String[] o2) {
+        // return o1[targetIndex].compareTo(o2[targetIndex]);
+        // }
+        // });
+        // listStrSet.add(singleDataList);
         return listStrSet;
     }
 
@@ -89,6 +89,50 @@ public class ConvertUtil {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         ObjectInput input = new ObjectInputStream(byteArrayInputStream);
         return input.readObject();
+    }
+
+    public static int[] toIntArray(String[] array) {
+        if (array == null || array.length == 0) {
+            return null;
+        }
+        int[] newArray = new int[array.length];
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = Integer.parseInt(array[i]);
+        }
+        return newArray;
+    }
+
+    public static List<int[]> toIntList(List<String[]> list) {
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        List<int[]> newList = new ArrayList<>();
+        for (String[] array : list) {
+            newList.add(toIntArray(array));
+        }
+        return newList;
+    }
+
+    public static String[] toStringArray(int[] array) {
+        if (array == null) {
+            return null;
+        }
+        String[] newArray = new String[array.length];
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = String.valueOf(array[i]);
+        }
+        return newArray;
+    }
+
+    public static List<String[]> toStringList(List<int[]> list) {
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        List<String[]> newList = new ArrayList<String[]>();
+        for (int[] array : list) {
+            newList.add(toStringArray(array));
+        }
+        return newList;
     }
 
 }

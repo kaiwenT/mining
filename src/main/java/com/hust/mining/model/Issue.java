@@ -1,9 +1,10 @@
 package com.hust.mining.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Issue extends IssueKey implements Serializable{
+public class Issue {
+    private String issueId;
+
     private String issueName;
 
     private Date createTime;
@@ -13,6 +14,14 @@ public class Issue extends IssueKey implements Serializable{
     private String lastOperator;
 
     private Date lastUpdateTime;
+
+    public String getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(String issueId) {
+        this.issueId = issueId == null ? null : issueId.trim();
+    }
 
     public String getIssueName() {
         return issueName;
