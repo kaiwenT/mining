@@ -40,9 +40,11 @@ public class Constant {
         public final static String ISSUE_ID = "issueId";
         public final static String RESULT_ID = "resultId";
         public static final String USER_NAME = "username";
-        public static final String RESULT_CLUSTER = "resultCluster";
-        public static final String RESULT_COUNT = "resultCount";
-        public static final String RESULT_CONTENT = "resultContent";
+        public static final String REDIS_CLUSTER_RESULT = "redis_cluster_result";
+        public static final String REDIS_COUNT_RESULT = "redis_count_result";
+        public static final String REDIS_CONTENT = "redis_content";
+        public static final String MINING_AMOUNT_TYPE = "typeAmount";
+        public static final String MINING_AMOUNT_MEDIA = "mediaAmount";
     }
 
     public static class Index {

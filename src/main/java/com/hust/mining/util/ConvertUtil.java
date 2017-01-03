@@ -135,4 +135,19 @@ public class ConvertUtil {
         return newList;
     }
 
+    public static List<String[]> toStringListB(List<List<Integer>> list) {
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        List<String[]> newList = new ArrayList<String[]>();
+        for (List<Integer> set : list) {
+            String[] array = new String[set.size()];
+            for (int i = 0; i < set.size(); i++) {
+                array[i] = set.get(i) + "";
+            }
+            newList.add(array);
+        }
+        return newList;
+    }
+
 }

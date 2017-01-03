@@ -26,9 +26,8 @@ import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.redis.RedisFacade;
-import com.hust.mining.service.ClusterService;
 import com.hust.mining.service.IssueService;
-import com.hust.mining.service.StatisticService;
+import com.hust.mining.service.MiningService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 
@@ -42,9 +41,7 @@ public class IssueServiceImpl implements IssueService {
     @Autowired
     private UserService userService;
     @Autowired
-    private ClusterService clusterService;
-    @Autowired
-    private StatisticService statService;
+    private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
 
@@ -155,9 +152,9 @@ public class IssueServiceImpl implements IssueService {
             list.add(row);
         }
         RedisFacade redis = RedisFacade.getInstance(true);
-        redis.setObject(KEY.RESULT_CONTENT, content);
-        redis.setObject(KEY.RESULT_CLUSTER, cluster);
-        redis.setObject(KEY.RESULT_COUNT, count);
+        redis.setObject(KEY.REDIS_CONTENT, content);
+        redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
+        redis.setObject(KEY.REDIS_COUNT_RESULT, count);
         return list;
     }
 
@@ -211,9 +208,9 @@ public class IssueServiceImpl implements IssueService {
             list.add(row);
         }
         RedisFacade redis = RedisFacade.getInstance(true);
-        redis.setObject(KEY.RESULT_CONTENT, content);
-        redis.setObject(KEY.RESULT_CLUSTER, cluster);
-        redis.setObject(KEY.RESULT_COUNT, count);
+        redis.setObject(KEY.REDIS_CONTENT, content);
+        redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
+        redis.setObject(KEY.REDIS_COUNT_RESULT, count);
         return list;
     }
 
@@ -237,9 +234,10 @@ public class IssueServiceImpl implements IssueService {
         }
         // 去重结束
         // 聚类
-        List<List<Integer>> clusterResult = clusterService.cluster(list);
+        List<List<Integer>> clusterResult = miningService.cluster(list);
         // 统计
-        List<int[]> countResult = statService.count(clusterResult, list);
+        List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);
+        List<int[]> countResult = miningService.count(list, cluster);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("clusterResult", clusterResult);
         result.put("countResult", countResult);

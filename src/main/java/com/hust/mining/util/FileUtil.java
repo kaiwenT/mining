@@ -24,7 +24,7 @@ public class FileUtil {
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
     public static List<String[]> read(String...filenames) {
-        if (CommonUtil.isEmptyArray(filenames)) {
+        if (CommonUtil.hasEmptyArray(filenames)) {
             return null;
         }
         int taskSize = filenames.length;
