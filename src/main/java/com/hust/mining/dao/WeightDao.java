@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.WeightMapper;
 import com.hust.mining.model.Weight;
 import com.hust.mining.model.WeightExample;
 import com.hust.mining.model.WeightExample.Criteria;
-
+@Repository
 public class WeightDao {
 
 	@Autowired

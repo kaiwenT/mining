@@ -3,6 +3,7 @@ package com.hust.mining.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.dao.mapper.ResultMapper;
@@ -12,6 +13,7 @@ import com.hust.mining.model.ResultExample.Criteria;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.util.FileUtil;
 
+@Repository
 public class ResultDao {
 
     @Autowired
@@ -61,9 +63,9 @@ public class ResultDao {
         String countpath = DIRECTORY.ORIG_COUNT + name;
         FileUtil.write(countpath, rc.getOrigCount());
         String modicluster = DIRECTORY.MODIFY_CLUSTER + name;
-        FileUtil.write(modicluster, rc.getModiCluster());
+        FileUtil.write(modicluster, rc.getOrigCluster());
         String modicount = DIRECTORY.MODIFY_COUNT + name;
-        FileUtil.write(modicount, rc.getModiCount());
+        FileUtil.write(modicount, rc.getOrigCount());
         int insert = resultMapper.insert(rc.getResult());
         return insert;
     }

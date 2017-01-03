@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.dao.mapper.IssueFileMapper;
@@ -14,7 +15,7 @@ import com.hust.mining.model.IssueFileExample;
 import com.hust.mining.model.IssueFileExample.Criteria;
 import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.util.FileUtil;
-
+@Repository
 public class FileDao {
     /**
      * Logger for this class

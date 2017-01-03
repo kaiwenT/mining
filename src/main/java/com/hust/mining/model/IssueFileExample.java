@@ -692,6 +692,11 @@ public class IssueFileExample {
             return typeHandler;
         }
 
+        protected Criterion() {
+            super();
+            // TODO Auto-generated constructor stub
+        }
+
         protected Criterion(String condition) {
             super();
             this.condition = condition;

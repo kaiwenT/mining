@@ -25,10 +25,12 @@ import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.ClusterService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.ConvertUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -131,7 +133,7 @@ public class IssueServiceImpl implements IssueService {
         rc.setResult(result);
         rc.setContent(content);
         rc.setOrigCluster(toStringArrayA((List<List<Integer>>) res.get("clusterResult")));
-        rc.setOrigCount(toStringArrayB((List<int[]>) res.get("countResult")));
+        rc.setOrigCount(ConvertUtil.toStringList(((List<int[]>) res.get("countResult"))));
         int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
@@ -143,14 +145,19 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
         List<int[]> count = (List<int[]>) res.get("countResult");
+        List<String[]> cluster = (List<String[]>) res.get("clusterResult");
         List<String[]> list = new ArrayList<String[]>();
         for (int[] array : count) {
             String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
             String[] row = new String[old.length + 1];
-            System.arraycopy(old, 0, row, 0, old.length);
-            row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
+            System.arraycopy(old, 0, row, 1, old.length);
+            row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
             list.add(row);
         }
+        RedisFacade redis = RedisFacade.getInstance(true);
+        redis.setObject(KEY.RESULT_CONTENT, content);
+        redis.setObject(KEY.RESULT_CLUSTER, cluster);
+        redis.setObject(KEY.RESULT_COUNT, count);
         return list;
     }
 
@@ -182,7 +189,7 @@ public class IssueServiceImpl implements IssueService {
         rc.setResult(result);
         rc.setContent(content);
         rc.setOrigCluster(toStringArrayA((List<List<Integer>>) res.get("clusterResult")));
-        rc.setOrigCount(toStringArrayB((List<int[]>) res.get("countResult")));
+        rc.setOrigCount(ConvertUtil.toStringList(((List<int[]>) res.get("countResult"))));
         int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
@@ -194,6 +201,7 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
         List<int[]> count = (List<int[]>) res.get("countResult");
+        List<String[]> cluster = (List<String[]>) res.get("clusterResult");
         List<String[]> list = new ArrayList<String[]>();
         for (int[] array : count) {
             String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
@@ -202,6 +210,10 @@ public class IssueServiceImpl implements IssueService {
             row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
             list.add(row);
         }
+        RedisFacade redis = RedisFacade.getInstance(true);
+        redis.setObject(KEY.RESULT_CONTENT, content);
+        redis.setObject(KEY.RESULT_CLUSTER, cluster);
+        redis.setObject(KEY.RESULT_COUNT, count);
         return list;
     }
 
@@ -237,19 +249,11 @@ public class IssueServiceImpl implements IssueService {
     private List<String[]> toStringArrayA(List<List<Integer>> list) {
         List<String[]> result = new ArrayList<>();
         for (List<Integer> ele : list) {
-            String[] row = (String[]) ele.toArray();
-            result.add(row);
-        }
-        return result;
-    }
-
-    private List<String[]> toStringArrayB(List<int[]> list) {
-        List<String[]> result = new ArrayList<>();
-        for (int[] ele : list) {
-            String[] row = new String[ele.length];
-            for (int i = 0; i < ele.length; i++) {
-                row[i] = Integer.toString(ele[i]);
+            int[] array = new int[ele.size()];
+            for (int i = 0; i < ele.size(); i++) {
+                array[i] = ele.get(i);
             }
+            String[] row = ConvertUtil.toStringArray(array);
             result.add(row);
         }
         return result;

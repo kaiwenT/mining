@@ -1,8 +1,9 @@
 package com.hust.mining.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class IssueFile {
+public class IssueFile implements Serializable{
     private String fileId;
 
     private String fileName;

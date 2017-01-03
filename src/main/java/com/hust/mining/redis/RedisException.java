@@ -11,6 +11,11 @@ public class RedisException extends Exception {
     private int exceptionCode;
     private String detailMsg;
 
+    protected RedisException() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
     public RedisException(int exceptionCode, String extraMsg) {
         super();
         this.setDetailMsg(exceptionCode);

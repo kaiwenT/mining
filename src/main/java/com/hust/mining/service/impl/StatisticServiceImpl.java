@@ -283,7 +283,7 @@ public class StatisticServiceImpl implements StatisticService {
                 }
             }
             if (origIndex == -1) {
-                origIndex = 0;
+                origIndex = tmpList.get(0);
             }
             int[] item = new int[2];
             item[Index.COUNT_ITEM_INDEX] = origIndex;

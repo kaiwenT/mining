@@ -3,12 +3,14 @@ package com.hust.mining.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.RoleMapper;
 import com.hust.mining.model.Role;
 import com.hust.mining.model.RoleExample;
 import com.hust.mining.model.RoleExample.Criteria;
 
+@Repository
 public class RoleDao {
 
 	@Autowired

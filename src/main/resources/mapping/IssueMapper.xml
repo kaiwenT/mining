@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.IssueMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.Issue">
-		<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 		<id column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="issue_name" jdbcType="VARCHAR" property="issueName" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />

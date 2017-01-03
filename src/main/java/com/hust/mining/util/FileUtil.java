@@ -115,7 +115,7 @@ public class FileUtil {
                 }
                 bw.close();
             } catch (Exception e) {
-                logger.error("write {} failed", filename);
+                logger.error("write {} failed, because:{}", filename, e.toString());
             }
         }
     }

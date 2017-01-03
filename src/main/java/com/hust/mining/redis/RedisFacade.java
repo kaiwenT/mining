@@ -42,6 +42,11 @@ public class RedisFacade {
 
     private static final Object LOCK = new Object();
 
+    protected RedisFacade() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
     private RedisFacade(boolean isMaster) {
         if (polling == 1) {
             if (masterJedisPool == null) {

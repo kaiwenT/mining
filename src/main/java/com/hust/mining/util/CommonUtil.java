@@ -15,12 +15,12 @@ public class CommonUtil {
         if (null == array || array.length == 0) {
             return true;
         }
-        for (int i = 0; i < array.length / 2; i++) {
-            if (!StringUtils.isBlank(array[i])) {
-                return false;
+        for (int i = 0; i < array.length; i++) {
+            if (StringUtils.isBlank(array[i])) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public static String getPrefixUrl(String url) {

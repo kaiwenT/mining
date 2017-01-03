@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class Constant {
 
+    private void init() {
+        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent);
+    }
+
     public final static String INVALID_TIME = "1970-01-01";
     public final static String EMOTION_EN = "emotion";
     public final static String EMOTION_CH = "情感";
@@ -89,19 +93,37 @@ public class Constant {
         public static final String WEIZHI = "未知";
     }
 
+    @Value("${upload_file}")
+    private String dirFile;
+    @Value("${orig_cluster}")
+    private String dirOrigCluster;
+    @Value("${orig_count}")
+    private String dirOrigCount;
+    @Value("${modify_cluster}")
+    private String dirModiCluster;
+    @Value("${modify_count}")
+    private String dirModiCount;
+    @Value("${content}")
+    private String dirContent;
+
     public static class DIRECTORY {
-        @Value("upload_file")
+
         public static String FILE;
-        @Value("orig_cluster")
         public static String ORIG_CLUSTER;
-        @Value("orig_count")
         public static String ORIG_COUNT;
-        @Value("modify_cluster")
         public static String MODIFY_CLUSTER;
-        @Value("modify_count")
         public static String MODIFY_COUNT;
-        @Value("content")
         public static String CONTENT;
+
+        public static void init(String dirFile, String dirOrigCluster, String dirOrigCount, String dirModiCluster,
+                String dirModiCount, String dirContent) {
+            FILE = dirFile;
+            ORIG_CLUSTER = dirOrigCluster;
+            ORIG_COUNT = dirOrigCount;
+            MODIFY_CLUSTER = dirModiCluster;
+            MODIFY_COUNT = dirModiCount;
+            CONTENT = dirContent;
+        }
     }
 
 }

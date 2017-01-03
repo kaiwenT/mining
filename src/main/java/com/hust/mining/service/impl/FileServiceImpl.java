@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant.KEY;
@@ -22,6 +23,7 @@ import com.hust.mining.service.FileService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
 
+@Service
 public class FileServiceImpl implements FileService {
     /**
      * Logger for this class
@@ -61,7 +63,7 @@ public class FileServiceImpl implements FileService {
         issueFile.setUploadTime(new Date());
         issueFile.setSize((int) (file.getSize() / 1024));
         issueFile.setSourceType(con.getSourceType());
-        return fileDao.insert(issueFile,list);
+        return fileDao.insert(issueFile, list);
     }
 
     @Override

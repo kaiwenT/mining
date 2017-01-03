@@ -1,8 +1,14 @@
 package com.hust.mining.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Issue {
+public class Issue implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private String issueId;
 
     private String issueName;

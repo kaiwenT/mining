@@ -3,12 +3,14 @@ package com.hust.mining.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.PowerMapper;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.PowerExample;
 import com.hust.mining.model.PowerExample.Criteria;
 
+@Repository
 public class PowerDao {
 
 	@Autowired

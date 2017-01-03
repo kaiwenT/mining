@@ -21,5 +21,12 @@
 	<aop:aspectj-autoproxy />
 	<import resource="ext/spring-db.xml" />
 	<import resource="ext/spring-ehcache.xml" />
+	<import resource="ext/spring-redis.xml" />
 
+	<bean class="com.hust.mining.constant.Constant" init-method="init"
+		lazy-init="false" />
+	<context:component-scan base-package="com.hust.mining">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 </beans>

@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
 import com.hust.mining.constant.Constant.DIRECTORY;
@@ -31,6 +32,7 @@ import com.hust.mining.service.ResultService;
 import com.hust.mining.service.StatisticService;
 import com.hust.mining.util.ConvertUtil;
 
+@Service
 public class ResultServiceImpl implements ResultService {
     /**
      * Logger for this class
@@ -61,6 +63,11 @@ public class ResultServiceImpl implements ResultService {
         try {
             List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
             List<int[]> count = ConvertUtil.toIntList(modiCount);
+            List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+            RedisFacade redis = RedisFacade.getInstance(true);
+            redis.setObject(KEY.RESULT_CLUSTER, cluster);
+            redis.setObject(KEY.RESULT_CONTENT, content);
+            redis.setObject(KEY.RESULT_COUNT, count);
             for (int[] item : count) {
                 String[] old = content.get(item[Index.COUNT_ITEM_INDEX]);
                 String[] ne = new String[old.length + 1];
@@ -69,7 +76,7 @@ public class ResultServiceImpl implements ResultService {
                 list.add(ne);
             }
         } catch (Exception e) {
-            logger.error("get count result failed:{}" + e.toString());
+            logger.error("get count result failed:{}", e.toString());
             return null;
         }
         return list;
