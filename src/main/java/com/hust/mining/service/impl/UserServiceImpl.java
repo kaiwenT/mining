@@ -7,11 +7,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.PowerDao;
 import com.hust.mining.dao.RoleDao;
 import com.hust.mining.dao.RolePowerDao;
@@ -22,6 +24,7 @@ import com.hust.mining.model.RolePower;
 import com.hust.mining.model.User;
 import com.hust.mining.model.UserRole;
 import com.hust.mining.model.params.UserQueryCondition;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.TimeUtil;
 
@@ -228,12 +231,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String getCurrentUser(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		if (null == session) {
+	public String getCurrentUser() {
+		RedisFacade redis = RedisFacade.getInstance(true);
+		String username = redis.getString(KEY.USER_NAME);
+		if (StringUtils.isEmpty(username)) {
 			return null;
 		}
-		return (String) session.getAttribute("username");
+		return username;
 	}
 
 	@Override

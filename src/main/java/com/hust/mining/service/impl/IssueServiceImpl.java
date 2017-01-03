@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,11 +42,12 @@ public class IssueServiceImpl implements IssueService {
     private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
+    private RedisFacade redis = RedisFacade.getInstance(true);
 
     @Override
-    public int createIssue(String issueName, HttpServletRequest request) {
+    public int createIssue(String issueName) {
         // TODO Auto-generated method stub
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = userService.getCurrentUser();
         Issue issue = new Issue();
         issue.setIssueId(UUID.randomUUID().toString());
         issue.setIssueName(issueName);
@@ -58,19 +57,19 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastUpdateTime(issue.getCreateTime());
         int insert = issueDao.insert(issue);
         if (insert > 0) {
-            request.getSession().setAttribute(KEY.ISSUE_ID, issue.getIssueId());
+            redis.setString(KEY.ISSUE_ID, issue.getIssueId());
         }
         return insert;
     }
 
     @Override
-    public String getCurrentIssueId(HttpServletRequest request) {
+    public String getCurrentIssueId() {
         // TODO Auto-generated method stub
-        Object obj = request.getSession().getAttribute(KEY.ISSUE_ID);
+        String obj = redis.getString(KEY.ISSUE_ID);
         if (null == obj) {
             return StringUtils.EMPTY;
         }
-        return obj.toString();
+        return obj;
     }
 
     @Override
@@ -86,26 +85,26 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int updateIssueInfo(Issue issue, HttpServletRequest request) {
+    public int updateIssueInfo(Issue issue) {
         // TODO Auto-generated method stub
-        String user = userService.getCurrentUser(request);
+        String user = userService.getCurrentUser();
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         return issueDao.updateIssueInfo(issue);
     }
 
     @Override
-    public int deleteIssueById(String issueId, HttpServletRequest request) {
+    public int deleteIssueById(String issueId) {
         // TODO Auto-generated method stub
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = userService.getCurrentUser();
         return issueDao.deleteIssueById(issueId, user);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
+    public List<String[]> miningByTime(Date start, Date end) {
         // TODO Auto-generated method stub
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String issueId = redis.getString(KEY.ISSUE_ID);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setStart(start);
@@ -116,11 +115,18 @@ public class IssueServiceImpl implements IssueService {
             filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
         }
         List<String[]> content = fileDao.getFileContent(filenames);
+        if (null == content) {
+            return null;
+        }
         Map<String, Object> res = mining(content);
         if (null == res) {
             return null;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        // 开始插入数据库
+        String user = userService.getCurrentUser();
+        content = (List<String[]>) res.get("content");
+        List<int[]> count = (List<int[]>) res.get("countResult");
+        List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
         Result result = new Result();
         result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
@@ -129,20 +135,24 @@ public class IssueServiceImpl implements IssueService {
         ResultWithContent rc = new ResultWithContent();
         rc.setResult(result);
         rc.setContent(content);
-        rc.setOrigCluster(toStringArrayA((List<List<Integer>>) res.get("clusterResult")));
-        rc.setOrigCount(ConvertUtil.toStringList(((List<int[]>) res.get("countResult"))));
+        rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
+        rc.setOrigCount(ConvertUtil.toStringList(count));
         int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
         }
-        request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
+        // 插入数据库完成
+
+        // 开始更新issue状态
+        redis.setString(KEY.RESULT_ID, result.getRid());
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
-        List<int[]> count = (List<int[]>) res.get("countResult");
-        List<String[]> cluster = (List<String[]>) res.get("clusterResult");
+        // 状态更新完成
+
+        // 开始根据统计结果映射源数据
         List<String[]> list = new ArrayList<String[]>();
         for (int[] array : count) {
             String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
@@ -151,18 +161,18 @@ public class IssueServiceImpl implements IssueService {
             row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
             list.add(row);
         }
-        RedisFacade redis = RedisFacade.getInstance(true);
+        // 映射完成
         redis.setObject(KEY.REDIS_CONTENT, content);
-        redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-        redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+        redis.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster());
+        redis.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount());
         return list;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
+    public List<String[]> miningByFileIds(List<String> fileIds) {
         // TODO Auto-generated method stub
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String issueId = redis.getString(KEY.ISSUE_ID);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setFileIds(fileIds);
@@ -172,11 +182,18 @@ public class IssueServiceImpl implements IssueService {
             filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
         }
         List<String[]> content = fileDao.getFileContent(filenames);
+        if (null == content) {
+            return null;
+        }
         Map<String, Object> res = mining(content);
         if (null == res) {
             return null;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        // 开始插入数据库
+        String user = userService.getCurrentUser();
+        content = (List<String[]>) res.get("content");
+        List<int[]> count = (List<int[]>) res.get("countResult");
+        List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
         Result result = new Result();
         result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
@@ -185,32 +202,36 @@ public class IssueServiceImpl implements IssueService {
         ResultWithContent rc = new ResultWithContent();
         rc.setResult(result);
         rc.setContent(content);
-        rc.setOrigCluster(toStringArrayA((List<List<Integer>>) res.get("clusterResult")));
-        rc.setOrigCount(ConvertUtil.toStringList(((List<int[]>) res.get("countResult"))));
+        rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
+        rc.setOrigCount(ConvertUtil.toStringList(count));
         int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
         }
-        request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
+        // 插入数据库完成
+
+        // 开始更新issue状态
+        redis.setString(KEY.RESULT_ID, result.getRid());
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
-        List<int[]> count = (List<int[]>) res.get("countResult");
-        List<String[]> cluster = (List<String[]>) res.get("clusterResult");
+        // 状态更新完成
+
+        // 开始根据统计结果映射源数据
         List<String[]> list = new ArrayList<String[]>();
         for (int[] array : count) {
             String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
             String[] row = new String[old.length + 1];
-            System.arraycopy(old, 0, row, 0, old.length);
-            row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
+            System.arraycopy(old, 0, row, 1, old.length);
+            row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
             list.add(row);
         }
-        RedisFacade redis = RedisFacade.getInstance(true);
+        // 映射完成
         redis.setObject(KEY.REDIS_CONTENT, content);
-        redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-        redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+        redis.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster());
+        redis.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount());
         return list;
     }
 
@@ -241,19 +262,7 @@ public class IssueServiceImpl implements IssueService {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("clusterResult", clusterResult);
         result.put("countResult", countResult);
-        return result;
-    }
-
-    private List<String[]> toStringArrayA(List<List<Integer>> list) {
-        List<String[]> result = new ArrayList<>();
-        for (List<Integer> ele : list) {
-            int[] array = new int[ele.size()];
-            for (int i = 0; i < ele.size(); i++) {
-                array[i] = ele.get(i);
-            }
-            String[] row = ConvertUtil.toStringArray(array);
-            result.add(row);
-        }
+        result.put("content", list);
         return result;
     }
 

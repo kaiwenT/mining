@@ -26,9 +26,11 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.model.params.IssueQueryCondition;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.ResultService;
+import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
@@ -48,6 +50,10 @@ public class FileController {
 	private IssueService issueService;
 	@Autowired
 	private ResultService resultService;
+	@Autowired
+	private UserService userService;
+	
+	private RedisFacade redis = RedisFacade.getInstance(true);
 
 	@ResponseBody
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -56,7 +62,7 @@ public class FileController {
 			@RequestParam(value = "timeIndex", required = true) int[] timeIndex,
 			@RequestParam(value = "urlIndex", required = true) int[] urlIndex,
 			@RequestParam(value = "sourceType", required = true) String[] sourceType, HttpServletRequest request) {
-		if (request.getSession().getAttribute(KEY.ISSUE_ID) == null) {
+		if (issueService.getCurrentIssueId() == null) {
 			return ResultUtil.errorWithMsg("请选择或者创建一个话题");
 		}
 		// 数组之间必须是一一对应关系
@@ -73,7 +79,7 @@ public class FileController {
 			condition.setUrlIndex(urlIndex[i]);
 			condition.setTitleIndex(titleIndex[i]);
 			condition.setSourceType(sourceType[i]);
-			if (fileService.insert(condition, request) == 0) {
+			if (fileService.insert(condition) == 0) {
 				logger.info("file insert failed");
 				info.add("file insert failed");
 				continue;
@@ -120,13 +126,13 @@ public class FileController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/download")
 	public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String issueId = issueService.getCurrentIssueId(request);
+		String issueId = issueService.getCurrentIssueId();
 		if (StringUtils.isBlank(issueId)) {
 			response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
 			logger.info("从session中无法s获得话题的话题id");
 			return;
 		}
-		String resultId = resultService.getCurrentResultId(request);
+		String resultId = resultService.getCurrentResultId();
 		if (StringUtils.isBlank(resultId)) {
 			response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
 			logger.info("从session中无法s获得记录的记录id");
@@ -162,7 +168,7 @@ public class FileController {
 	@RequestMapping(value = "/queryIssueFiles")
 	public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId,
 			HttpServletRequest request) {
-		String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+		String user = userService.getCurrentUser();
 		IssueQueryCondition con = new IssueQueryCondition();
 		con.setIssueId(issueId);
 		con.setUser(user);
@@ -171,7 +177,7 @@ public class FileController {
 			return ResultUtil.errorWithMsg("查询话题文件失败");
 		}
 		List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
-		request.getSession().setAttribute(KEY.ISSUE_ID, issueId);
+		redis.setString(KEY.ISSUE_ID, issueId);
 		JSONObject json = new JSONObject();
 		json.put("issue", issues.get(0));
 		json.put("list", list);
@@ -182,7 +188,7 @@ public class FileController {
 	@RequestMapping(value = "/deleteFileById")
 	public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId,
 			HttpServletRequest request) {
-		String issueId = issueService.getCurrentIssueId(request);
+		String issueId = issueService.getCurrentIssueId();
 		if (StringUtils.isEmpty(issueId)) {
 			return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
 		}

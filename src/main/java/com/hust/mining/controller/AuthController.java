@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hust.mining.constant.Constant.KEY;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.UserService;
 
 @Controller
@@ -17,6 +18,7 @@ public class AuthController {
 
 	@Autowired
 	private UserService userService;
+	private RedisFacade redis = RedisFacade.getInstance(true);
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(@RequestParam(value = "form-username", required = true) String userName,
@@ -24,7 +26,7 @@ public class AuthController {
 //	    request.getSession().setAttribute(KEY.USER_NAME, userName);
 //	    return "redirect:page/infoManager.html";
         if (userService.login(userName, passwd)) {
-            request.getSession().setAttribute(KEY.USER_NAME, userName);
+            redis.setString(KEY.USER_NAME, userName);
             return "redirect:page/infoManager.html";
         }
         return "redirect:page/error.jsp";

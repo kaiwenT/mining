@@ -29,5 +29,5 @@ public interface UserService {
 
 	List<User> selectUserByPageLimit(UserQueryCondition userQueryCondition);
 
-	String getCurrentUser(HttpServletRequest request);
+	String getCurrentUser();
 }

@@ -41,7 +41,7 @@ public class ResultDao {
             FileUtil.write(DIRECTORY.MODIFY_COUNT + name, rc.getModiCount());
         }
         Result result = rc.getResult();
-        return resultMapper.updateByPrimaryKey(result);
+        return resultMapper.updateByPrimaryKeySelective(result);
     }
 
     public int delResultById(String resultId) {

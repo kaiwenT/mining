@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hust.datamining.algorithm.cluster.Canopy;
 import com.hust.datamining.convertor.Convertor;
@@ -29,6 +30,7 @@ import com.hust.mining.service.SegmentService;
 import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
 
+@Service
 public class MiningServiceImpl implements MiningService {
 
     @Autowired

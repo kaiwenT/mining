@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,8 +26,10 @@ import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.redis.RedisFacade;
+import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.ResultService;
+import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 
 @Service
@@ -45,14 +45,20 @@ public class ResultServiceImpl implements ResultService {
     private IssueDao issueDao;
     @Autowired
     private MiningService miningService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private IssueService issueService;
+
+    private RedisFacade redis = RedisFacade.getInstance(true);
 
     @Override
-    public String getCurrentResultId(HttpServletRequest request) {
-        Object result = request.getSession().getAttribute(KEY.RESULT_ID);
+    public String getCurrentResultId() {
+        String result = redis.getString(KEY.RESULT_ID);
         if (result == null) {
             return StringUtils.EMPTY;
         }
-        return result.toString();
+        return result;
     }
 
     @Override
@@ -67,7 +73,7 @@ public class ResultServiceImpl implements ResultService {
             RedisFacade redis = RedisFacade.getInstance(true);
             redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
             redis.setObject(KEY.REDIS_CONTENT, content);
-            redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+            redis.setObject(KEY.REDIS_COUNT_RESULT, modiCount);
             for (int[] item : count) {
                 String[] old = content.get(item[Index.COUNT_ITEM_INDEX]);
                 String[] ne = new String[old.length + 1];
@@ -84,33 +90,37 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean deleteSets(int[] sets, HttpServletRequest request) {
+    public boolean deleteSets(int[] sets) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = redis.getString(KEY.RESULT_ID);
+        String issueId = issueService.getCurrentIssueId();
         RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<int[]> count = (List<int[]>) redis.getObject(KEY.REDIS_COUNT_RESULT);
+            // 从redis获取数据
+            List<String[]> count = (List<String[]>) redis.getObject(KEY.REDIS_COUNT_RESULT);
             List<String[]> cluster = (List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT);
+            // 删除集合
             Arrays.sort(sets);
             for (int i = sets.length - 1; i >= 0; i--) {
                 cluster.remove(sets[i]);
                 count.remove(sets[i]);
             }
+            // 更新redis数据
             redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
             redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+            // 写回数据库
             Result result = new Result();
             result.setRid(resultId);
             result.setIssueId(issueId);
             ResultWithContent rc = new ResultWithContent();
             rc.setResult(result);
             rc.setModiCluster(cluster);
-            rc.setModiCount(ConvertUtil.toStringList(count));
+            rc.setModiCount(count);
             int update = resultDao.updateResult(rc);
             if (update <= 0) {
                 return false;
             }
-            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String user = userService.getCurrentUser();
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -125,14 +135,16 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean combineSets(int[] sets, HttpServletRequest request) {
+    public boolean combineSets(int[] sets) {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = redis.getString(KEY.RESULT_ID);
+        String issueId = issueService.getCurrentIssueId();
         RedisFacade redis = RedisFacade.getInstance(true);
         try {
+            // 从redis获取数据
             List<String[]> content = (List<String[]>) redis.getObject(KEY.REDIS_CONTENT);
             List<String[]> cluster = (List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT);
+            // 合并集合
             String[] newrow = cluster.get(sets[0]);
             for (int i = 1; i < sets.length; i++) {
                 newrow = (String[]) ArrayUtils.addAll(newrow, cluster.get(sets[i]));
@@ -150,10 +162,9 @@ public class ResultServiceImpl implements ResultService {
                     return o2.length - o1.length;
                 }
             });
-            // TODO:重构统计
+            // TODO:重新统计
             List<int[]> count = miningService.count(content, cluster);
-            redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-            redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+            // 更新数据库
             Result result = new Result();
             result.setRid(resultId);
             result.setIssueId(issueId);
@@ -165,12 +176,15 @@ public class ResultServiceImpl implements ResultService {
             if (update <= 0) {
                 return false;
             }
-            String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+            String user = userService.getCurrentUser();
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
             issue.setLastUpdateTime(new Date());
             issueDao.updateIssueInfo(issue);
+            // 更新redis数据
+            redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
+            redis.setObject(KEY.REDIS_COUNT_RESULT, count);
         } catch (Exception e) {
             logger.error("sth failed when combine sets:{}" + e.toString());
         }
@@ -178,13 +192,14 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public boolean reset(HttpServletRequest request) {
+    public boolean reset() {
         // TODO Auto-generated method stub
-        String resultId = request.getSession().getAttribute(KEY.RESULT_ID).toString();
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String resultId = redis.getString(KEY.RESULT_ID);
+        String issueId = issueService.getCurrentIssueId();
+        // 从数据库获取数据
         List<String[]> origCluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_CLUSTER);
         List<String[]> origCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_COUNT);
-
+        // 用原始数据覆盖修改后数据
         Result result = new Result();
         result.setRid(resultId);
         result.setIssueId(issueId);
@@ -196,7 +211,7 @@ public class ResultServiceImpl implements ResultService {
         if (update <= 0) {
             return false;
         }
-        String user = request.getSession().getAttribute(KEY.USER_NAME).toString();
+        String user = userService.getCurrentUser();
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -207,7 +222,7 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
+    public Map<String, Object> statistic(StatisticParams params) {
         // TODO Auto-generated method stub
         RedisFacade redis = RedisFacade.getInstance(true);
         try {

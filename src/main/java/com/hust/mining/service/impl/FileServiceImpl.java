@@ -7,19 +7,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.service.FileService;
+import com.hust.mining.service.IssueService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
 
@@ -35,9 +33,11 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private IssueService issueService;
 
     @Override
-    public int insert(Condition con, HttpServletRequest request) {
+    public int insert(Condition con) {
         // TODO Auto-generated method stub
         MultipartFile file = con.getFile();
         List<String[]> list = new ArrayList<String[]>();
@@ -52,8 +52,8 @@ public class FileServiceImpl implements FileService {
             return 0;
         }
 
-        String user = userService.getCurrentUser(request);
-        String issueId = request.getSession().getAttribute(KEY.ISSUE_ID).toString();
+        String user = userService.getCurrentUser();
+        String issueId = issueService.getCurrentIssueId();
         IssueFile issueFile = new IssueFile();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());
