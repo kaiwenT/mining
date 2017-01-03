@@ -44,15 +44,22 @@ public class FileUtil {
         return content;
     }
 
-    public static void write(String filename, List<String[]> content) {
+    public static boolean write(String filename, List<String[]> content) {
         if (StringUtils.isEmpty(filename)) {
-            return;
+            return false;
         }
         if (content == null || content.size() == 0) {
-            return;
+            return false;
         }
-        WriteThread write = new FileUtil().new WriteThread(filename, content);
-        write.run();
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Callable<Boolean> thread = new FileUtil().new WriteThread(filename, content);
+        Future<Boolean> f = pool.submit(thread);
+        try {
+            return f.get();
+        } catch (Exception e) {
+            logger.error("写文件失败:{}", e.toString());
+        }
+        return false;
     }
 
     public static boolean delete(String filename) {
@@ -93,8 +100,7 @@ public class FileUtil {
         }
     }
 
-    class WriteThread implements Runnable {
-
+    class WriteThread implements Callable<Boolean> {
         private String filename;
         private List<String[]> content;
 
@@ -105,7 +111,7 @@ public class FileUtil {
         }
 
         @Override
-        public void run() {
+        public Boolean call() throws Exception {
             // TODO Auto-generated method stub
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
@@ -116,7 +122,10 @@ public class FileUtil {
                 bw.close();
             } catch (Exception e) {
                 logger.error("write {} failed, because:{}", filename, e.toString());
+                return false;
             }
+            return true;
         }
+
     }
 }

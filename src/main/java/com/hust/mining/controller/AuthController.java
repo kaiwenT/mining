@@ -22,7 +22,7 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
     private RedisService redisService;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)

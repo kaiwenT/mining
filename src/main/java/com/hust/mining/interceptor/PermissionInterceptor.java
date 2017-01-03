@@ -26,6 +26,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
      */
     @Autowired
     private UserService userService;
+    @Autowired
     private RedisService redisService;
     private static final Logger LOG = LoggerFactory.getLogger(PermissionInterceptor.class);
 

@@ -45,6 +45,7 @@ public class IssueServiceImpl implements IssueService {
     private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
+    @Autowired
     private RedisService redisService;
 
     @Override

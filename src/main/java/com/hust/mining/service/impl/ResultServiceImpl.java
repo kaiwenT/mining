@@ -52,6 +52,7 @@ public class ResultServiceImpl implements ResultService {
     private UserService userService;
     @Autowired
     private IssueService issueService;
+    @Autowired
     private RedisService redisService;
 
     @Override
