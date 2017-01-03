@@ -9,25 +9,25 @@ import com.hust.mining.model.params.UserQueryCondition;
 
 public interface UserService {
 
-	List<User> selectAllUserInfo(HttpServletRequest request);
+    List<User> selectAllUserInfo(HttpServletRequest request);
 
-	List<User> selectSingleUserInfo(String userName, HttpServletRequest request);
+    List<User> selectSingleUserInfo(String userName, HttpServletRequest request);
 
-	boolean deleteUserInfoById(int userId, HttpServletRequest request);
+    boolean deleteUserInfoById(int userId, HttpServletRequest request);
 
-	boolean updateUserInfo(User user);
+    boolean updateUserInfo(User user);
 
-	boolean insertUserInfo(User user, List<String> roleName);
+    boolean insertUserInfo(User user, List<String> roleName);
 
-	boolean login(String userName, String password);
+    boolean login(String userName, String password);
 
-	void logout(HttpServletRequest request);
+    void logout(HttpServletRequest request);
 
-	List<String> selectUserPowerUrl(String userName);
+    List<String> selectUserPowerUrl(String userName);
 
-	long countOfUser();
+    long countOfUser();
 
-	List<User> selectUserByPageLimit(UserQueryCondition userQueryCondition);
+    List<User> selectUserByPageLimit(UserQueryCondition userQueryCondition);
 
-	String getCurrentUser();
+    String getCurrentUser(HttpServletRequest request);
 }

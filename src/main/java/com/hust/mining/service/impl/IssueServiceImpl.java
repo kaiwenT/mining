@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 
@@ -42,12 +45,12 @@ public class IssueServiceImpl implements IssueService {
     private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
-    private RedisFacade redis = RedisFacade.getInstance(true);
+    private RedisService redisService;
 
     @Override
-    public int createIssue(String issueName) {
+    public int createIssue(String issueName, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         Issue issue = new Issue();
         issue.setIssueId(UUID.randomUUID().toString());
         issue.setIssueName(issueName);
@@ -57,15 +60,15 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastUpdateTime(issue.getCreateTime());
         int insert = issueDao.insert(issue);
         if (insert > 0) {
-            redis.setString(KEY.ISSUE_ID, issue.getIssueId());
+            redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
         }
         return insert;
     }
 
     @Override
-    public String getCurrentIssueId() {
+    public String getCurrentIssueId(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String obj = redis.getString(KEY.ISSUE_ID);
+        String obj = redisService.getString(KEY.ISSUE_ID, request);
         if (null == obj) {
             return StringUtils.EMPTY;
         }
@@ -85,26 +88,26 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int updateIssueInfo(Issue issue) {
+    public int updateIssueInfo(Issue issue,HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         return issueDao.updateIssueInfo(issue);
     }
 
     @Override
-    public int deleteIssueById(String issueId) {
+    public int deleteIssueById(String issueId,HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         return issueDao.deleteIssueById(issueId, user);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByTime(Date start, Date end) {
+    public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = redis.getString(KEY.ISSUE_ID);
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setStart(start);
@@ -123,7 +126,7 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         // 开始插入数据库
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
@@ -144,7 +147,7 @@ public class IssueServiceImpl implements IssueService {
         // 插入数据库完成
 
         // 开始更新issue状态
-        redis.setString(KEY.RESULT_ID, result.getRid());
+        redisService.setString(KEY.RESULT_ID, result.getRid(), request);
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -162,17 +165,17 @@ public class IssueServiceImpl implements IssueService {
             list.add(row);
         }
         // 映射完成
-        redis.setObject(KEY.REDIS_CONTENT, content);
-        redis.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster());
-        redis.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount());
+        redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        redisService.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster(), request);
+        redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
         return list;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByFileIds(List<String> fileIds) {
+    public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = redis.getString(KEY.ISSUE_ID);
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setFileIds(fileIds);
@@ -190,7 +193,7 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         // 开始插入数据库
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
@@ -211,7 +214,7 @@ public class IssueServiceImpl implements IssueService {
         // 插入数据库完成
 
         // 开始更新issue状态
-        redis.setString(KEY.RESULT_ID, result.getRid());
+        redisService.setString(KEY.RESULT_ID, result.getRid(), request);
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
@@ -229,9 +232,9 @@ public class IssueServiceImpl implements IssueService {
             list.add(row);
         }
         // 映射完成
-        redis.setObject(KEY.REDIS_CONTENT, content);
-        redis.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster());
-        redis.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount());
+        redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        redisService.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster(), request);
+        redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
         return list;
     }
 

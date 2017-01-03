@@ -33,7 +33,7 @@ public class ResultController {
     @RequestMapping("/getCountResult")
     public Object getCountResult(@RequestParam(value = "resultId", required = true) String resultId,
             HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
@@ -48,15 +48,15 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/deleteSets")
     public Object delSets(@RequestParam(value = "sets", required = true) int[] sets, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        String resultId = resultService.getCurrentResultId();
+        String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isEmpty(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
         }
-        boolean result = resultService.deleteSets(sets);
+        boolean result = resultService.deleteSets(sets, request);
         if (result) {
             return ResultUtil.success("删除成功");
         }
@@ -66,15 +66,15 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/combineSets")
     public Object combineSets(int[] sets, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        String resultId = resultService.getCurrentResultId();
+        String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isEmpty(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
         }
-        boolean result = resultService.combineSets(sets);
+        boolean result = resultService.combineSets(sets, request);
         if (result) {
             return ResultUtil.success("合并成功");
         }
@@ -84,7 +84,7 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/queryResultList")
     public Object queryResultList(HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
         }
@@ -109,7 +109,7 @@ public class ResultController {
     @ResponseBody
     @RequestMapping(value = "/statisticSingleSet")
     public Object statistic(@RequestBody StatisticParams params, HttpServletRequest request) {
-        String resultId = resultService.getCurrentResultId();
+        String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isBlank(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }

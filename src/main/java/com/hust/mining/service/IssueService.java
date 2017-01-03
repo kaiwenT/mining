@@ -10,20 +10,20 @@ import com.hust.mining.model.params.IssueQueryCondition;
 
 public interface IssueService {
 
-    int createIssue(String issueName);
+    int createIssue(String issueName, HttpServletRequest request);
 
-    int deleteIssueById(String issueId);
+    int deleteIssueById(String issueId,HttpServletRequest request);
 
-    String getCurrentIssueId();
+    String getCurrentIssueId(HttpServletRequest request);
 
     List<Issue> queryIssue(IssueQueryCondition con);
 
     Issue queryIssueById(String issueId);
 
-    int updateIssueInfo(Issue issue);
+    int updateIssueInfo(Issue issue,HttpServletRequest request);
 
-    List<String[]> miningByTime(Date start, Date end);
+    List<String[]> miningByTime(Date start, Date end,HttpServletRequest request);
 
-    List<String[]> miningByFileIds(List<String> fileIds);
-    
+    List<String[]> miningByFileIds(List<String> fileIds,HttpServletRequest request);
+
 }

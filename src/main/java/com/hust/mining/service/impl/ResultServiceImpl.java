@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
@@ -49,12 +52,11 @@ public class ResultServiceImpl implements ResultService {
     private UserService userService;
     @Autowired
     private IssueService issueService;
-
-    private RedisFacade redis = RedisFacade.getInstance(true);
+    private RedisService redisService;
 
     @Override
-    public String getCurrentResultId() {
-        String result = redis.getString(KEY.RESULT_ID);
+    public String getCurrentResultId(HttpServletRequest request) {
+        String result = redisService.getString(KEY.RESULT_ID, request);
         if (result == null) {
             return StringUtils.EMPTY;
         }
@@ -90,10 +92,10 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean deleteSets(int[] sets) {
+    public boolean deleteSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = redis.getString(KEY.RESULT_ID);
-        String issueId = issueService.getCurrentIssueId();
+        String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
         RedisFacade redis = RedisFacade.getInstance(true);
         try {
             // 从redis获取数据
@@ -120,7 +122,7 @@ public class ResultServiceImpl implements ResultService {
             if (update <= 0) {
                 return false;
             }
-            String user = userService.getCurrentUser();
+            String user = userService.getCurrentUser(request);
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -135,10 +137,10 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean combineSets(int[] sets) {
+    public boolean combineSets(int[] sets, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = redis.getString(KEY.RESULT_ID);
-        String issueId = issueService.getCurrentIssueId();
+        String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
         RedisFacade redis = RedisFacade.getInstance(true);
         try {
             // 从redis获取数据
@@ -176,7 +178,7 @@ public class ResultServiceImpl implements ResultService {
             if (update <= 0) {
                 return false;
             }
-            String user = userService.getCurrentUser();
+            String user = userService.getCurrentUser(request);
             Issue issue = new Issue();
             issue.setIssueId(issueId);
             issue.setLastOperator(user);
@@ -192,10 +194,10 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public boolean reset() {
+    public boolean reset(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String resultId = redis.getString(KEY.RESULT_ID);
-        String issueId = issueService.getCurrentIssueId();
+        String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
         // 从数据库获取数据
         List<String[]> origCluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_CLUSTER);
         List<String[]> origCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_COUNT);
@@ -211,7 +213,7 @@ public class ResultServiceImpl implements ResultService {
         if (update <= 0) {
             return false;
         }
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);

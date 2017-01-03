@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String getCurrentUser() {
+	public String getCurrentUser(HttpServletRequest request) {
 		RedisFacade redis = RedisFacade.getInstance(true);
 		String username = redis.getString(KEY.USER_NAME);
 		if (StringUtils.isEmpty(username)) {

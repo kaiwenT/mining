@@ -37,6 +37,7 @@ public class Constant {
     public final static String TYPE_MODIFIED = "modified";
 
     public static class KEY {
+        public final static String SESSION_ID = "sessionid";
         public final static String ISSUE_ID = "issueId";
         public final static String RESULT_ID = "resultId";
         public static final String USER_NAME = "username";

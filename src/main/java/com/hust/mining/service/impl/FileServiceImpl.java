@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class FileServiceImpl implements FileService {
     private IssueService issueService;
 
     @Override
-    public int insert(Condition con) {
+    public int insert(Condition con, HttpServletRequest request) {
         // TODO Auto-generated method stub
         MultipartFile file = con.getFile();
         List<String[]> list = new ArrayList<String[]>();
@@ -52,8 +54,8 @@ public class FileServiceImpl implements FileService {
             return 0;
         }
 
-        String user = userService.getCurrentUser();
-        String issueId = issueService.getCurrentIssueId();
+        String user = userService.getCurrentUser(request);
+        String issueId = issueService.getCurrentIssueId(request);
         IssueFile issueFile = new IssueFile();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());

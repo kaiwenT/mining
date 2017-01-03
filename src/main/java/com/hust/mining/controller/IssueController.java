@@ -46,7 +46,7 @@ public class IssueController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
             HttpServletRequest request) {
-        if (issueService.createIssue(issueName) == 0) {
+        if (issueService.createIssue(issueName,request) == 0) {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("创建话题失败");
         }
@@ -57,7 +57,7 @@ public class IssueController {
     @RequestMapping("/delete")
     public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
-        if (issueService.deleteIssueById(issueId) > 0) {
+        if (issueService.deleteIssueById(issueId,request) > 0) {
             return ResultUtil.success("删除话题成功");
         }
         return ResultUtil.errorWithMsg("删除话题失败");
@@ -66,7 +66,7 @@ public class IssueController {
     @ResponseBody
     @RequestMapping("/queryOwnIssue")
     public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
-        String user = userService.getCurrentUser();
+        String user = userService.getCurrentUser(request);
         con.setUser(user);
         List<Issue> list = issueService.queryIssue(con);
         long count = list.size();
@@ -93,11 +93,11 @@ public class IssueController {
     @RequestMapping("/miningByTime")
     public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByTime(startTime, endTime);
+        List<String[]> count = issueService.miningByTime(startTime, endTime,request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -108,11 +108,11 @@ public class IssueController {
     @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId();
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByFileIds(fileIds);
+        List<String[]> count = issueService.miningByFileIds(fileIds,request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
