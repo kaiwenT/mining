@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.params.StatisticParams;
-import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.util.ResultUtil;
 
@@ -26,8 +26,8 @@ public class ResultController {
     private ResultService resultService;
     @Autowired
     private IssueService issueService;
-
-    private RedisFacade redis = RedisFacade.getInstance(true);
+    @Autowired
+    private RedisService redisService;
 
     @ResponseBody
     @RequestMapping("/getCountResult")
@@ -37,11 +37,11 @@ public class ResultController {
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> list = resultService.getCountResultById(resultId, issueId);
+        List<String[]> list = resultService.getCountResultById(resultId, issueId, request);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
-        redis.setString(KEY.RESULT_ID, resultId);
+        redisService.setString(KEY.RESULT_ID, resultId, request);
         return ResultUtil.success(list);
     }
 
@@ -113,7 +113,7 @@ public class ResultController {
         if (StringUtils.isBlank(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        Map<String, Object> map = resultService.statistic(params);
+        Map<String, Object> map = resultService.statistic(params, request);
         if (null == map || map.isEmpty()) {
             return ResultUtil.errorWithMsg("统计失败");
         }

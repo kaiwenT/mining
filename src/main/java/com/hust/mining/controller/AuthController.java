@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hust.mining.constant.Constant.KEY;
+import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 
@@ -32,10 +33,8 @@ public class AuthController {
         // request.getSession().setAttribute(KEY.USER_NAME, userName);
         // return "redirect:page/infoManager.html";
         if (userService.login(userName, passwd)) {
-            String sessionid = UUID.randomUUID().toString();
-            Cookie session = new Cookie(KEY.SESSION_ID, sessionid);
             Cookie username = new Cookie(KEY.USER_NAME, userName);
-            response.addCookie(session);
+            username.setPath("/");
             response.addCookie(username);
             redisService.setString(KEY.USER_NAME, userName, request);
             return "redirect:page/infoManager.html";

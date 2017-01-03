@@ -25,7 +25,6 @@ import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
-import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;

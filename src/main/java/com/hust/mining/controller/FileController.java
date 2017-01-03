@@ -26,9 +26,9 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.model.params.IssueQueryCondition;
-import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
@@ -52,8 +52,8 @@ public class FileController {
     private ResultService resultService;
     @Autowired
     private UserService userService;
-
-    private RedisFacade redis = RedisFacade.getInstance(true);
+    @Autowired
+    private RedisService redisService;
 
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -140,7 +140,7 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId);
+            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId,request);
             if (map == null) {
                 response.sendError(404, "导出错误");
                 return;
@@ -177,7 +177,7 @@ public class FileController {
             return ResultUtil.errorWithMsg("查询话题文件失败");
         }
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
-        redis.setString(KEY.ISSUE_ID, issueId);
+        redisService.setString(KEY.ISSUE_ID, issueId, request);
         JSONObject json = new JSONObject();
         json.put("issue", issues.get(0));
         json.put("list", list);

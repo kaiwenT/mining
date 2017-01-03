@@ -2,12 +2,15 @@ package com.hust.mining.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.redis.RedisFacade;
 
+@Service
 public class RedisService {
     /**
      * Logger for this class
@@ -22,6 +25,7 @@ public class RedisService {
             return;
         }
         redis.setObject(sessionid + key, object);
+
     }
 
     public Object getObject(String key, HttpServletRequest request) {
@@ -45,7 +49,8 @@ public class RedisService {
         if (sessionid == null) {
             return null;
         }
-        return redis.getString(sessionid + key);
+        String value = redis.getString(sessionid + key);
+        return value;
     }
 
     public void del(String key, HttpServletRequest request) {
@@ -60,7 +65,7 @@ public class RedisService {
         Cookie[] cookies = request.getCookies();
         String sessionid = null;
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("sessionid")) {
+            if (cookie.getName().equals(KEY.SESSION_ID)) {
                 sessionid = cookie.getValue();
             }
         }

@@ -27,7 +27,6 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.StatisticParams;
-import com.hust.mining.redis.RedisFacade;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
@@ -65,7 +64,7 @@ public class ResultServiceImpl implements ResultService {
     }
 
     @Override
-    public List<String[]> getCountResultById(String resultId, String issueId) {
+    public List<String[]> getCountResultById(String resultId, String issueId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         List<String[]> modiCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_COUNT);
         List<String[]> list = new ArrayList<String[]>();
@@ -73,10 +72,9 @@ public class ResultServiceImpl implements ResultService {
             List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
             List<int[]> count = ConvertUtil.toIntList(modiCount);
             List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
-            RedisFacade redis = RedisFacade.getInstance(true);
-            redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-            redis.setObject(KEY.REDIS_CONTENT, content);
-            redis.setObject(KEY.REDIS_COUNT_RESULT, modiCount);
+            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+            redisService.setObject(KEY.REDIS_CONTENT, content, request);
+            redisService.setObject(KEY.REDIS_COUNT_RESULT, modiCount, request);
             for (int[] item : count) {
                 String[] old = content.get(item[Index.COUNT_ITEM_INDEX]);
                 String[] ne = new String[old.length + 1];
@@ -97,11 +95,10 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = redisService.getString(KEY.RESULT_ID, request);
         String issueId = issueService.getCurrentIssueId(request);
-        RedisFacade redis = RedisFacade.getInstance(true);
         try {
             // 从redis获取数据
-            List<String[]> count = (List<String[]>) redis.getObject(KEY.REDIS_COUNT_RESULT);
-            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT);
+            List<String[]> count = (List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
             // 删除集合
             Arrays.sort(sets);
             for (int i = sets.length - 1; i >= 0; i--) {
@@ -109,8 +106,8 @@ public class ResultServiceImpl implements ResultService {
                 count.remove(sets[i]);
             }
             // 更新redis数据
-            redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-            redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+            redisService.setObject(KEY.REDIS_COUNT_RESULT, count, request);
             // 写回数据库
             Result result = new Result();
             result.setRid(resultId);
@@ -142,11 +139,10 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         String resultId = redisService.getString(KEY.RESULT_ID, request);
         String issueId = issueService.getCurrentIssueId(request);
-        RedisFacade redis = RedisFacade.getInstance(true);
         try {
             // 从redis获取数据
-            List<String[]> content = (List<String[]>) redis.getObject(KEY.REDIS_CONTENT);
-            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT);
+            List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
             // 合并集合
             String[] newrow = cluster.get(sets[0]);
             for (int i = 1; i < sets.length; i++) {
@@ -186,8 +182,8 @@ public class ResultServiceImpl implements ResultService {
             issue.setLastUpdateTime(new Date());
             issueDao.updateIssueInfo(issue);
             // 更新redis数据
-            redis.setObject(KEY.REDIS_CLUSTER_RESULT, cluster);
-            redis.setObject(KEY.REDIS_COUNT_RESULT, count);
+            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+            redisService.setObject(KEY.REDIS_COUNT_RESULT, count, request);
         } catch (Exception e) {
             logger.error("sth failed when combine sets:{}" + e.toString());
         }
@@ -225,12 +221,11 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, Object> statistic(StatisticParams params) {
+    public Map<String, Object> statistic(StatisticParams params, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<String[]> content = (List<String[]>) redis.getObject(KEY.REDIS_CONTENT);
-            List<String[]> cluster = (List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT);
+            List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
             String[] set = cluster.get(params.getCurrentSet());
             Map<String, Map<String, Map<String, Integer>>> timeMap =
                     miningService.statistic(content, set, params.getInterval());
@@ -264,14 +259,13 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, List<String[]>> exportService(String issueId, String resultId) {
+    public Map<String, List<String[]>> exportService(String issueId, String resultId,HttpServletRequest request) {
         // TODO Auto-generated method stub
-        RedisFacade redis = RedisFacade.getInstance(true);
         try {
-            List<String[]> content = (List<String[]>) redis.getObject(KEY.REDIS_CONTENT);
+            List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT,request);
             List<String[]> cluster = new ArrayList<String[]>();
             List<int[]> clusterIndex =
-                    ConvertUtil.toIntList((List<String[]>) redis.getObject(KEY.REDIS_CLUSTER_RESULT));
+                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT,request));
             for (int[] set : clusterIndex) {
                 for (int index : set) {
                     String[] row = content.get(index);
@@ -280,7 +274,7 @@ public class ResultServiceImpl implements ResultService {
                 cluster.add(new String[1]);
             }
             List<String[]> count = new ArrayList<String[]>();
-            List<int[]> countResult = (List<int[]>) redis.getObject(KEY.REDIS_COUNT_RESULT);
+            List<int[]> countResult = (List<int[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT,request);
             for (int[] row : countResult) {
                 String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
                 String[] nRow = new String[oldRow.length + 1];
