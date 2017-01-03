@@ -34,14 +34,13 @@ public class ResultDao {
 
     public int updateResult(ResultWithContent rc) {
         String name = rc.getResult().getRid();
-        if (rc.getModiCluster() != null) {
-            FileUtil.write(DIRECTORY.MODIFY_CLUSTER + name, rc.getModiCluster());
+        boolean b1 = FileUtil.write(DIRECTORY.MODIFY_CLUSTER + name, rc.getModiCluster());
+        boolean b2 = FileUtil.write(DIRECTORY.MODIFY_COUNT + name, rc.getModiCount());
+        if (b1 && b2) {
+            Result result = rc.getResult();
+            return resultMapper.updateByPrimaryKeySelective(result);
         }
-        if (rc.getModiCount() != null) {
-            FileUtil.write(DIRECTORY.MODIFY_COUNT + name, rc.getModiCount());
-        }
-        Result result = rc.getResult();
-        return resultMapper.updateByPrimaryKeySelective(result);
+        return 0;
     }
 
     public int delResultById(String resultId) {
@@ -57,17 +56,19 @@ public class ResultDao {
     public int insert(ResultWithContent rc) {
         String name = rc.getResult().getRid();
         String contentpath = DIRECTORY.CONTENT + name;
-        FileUtil.write(contentpath, rc.getContent());
+        boolean b1 = FileUtil.write(contentpath, rc.getContent());
         String clusterpath = DIRECTORY.ORIG_CLUSTER + name;
-        FileUtil.write(clusterpath, rc.getOrigCluster());
+        boolean b2 = FileUtil.write(clusterpath, rc.getOrigCluster());
         String countpath = DIRECTORY.ORIG_COUNT + name;
-        FileUtil.write(countpath, rc.getOrigCount());
+        boolean b3 = FileUtil.write(countpath, rc.getOrigCount());
         String modicluster = DIRECTORY.MODIFY_CLUSTER + name;
-        FileUtil.write(modicluster, rc.getOrigCluster());
+        boolean b4 = FileUtil.write(modicluster, rc.getOrigCluster());
         String modicount = DIRECTORY.MODIFY_COUNT + name;
-        FileUtil.write(modicount, rc.getOrigCount());
-        int insert = resultMapper.insert(rc.getResult());
-        return insert;
+        boolean b5 = FileUtil.write(modicount, rc.getOrigCount());
+        if (b1 && b2 && b3 && b4 && b5) {
+            return resultMapper.insert(rc.getResult());
+        }
+        return 0;
     }
 
     public List<Result> queryResultsByIssueId(String issueId) {

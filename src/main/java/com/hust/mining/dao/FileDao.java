@@ -15,6 +15,7 @@ import com.hust.mining.model.IssueFileExample;
 import com.hust.mining.model.IssueFileExample.Criteria;
 import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.util.FileUtil;
+
 @Repository
 public class FileDao {
     /**
@@ -28,12 +29,14 @@ public class FileDao {
     public int insert(IssueFile file, List<String[]> content) {
         String filename = DIRECTORY.FILE + file.getFileId();
         try {
-            FileUtil.write(filename, content);
+            boolean success = FileUtil.write(filename, content);
+            if (success) {
+                return issueFileMapper.insert(file);
+            }
         } catch (Exception e) {
             logger.error("write file error:{}", e.toString());
-            return 0;
         }
-        return issueFileMapper.insert(file);
+        return 0;
     }
 
     public int deleteById(String fileId) {
