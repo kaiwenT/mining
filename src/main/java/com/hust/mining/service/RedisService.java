@@ -25,7 +25,7 @@ public class RedisService {
             return;
         }
         redis.setObject(sessionid + key, object);
-
+        redis.expire(sessionid + key, 600);
     }
 
     public Object getObject(String key, HttpServletRequest request) {
@@ -42,6 +42,7 @@ public class RedisService {
             return;
         }
         redis.setString(sessionid + key, value);
+        redis.expire(sessionid + key, 600);
     }
 
     public String getString(String key, HttpServletRequest request) {
