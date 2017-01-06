@@ -93,7 +93,7 @@ public class IssueController {
     @RequestMapping("/miningByTime")
     public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
