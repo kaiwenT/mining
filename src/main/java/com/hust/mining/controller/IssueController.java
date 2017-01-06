@@ -108,7 +108,7 @@ public class IssueController {
     @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
-        String issueId = issueService.getCurrentIssueId(request);
+        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
