@@ -182,7 +182,7 @@ public class FileController {
 	@RequestMapping(value = "/deleteFileById")
 	public Object deleteFileById(@RequestParam(value = "fileid", required = true) String fileId,
 			HttpServletRequest request) {
-		String issueId = issueService.getCurrentIssueId(request);
+		String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
 		if (StringUtils.isEmpty(issueId)) {
 			return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
 		}
