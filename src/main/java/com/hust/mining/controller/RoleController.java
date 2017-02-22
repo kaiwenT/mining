@@ -78,8 +78,9 @@ public class RoleController {
 	}
 
 	/**
-	 * 删除角色
 	 * 
+	 * @param roleId
+	 * @param request
 	 * @return
 	 */
 	@ResponseBody
@@ -100,8 +101,9 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/updateRoleInfo")
-	public Object updateRoleInfo(@RequestBody Role role, HttpServletRequest request) {
-		boolean statue = roleService.updateRoleInfo(role);
+	public Object updateRoleInfo(@RequestBody Role role,
+			@RequestParam(value = "powerName", required = true) List<String> powerName, HttpServletRequest request) {
+		boolean statue = roleService.updateRoleInfo(role, powerName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update roleinfo error,unknow error");
 		}

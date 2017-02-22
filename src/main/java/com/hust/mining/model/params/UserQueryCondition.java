@@ -10,6 +10,16 @@ public class UserQueryCondition {
 
 	private String trueName;
 
+	private String roleName;
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
 	private int page;
 
 	private int row;
@@ -65,7 +75,7 @@ public class UserQueryCondition {
 	@Override
 	public String toString() {
 		return "UserQueryCondition [userName=" + userName + ", email=" + email + ", telphone=" + telphone
-				+ ", trueName=" + trueName + ", page=" + page + ", row=" + row + "]";
+				+ ", trueName=" + trueName + ", roleName=" + roleName + ", page=" + page + ", row=" + row + "]";
 	}
 
 }

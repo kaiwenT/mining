@@ -43,6 +43,14 @@ public class UserRoleDao {
 		return userRole;
 	}
 
+	public List<UserRole> selectUserRoleByRoleId(int roleId) {
+		UserRoleExample example = new UserRoleExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andRoleIdEqualTo(roleId);
+		List<UserRole> userRole = userRoleMapper.selectByExample(example);
+		return userRole;
+	}
+
 	public int insertUserRole(UserRole userRole) {
 		int status = userRoleMapper.insertSelective(userRole);
 		return status;

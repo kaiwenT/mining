@@ -15,7 +15,7 @@ public interface UserService {
 
 	boolean deleteUserInfoById(int userId, HttpServletRequest request);
 
-	boolean updateUserInfo(User user);
+	boolean updateUserInfo(User user,List<String> roleName);
 
 	boolean insertUserInfo(User user, List<String> roleName);
 

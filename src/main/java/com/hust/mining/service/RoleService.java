@@ -5,7 +5,6 @@ import java.util.List;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
 
-
 public interface RoleService {
 	List<Role> selectAllRole();
 
@@ -15,7 +14,7 @@ public interface RoleService {
 
 	boolean deleteRoleInfoById(int roleId);
 
-	boolean updateRoleInfo(Role role);
+	boolean updateRoleInfo(Role role, List<String> powerName);
 
 	boolean insertPowerOfRole(int roleId, List<String> powerName);
 
