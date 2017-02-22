@@ -18,6 +18,7 @@ import com.hust.mining.dao.RolePowerDao;
 import com.hust.mining.dao.UserDao;
 import com.hust.mining.dao.UserRoleDao;
 import com.hust.mining.model.Power;
+import com.hust.mining.model.Role;
 import com.hust.mining.model.RolePower;
 import com.hust.mining.model.User;
 import com.hust.mining.model.UserRole;
@@ -116,10 +117,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean updateUserInfo(User user) {
-		int statue = userDao.updateByPrimaryKeySelective(user);
+	public boolean updateUserInfo(User user, List<String> roleName) {
+		int statue = userDao.updateByPrimaryKey(user);
+		userRoleDao.deleteUserRoleByUserId(user.getUserId());
+		List<Integer> roleIds = new ArrayList<Integer>();
+		for (String roleNameInfo : roleName) {
+			System.out.println(roleName);
+			List<Role> role = roleDao.selectRoleByName(roleNameInfo);
+			roleIds.add(role.get(0).getRoleId());
+		}
+		for (int roleId : roleIds) {
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(roleId);
+			userRole.setUserId(user.getUserId());
+			int statueOfUserRole = userRoleDao.insertUserRole(userRole);
+			if (statueOfUserRole == 0) {
+				logger.info("update userRole is error");
+				return false;
+			}
+		}
 		if (statue == 0) {
-			logger.info("updateUserInfo is error");
+			logger.info("update UserInfo is error");
 			return false;
 		}
 		return true;
@@ -224,6 +242,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> selectUserByPageLimit(UserQueryCondition userQueryCondition) {
 		List<User> users = userDao.selectByExample(userQueryCondition);
+		List<User> user = new ArrayList<User>();
+		// 对查询出来的信息进行筛选 首先需要根据条件 查出roleId，再根据ID 查出所有的用户ID，然后去判断
+		if (!userQueryCondition.getRoleName().isEmpty()) {
+			List<Role> roles = roleDao.selectRoleByName(userQueryCondition.getRoleName());
+			List<UserRole> userRoles = userRoleDao.selectUserRoleByRoleId(roles.get(0).getRoleId());
+			for (User userInfo : users) {
+				for (UserRole userRoleInfo : userRoles) {
+					if (userInfo.getUserId().equals(userRoleInfo.getUserId())) {
+						user.add(userInfo);
+					}
+				}
+			}
+		} else {
+			user = users;
+		}
 		return users;
 	}
 

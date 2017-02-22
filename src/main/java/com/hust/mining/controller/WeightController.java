@@ -42,7 +42,7 @@ public class WeightController {
 
 	@ResponseBody
 	@RequestMapping("/insertWeight")
-	public Object insertWeight(Weight weight) {
+	public Object insertWeight(@RequestBody Weight weight) {
 		boolean status = weightService.insertWeight(weight);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("insert is error");
@@ -52,8 +52,8 @@ public class WeightController {
 
 	@ResponseBody
 	@RequestMapping("/deleteWeight")
-	public Object deleteWeight(@RequestParam(value = "id", required = true) int id) {
-		boolean status = weightService.deleteWeightById(id);
+	public Object deleteWeight(@RequestParam(value = "weightId", required = true) int weightId) {
+		boolean status = weightService.deleteWeightById(weightId);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("delete is error");
 		}

@@ -85,9 +85,48 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public boolean updateRoleInfo(Role role) {
-		// 更新角色信息也不能更新成数据库中已经存在的信息
+	public boolean updateRoleInfo(Role role, List<String> powerName) {
 		int statue = roleDao.updateByPrimaryKeySelective(role);
+		List<RolePower> rolePowers = rolePowerDao.selectRolePowerByRoleId(role.getRoleId());
+		List<Integer> oldPowers = new ArrayList<Integer>();
+		for (RolePower powers : rolePowers) {
+			oldPowers.add(powers.getPowerId());
+		}
+		List<Integer> newPowerInfo = new ArrayList<Integer>();
+		if (!powerName.isEmpty()) {
+			for (String powerNameInfo : powerName) {
+				List<Power> powers = powerDao.selectPowerByPowerName(powerNameInfo);
+				newPowerInfo.add(powers.get(0).getPowerId());
+			}
+		} else {
+			logger.info("power update is empty");
+		}
+		List<Integer> includePowers = new ArrayList<Integer>();
+		List<Integer> notIncludePowers = new ArrayList<Integer>();
+		if (!newPowerInfo.isEmpty()) {
+			for (Integer powerInfo : newPowerInfo) {
+				if (oldPowers.contains(powerInfo)) {
+					includePowers.add(powerInfo);
+				} else {
+					notIncludePowers.add(powerInfo);
+				}
+			}
+		}
+		if (includePowers.size() < oldPowers.size()) {
+			for (int power : oldPowers) {
+				if (!includePowers.contains(power)) {
+					rolePowerDao.deleteRolePowerById(power, role.getRoleId());
+				}
+			}
+		}
+		if (!notIncludePowers.isEmpty()) {
+			for (int powers : notIncludePowers) {
+				RolePower rolePower = new RolePower();
+				rolePower.setPowerId(powers);
+				rolePower.setRoleId(role.getRoleId());
+				rolePowerDao.insertSelective(rolePower);
+			}
+		}
 		if (statue == 0) {
 			return false;
 		}

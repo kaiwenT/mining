@@ -96,21 +96,22 @@ public class UserController {
 	}
 
 	/**
-	 * 更新用户信息
 	 * 
+	 * @param user
+	 * @param roleName
 	 * @param request
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/updateUserInfo")
-	public Object updateUseInfo(@RequestBody User user, HttpServletRequest request) {
-		boolean statue = userService.updateUserInfo(user);
+	public Object updateUseInfo(@RequestBody User user,
+			@RequestParam(value = "roleName", required = true) List<String> roleName, HttpServletRequest request) {
+		boolean statue = userService.updateUserInfo(user,roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update user error ");
 		}
 		return ResultUtil.success("update user success");
 	}
-
 	/**
 	 * 添加用户信息：只能添加用户信息。不需要为用户设置角色
 	 * 

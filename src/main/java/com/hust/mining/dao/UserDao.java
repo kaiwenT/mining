@@ -24,6 +24,7 @@ public class UserDao {
 		return users;
 	}
 
+	
 	public List<User> selectByUserName(String userName) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();

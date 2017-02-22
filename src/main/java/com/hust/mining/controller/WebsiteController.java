@@ -42,8 +42,8 @@ public class WebsiteController {
 
 	@ResponseBody
 	@RequestMapping("/deleteWebsite")
-	public Object deleteWebsiteById(@RequestParam(value = "id", required = true) long id) {
-		boolean status = websiteService.deleteWebsiteById(id);
+	public Object deleteWebsiteById(@RequestParam(value = "websiteId", required = true) long websiteId) {
+		boolean status = websiteService.deleteWebsiteById(websiteId);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("delete website error ");
 		}
