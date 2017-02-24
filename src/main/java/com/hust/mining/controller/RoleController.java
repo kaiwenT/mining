@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -101,8 +100,12 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/updateRoleInfo")
-	public Object updateRoleInfo(@RequestBody Role role,
+	public Object updateRoleInfo(@RequestParam(value = "roleId", required = true) int roleId,
+			@RequestParam(value = "roleName", required = true) String roleName,
 			@RequestParam(value = "powerName", required = true) List<String> powerName, HttpServletRequest request) {
+		Role role = new Role();
+		role.setRoleId(roleId);
+		role.setRoleName(roleName);
 		boolean statue = roleService.updateRoleInfo(role, powerName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update roleinfo error,unknow error");

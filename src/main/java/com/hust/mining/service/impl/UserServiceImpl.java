@@ -1,6 +1,5 @@
 package com.hust.mining.service.impl;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import com.hust.mining.model.User;
 import com.hust.mining.model.UserRole;
 import com.hust.mining.model.params.UserQueryCondition;
 import com.hust.mining.service.UserService;
-import com.hust.mining.util.TimeUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -148,12 +146,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean insertUserInfo(User user, List<String> roleName) {
-		try {
-			user.setCreateDate(TimeUtil.getSystemDate());
-		} catch (ParseException e) {
-			logger.info("get systemdate is error ");
-			e.printStackTrace();
-		}
 		int statue = userDao.insert(user);
 		if (statue == 0) {
 			logger.info("insert user error ");

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hust.datamining.cluster.Canopy;
+import com.hust.datamining.algorithm.cluster.Canopy;
 import com.hust.datamining.convertor.Convertor;
 import com.hust.datamining.convertor.DigitalConvertor;
 import com.hust.datamining.distance.AcrossDistance;

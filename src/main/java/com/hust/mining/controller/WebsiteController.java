@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +31,15 @@ public class WebsiteController {
 
 	@ResponseBody
 	@RequestMapping("/insertWebsite")
-	public Object insertWebsite(@RequestBody Website website) {
+	public Object insertWebsite(@RequestParam(value = "url", required = true) String url,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "levle", required = true) String level,
+			@RequestParam(value = "type", required = true) String type) {
+		Website website = new Website();
+		website.setUrl(url);
+		website.setName(name);
+		website.setLevel(level);
+		website.setType(type);
 		boolean status = websiteService.insertWebsite(website);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("insert error");
@@ -52,7 +59,17 @@ public class WebsiteController {
 
 	@ResponseBody
 	@RequestMapping("/updateWebsite")
-	public Object updateWebsite(@RequestBody Website website) {
+	public Object updateWebsite(@RequestParam(value = "id", required = true) long id,
+			@RequestParam(value = "url", required = true) String url,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "level", required = true) String level,
+			@RequestParam(value = "type", required = true) String type) {
+		Website website = new Website();
+		website.setId(id);
+		website.setUrl(url);
+		website.setName(name);
+		website.setLevel(level);
+		website.setType(type);
 		boolean status = websiteService.updateWebsite(website);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("update is error");
@@ -62,7 +79,15 @@ public class WebsiteController {
 
 	@ResponseBody
 	@RequestMapping("/selectByCondition")
-	public Object selectByCondition(@RequestBody Website website) {
+	public Object selectByCondition(@RequestParam(value = "url", required = true) String url,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "levle", required = true) String level,
+			@RequestParam(value = "type", required = true) String type) {
+		Website website = new Website();
+		website.setUrl(url);
+		website.setName(name);
+		website.setLevel(level);
+		website.setType(type);
 		List<Website> websites = websiteService.selectByCondition(website);
 		if (websites.isEmpty()) {
 			return ResultUtil.errorWithMsg("website is empty");
