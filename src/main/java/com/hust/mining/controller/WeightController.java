@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,8 +31,12 @@ public class WeightController {
 
 	@ResponseBody
 	@RequestMapping("/selectByCondition")
-	public Object selectByCondition(@RequestBody Weight weight) {
-		List<Weight> weights = weightService.selectByCondition(weight);
+	public Object selectByCondition(@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "weight", required = true) Integer weight) {
+		Weight weightInfo = new Weight();
+		weightInfo.setName(name);
+		weightInfo.setWeight(weight);
+		List<Weight> weights = weightService.selectByCondition(weightInfo);
 		if (weights.isEmpty()) {
 			return ResultUtil.errorWithMsg("the condition not exist");
 		}
@@ -42,8 +45,12 @@ public class WeightController {
 
 	@ResponseBody
 	@RequestMapping("/insertWeight")
-	public Object insertWeight(@RequestBody Weight weight) {
-		boolean status = weightService.insertWeight(weight);
+	public Object insertWeight(@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "weight", required = true) Integer weight) {
+		Weight weightInfo = new Weight();
+		weightInfo.setName(name);
+		weightInfo.setWeight(weight);
+		boolean status = weightService.insertWeight(weightInfo);
 		if (status == false) {
 			return ResultUtil.errorWithMsg("insert is error");
 		}
@@ -60,12 +67,26 @@ public class WeightController {
 		return ResultUtil.success("delete date success");
 	}
 
+	/**
+	 * 新闻媒体不能更新成已有的新闻类型
+	 * 
+	 * @param id
+	 * @param name
+	 * @param weight
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/updateWeight")
-	public Object updateWeight(@RequestBody Weight weight) {
-		boolean status = weightService.updateWeight(weight);
+	public Object updateWeight(@RequestParam(value = "id", required = true) Integer id,
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "weight", required = true) Integer weight) {
+		Weight weightInfo = new Weight();
+		weightInfo.setId(id);
+		weightInfo.setName(name);
+		weightInfo.setWeight(weight);
+		boolean status = weightService.updateWeight(weightInfo);
 		if (status == false) {
-			return ResultUtil.errorWithMsg("update weight error");
+			return ResultUtil.errorWithMsg("update weightName has exist or update error");
 		}
 		return ResultUtil.success("update date success");
 	}

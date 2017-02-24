@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,7 +53,11 @@ public class PowerController {
 	 */
 	@ResponseBody
 	@RequestMapping("/insertPowerInfo")
-	public Object insertPowerInfo(@RequestBody Power power, HttpServletRequest request) {
+	public Object insertPowerInfo(@RequestParam(value = "powerName", required = true) String powerName,
+			@RequestParam(value = "powerUrl", required = true) String powerUrl, HttpServletRequest request) {
+		Power power = new Power();
+		power.setPowerName(powerName);
+		power.setPowerUrl(powerUrl);
 		boolean statue = powerService.insertPowerInfo(power);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("power table have this power");
@@ -85,10 +88,16 @@ public class PowerController {
 	 */
 	@ResponseBody
 	@RequestMapping("/updatePowerInfo")
-	public Object updatePowerInfo(@RequestBody Power power, HttpServletRequest request) {
+	public Object updatePowerInfo(@RequestParam(value = "powerId", required = true) int powerId,
+			@RequestParam(value = "powerName", required = true) String powerName,
+			@RequestParam(value = "powerUrl", required = true) String powerUrl, HttpServletRequest request) {
+		Power power = new Power();
+		power.setPowerId(powerId);
+		power.setPowerName(powerName);
+		power.setPowerUrl(powerUrl);
 		boolean statue = powerService.updatePowerInfo(power);
 		if (statue == false) {
-			return ResultUtil.unknowError();
+			return ResultUtil.errorWithMsg("powerName has exist or power update error");
 		}
 		return ResultUtil.success("update data success");
 	}

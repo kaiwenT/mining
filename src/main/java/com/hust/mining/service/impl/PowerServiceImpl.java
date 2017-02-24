@@ -32,7 +32,6 @@ public class PowerServiceImpl implements PowerService {
 		return powers;
 	}
 
-	
 	@Override
 	public List<Power> selectOnePowerInfo(String powerName) {
 		List<Power> powers = powerDao.selectByLikePowerName(powerName);
@@ -76,10 +75,15 @@ public class PowerServiceImpl implements PowerService {
 
 	@Override
 	public boolean updatePowerInfo(Power power) {
-		// 也不能更新成已经存在的权限名称
-		List<Power> powers = powerDao.selectPowerByPowerName(power.getPowerName());
-		if (null != powers) {
-			logger.info("powername has been exist ");
+		// 就是为了避免 权限更新成已有的权限名称 新权限名称 和旧的权限名称
+		List<Power> oldPowers = powerDao.selectPowerById(power.getPowerId());
+		if (power.getPowerName().equals(oldPowers.get(0).getPowerName())) {
+			logger.info("newPowerName is same as oldPowerName");
+			return false;
+		}
+		List<Power> newPowers = powerDao.selectPowerByPowerName(power.getPowerName());
+		if (!newPowers.isEmpty()) {
+			logger.info("newPowerName has been exist");
 			return false;
 		}
 		int statue = powerDao.updateByPrimaryKeySelective(power);

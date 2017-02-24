@@ -12,6 +12,10 @@ public class UserQueryCondition {
 
 	private String roleName;
 
+	private int page;
+
+	private int row;
+
 	public String getRoleName() {
 		return roleName;
 	}
@@ -19,10 +23,6 @@ public class UserQueryCondition {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-
-	private int page;
-
-	private int row;
 
 	public String getUserName() {
 		return userName;

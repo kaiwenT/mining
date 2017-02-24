@@ -1,14 +1,16 @@
 package com.hust.mining.controller;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,10 +24,12 @@ import com.hust.mining.service.RoleService;
 import com.hust.mining.service.UserRoleService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ResultUtil;
+import com.hust.mining.util.TimeUtil;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -104,14 +108,33 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/updateUserInfo")
-	public Object updateUseInfo(@RequestBody User user,
+	public Object updateUseInfo(@RequestParam(value = "userId", required = true) int userId,
+			@RequestParam(value = "userName", required = true) String userName,
+			@RequestParam(value = "trueName", required = true) String trueName,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "telphone", required = true) String telphone,
+			@RequestParam(value = "email", required = true) String email,
 			@RequestParam(value = "roleName", required = true) List<String> roleName, HttpServletRequest request) {
-		boolean statue = userService.updateUserInfo(user,roleName);
+		User user = new User();
+		user.setUserId(userId);
+		user.setUserName(userName);
+		user.setTrueName(trueName);
+		user.setPassword(password);
+		user.setTelphone(telphone);
+		user.setEmail(email);
+		try {
+			user.setCreateDate(TimeUtil.getSystemDate());
+		} catch (ParseException e) {
+			logger.info("get systemdate is error ");
+			e.printStackTrace();
+		}
+		boolean statue = userService.updateUserInfo(user, roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("update user error ");
 		}
 		return ResultUtil.success("update user success");
 	}
+
 	/**
 	 * 添加用户信息：只能添加用户信息。不需要为用户设置角色
 	 * 
@@ -120,8 +143,24 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/insertUserInfo")
-	public Object insertUserInfo(@RequestBody User user,
+	public Object insertUserInfo(@RequestParam(value = "userName", required = true) String userName,
+			@RequestParam(value = "trueName", required = true) String trueName,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "telphone", required = true) String telphone,
+			@RequestParam(value = "email", required = true) String email,
 			@RequestParam(value = "roleName", required = true) List<String> roleName, HttpServletRequest request) {
+		User user = new User();
+		user.setUserName(userName);
+		user.setEmail(email);
+		user.setTrueName(trueName);
+		user.setPassword(password);
+		user.setTelphone(telphone);
+		try {
+			user.setCreateDate(TimeUtil.getSystemDate());
+		} catch (ParseException e) {
+			logger.info("get systemdate is error ");
+			e.printStackTrace();
+		}
 		boolean statue = userService.insertUserInfo(user, roleName);
 		if (statue == false) {
 			return ResultUtil.errorWithMsg("insert userinfo erro ");
@@ -137,9 +176,22 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/getUserInfoByPageLimit")
-	public Object getUserInfoByPageLimit(@RequestBody UserQueryCondition userQueryCondition,
-			HttpServletRequest request) {
+	@RequestMapping(value = "/getUserInfoByPageLimit", method = RequestMethod.POST)
+	public Object getUserInfoByPageLimit(@RequestParam(value = "userName", required = true) String userName,
+			@RequestParam(value = "email", required = true) String email,
+			@RequestParam(value = "telphone", required = true) String telphone,
+			@RequestParam(value = "trueName", required = true) String trueName,
+			@RequestParam(value = "roleName", required = true) String roleName,
+			@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "row", required = true) int row, HttpServletRequest request) {
+		UserQueryCondition userQueryCondition = new UserQueryCondition();
+		userQueryCondition.setUserName(userName);
+		userQueryCondition.setEmail(email);
+		userQueryCondition.setTelphone(telphone);
+		userQueryCondition.setTrueName(trueName);
+		userQueryCondition.setRoleName(roleName);
+		userQueryCondition.setPage(page);
+		userQueryCondition.setRow(row);
 		List<User> userInfo = userService.selectUserByPageLimit(userQueryCondition);
 		List<Role> roles = roleService.selectAllRole();
 		if (null == roles || roles.size() == 0) {

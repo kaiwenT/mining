@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,7 +61,11 @@ public class SourceTypeContrller {
 
 	@ResponseBody
 	@RequestMapping(value = "/updateSourceType")
-	public Object updateSourceType(@RequestBody SourceType sourceType) {
+	public Object updateSourceType(@RequestParam(value = "id", required = true) int id,
+			@RequestParam(value = "name", required = true) String name) {
+		SourceType sourceType = new SourceType();
+		sourceType.setId(id);
+		sourceType.setName(name);
 		int status = sourceTypeService.updateSourceType(sourceType);
 		if (status == 0) {
 			return ResultUtil.errorWithMsg("update data error");

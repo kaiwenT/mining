@@ -1,5 +1,6 @@
 package com.hust.mining.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -39,8 +40,21 @@ public class WeightServiceImple implements WeightService {
 		return true;
 	}
 
+	/**
+	 * 不能更新成已有的新闻类型 出现返回错误情况
+	 */
 	@Override
 	public boolean updateWeight(Weight weight) {
+		List<Weight> weightInfo = weightDao.selectWeightById(weight.getId());
+		List<Weight> weights = weightDao.selectWeigth(weightInfo.get(0).getName());
+		List<String> weightName = new ArrayList<String>();
+		for (Weight weightInfos : weights) {
+			weightName.add(weightInfos.getName());
+		}
+		if (weightName.contains(weight.getName())) {
+			logger.info("update weightName is exist");
+			return false;
+		}
 		int status = weightDao.updateWeight(weight);
 		if (status == 0) {
 			logger.info("update weight is error");

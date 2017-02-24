@@ -33,6 +33,31 @@ public class WeightDao {
 		return weight;
 	}
 
+	public List<Weight> selectWeightById(int id) {
+		WeightExample example = new WeightExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andIdEqualTo(id);
+		List<Weight> weight = weightMapper.selectByExample(example);
+		return weight;
+	}
+
+	public List<Weight> selectWeightByName(String name) {
+		WeightExample example = new WeightExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(name);
+		List<Weight> weight = weightMapper.selectByExample(example);
+		return weight;
+	}
+
+	public List<Weight> selectWeigth(String name) {
+		WeightExample example = new WeightExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameNotEqualTo(name);
+		List<Weight> weight = weightMapper.selectByExample(example);
+		return weight;
+
+	}
+
 	public int insertWeight(Weight weight) {
 		return weightMapper.insert(weight);
 	}
