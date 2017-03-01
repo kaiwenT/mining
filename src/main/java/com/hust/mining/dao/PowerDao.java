@@ -2,12 +2,14 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.PowerMapper;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.PowerExample;
 import com.hust.mining.model.PowerExample.Criteria;
+import com.hust.mining.model.params.PowerQueryCondition;
 
 public class PowerDao {
 
@@ -42,10 +44,18 @@ public class PowerDao {
 		return powers;
 	}
 
-	public List<Power> selectByLikePowerName(String powerName) {
+	public List<Power> selectByLikePowerName(PowerQueryCondition power) {
 		PowerExample example = new PowerExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andPowerNameLike("%" + powerName + "%");
+		if (!StringUtils.isBlank(power.getName())) {
+			criteria.andPowerNameLike("%" + power.getName() + "%");
+		}
+		if (power.getStart() != 0) {
+			example.setStart(power.getStart());
+		}
+		if (power.getLimit() != 0) {
+			example.setLimit(power.getLimit());
+		}
 		List<Power> powers = powerMapper.selectByExample(example);
 		return powers;
 

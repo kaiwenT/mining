@@ -3,13 +3,14 @@ package com.hust.mining.service;
 import java.util.List;
 
 import com.hust.mining.model.Power;
+import com.hust.mining.model.params.PowerQueryCondition;
 
 
 public interface PowerService {
 
 	List<Power> selectAllPower();
 
-	List<Power> selectOnePowerInfo(String powerName);
+	List<Power> selectOnePowerInfo(PowerQueryCondition powerName);
 
 	boolean insertPowerInfo(Power power);
 

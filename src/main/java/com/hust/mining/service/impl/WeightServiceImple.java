@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.hust.mining.dao.WeightDao;
 import com.hust.mining.model.Weight;
+import com.hust.mining.model.params.WeightQueryCondition;
 import com.hust.mining.service.WeightService;
 
 @Service
@@ -32,6 +33,12 @@ public class WeightServiceImple implements WeightService {
 
 	@Override
 	public boolean insertWeight(Weight weight) {
+		// 添加权重数据时 ，权重名称有唯一性 。
+		List<Weight> weights = weightDao.selectWeightByName(weight.getName());
+		if (!weights.isEmpty()) {
+			logger.info("weightName is exist");
+			return false;
+		}
 		int status = weightDao.insertWeight(weight);
 		if (status == 0) {
 			logger.info("insert is error");
@@ -46,7 +53,7 @@ public class WeightServiceImple implements WeightService {
 	@Override
 	public boolean updateWeight(Weight weight) {
 		List<Weight> weightInfo = weightDao.selectWeightById(weight.getId());
-		List<Weight> weights = weightDao.selectWeigth(weightInfo.get(0).getName());
+		List<Weight> weights = weightDao.selectNotIncluedWeigth(weightInfo.get(0).getName());
 		List<String> weightName = new ArrayList<String>();
 		for (Weight weightInfos : weights) {
 			weightName.add(weightInfos.getName());
@@ -74,7 +81,7 @@ public class WeightServiceImple implements WeightService {
 	}
 
 	@Override
-	public List<Weight> selectByCondition(Weight weight) {
+	public List<Weight> selectByCondition(WeightQueryCondition weight) {
 		List<Weight> weights = weightDao.selectByCondition(weight);
 		if (weights.isEmpty()) {
 			logger.info("weights is empty");

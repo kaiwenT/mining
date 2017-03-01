@@ -163,7 +163,7 @@ public class UserController {
 		}
 		boolean statue = userService.insertUserInfo(user, roleName);
 		if (statue == false) {
-			return ResultUtil.errorWithMsg("insert userinfo erro ");
+			return ResultUtil.errorWithMsg("insert userinfo error ");
 		}
 		return ResultUtil.success("insert user success");
 	}

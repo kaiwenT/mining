@@ -15,6 +15,7 @@ import com.hust.mining.dao.UserRoleDao;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
 import com.hust.mining.model.RolePower;
+import com.hust.mining.model.params.RoleQueryCondition;
 import com.hust.mining.service.RoleService;
 
 @Service
@@ -39,13 +40,13 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public List<Role> selectOneRoleInfo(String roleName) {
+	public List<Role> selectOneRoleInfo(RoleQueryCondition role) {
 		// 角色名必须是表已经存在的角色名
-		List<Role> role = roleDao.selectByLikeRoleName(roleName);
-		if (role.isEmpty()) {
+		List<Role> roles = roleDao.selectByLikeRoleName(role);
+		if (roles.isEmpty()) {
 			logger.info("roleName is not exist");
 		}
-		return role;
+		return roles;
 	}
 
 	@Override
@@ -86,6 +87,14 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public boolean updateRoleInfo(Role role, List<String> powerName) {
+		List<Role> oldRole = roleDao.selectRoleById(role.getRoleId());
+		List<Role> otherRole = roleDao.selectByNotIncluedRoleName(oldRole.get(0).getRoleName());
+		for (Role roleInfo : otherRole) {
+			if (roleInfo.getRoleName().equals(role.getRoleName())) {
+				logger.info("update roleName has exist");
+				return false;
+			}
+		}
 		int statue = roleDao.updateByPrimaryKeySelective(role);
 		List<RolePower> rolePowers = rolePowerDao.selectRolePowerByRoleId(role.getRoleId());
 		List<Integer> oldPowers = new ArrayList<Integer>();

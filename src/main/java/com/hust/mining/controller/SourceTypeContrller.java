@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.model.SourceType;
+import com.hust.mining.model.params.SourceTypeQueryCondition;
 import com.hust.mining.service.SourceTypeService;
 import com.hust.mining.util.ResultUtil;
 
@@ -31,12 +32,19 @@ public class SourceTypeContrller {
 
 	@ResponseBody
 	@RequestMapping(value = "/selectSourceTypeByName")
-	public Object selectSourceTypeByName(@RequestParam(value = "name", required = true) String name) {
-		List<SourceType> sourceType = sourceTypeService.selectSourceTypeByName(name);
-		if (sourceType.isEmpty()) {
+	public Object selectSourceTypeByName(@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit) {
+		System.out.println(name);
+		SourceTypeQueryCondition sourceType = new SourceTypeQueryCondition();
+		sourceType.setName(name);
+		sourceType.setStart(start);
+		sourceType.setLimit(limit);
+		List<SourceType> sourceTypes = sourceTypeService.selectSourceTypeByName(sourceType);
+		if (sourceTypes.isEmpty()) {
 			return ResultUtil.errorWithMsg("The name is not exist");
 		}
-		return ResultUtil.success(sourceType);
+		return ResultUtil.success(sourceTypes);
 	}
 
 	@ResponseBody
@@ -54,7 +62,7 @@ public class SourceTypeContrller {
 	public Object insertSourceType(@RequestParam(value = "name", required = true) String name) {
 		int status = sourceTypeService.insertSourceType(name);
 		if (status == 0) {
-			return ResultUtil.errorWithMsg("insert is error");
+			return ResultUtil.errorWithMsg("insert sourceType error");
 		}
 		return ResultUtil.success("insert data success");
 	}
@@ -68,7 +76,7 @@ public class SourceTypeContrller {
 		sourceType.setName(name);
 		int status = sourceTypeService.updateSourceType(sourceType);
 		if (status == 0) {
-			return ResultUtil.errorWithMsg("update data error");
+			return ResultUtil.errorWithMsg("update sourceType error");
 		}
 		return ResultUtil.success("update data success");
 	}

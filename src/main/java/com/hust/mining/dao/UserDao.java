@@ -24,11 +24,18 @@ public class UserDao {
 		return users;
 	}
 
-	
 	public List<User> selectByUserName(String userName) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUserNameEqualTo(userName);
+		List<User> users = userMapper.selectByExample(example);
+		return users;
+	}
+
+	public List<User> selectBynotIncluedUserName(String userName) {
+		UserExample example = new UserExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserNameNotEqualTo(userName);
 		List<User> users = userMapper.selectByExample(example);
 		return users;
 	}

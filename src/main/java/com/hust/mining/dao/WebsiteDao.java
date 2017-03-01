@@ -9,6 +9,7 @@ import com.hust.mining.dao.mapper.WebsiteMapper;
 import com.hust.mining.model.Website;
 import com.hust.mining.model.WebsiteExample;
 import com.hust.mining.model.WebsiteExample.Criteria;
+import com.hust.mining.model.params.WebsiteQueryCondition;
 
 public class WebsiteDao {
 
@@ -54,7 +55,7 @@ public class WebsiteDao {
 		return websiteMapper.insert(werbsite);
 	}
 
-	public List<Website> selectByCondition(Website webSite) {
+	public List<Website> selectByCondition(WebsiteQueryCondition webSite) {
 		WebsiteExample example = new WebsiteExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(webSite.getUrl())) {
@@ -68,6 +69,12 @@ public class WebsiteDao {
 		}
 		if (!StringUtils.isBlank(webSite.getType())) {
 			criteria.andTypeLike(webSite.getType());
+		}
+		if (webSite.getStart() != 0) {
+			example.setStart(webSite.getStart());
+		}
+		if (webSite.getLimit() != 0) {
+			example.setLimit(webSite.getLimit());
 		}
 		List<Website> websites = websiteMapper.selectByExample(example);
 		return websites;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.model.Power;
+import com.hust.mining.model.params.PowerQueryCondition;
 import com.hust.mining.service.PowerService;
 import com.hust.mining.util.ResultUtil;
 
@@ -38,8 +39,13 @@ public class PowerController {
 	@ResponseBody
 	@RequestMapping("/selectOnePowerInfo")
 	public Object selectOnePowerInfo(@RequestParam(value = "powerName", required = true) String powerName,
-			HttpServletRequest request) {
-		List<Power> element = powerService.selectOnePowerInfo(powerName);
+			@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
+		PowerQueryCondition power = new PowerQueryCondition();
+		power.setName(powerName);
+		power.setStart(start);
+		power.setLimit(limit);
+		List<Power> element = powerService.selectOnePowerInfo(power);
 		if (null == element || element.size() == 0) {
 			return ResultUtil.errorWithMsg("power table not have this powerName");
 		}

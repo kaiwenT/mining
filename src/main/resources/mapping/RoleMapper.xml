@@ -86,9 +86,13 @@
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
+		<if test="start!=0 or limit!=0">
+			limit #{start},#{limit}
+		</if>
 		<if test="orderByClause != null">
 			order by ${orderByClause}
 		</if>
+
 	</select>
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
 		resultMap="BaseResultMap">

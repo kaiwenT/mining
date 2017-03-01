@@ -21,7 +21,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -53,7 +54,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -88,6 +90,9 @@
 		<if test="orderByClause != null">
 			order by ${orderByClause}
 		</if>
+		<if test="start!=0 or limit!=0">
+			limit #{start},#{limit}
+		</if>
 	</select>
 	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
 		resultMap="BaseResultMap">
@@ -107,9 +112,11 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.Power">
-		insert into power (power_id, power_name, power_url
+		insert into power (power_id,
+		power_name, power_url
 		)
-		values (#{powerId,jdbcType=INTEGER}, #{powerName,jdbcType=VARCHAR},
+		values (#{powerId,jdbcType=INTEGER},
+		#{powerName,jdbcType=VARCHAR},
 		#{powerUrl,jdbcType=VARCHAR}
 		)
 	</insert>
@@ -166,7 +173,8 @@
 		update power
 		set power_id = #{record.powerId,jdbcType=INTEGER},
 		power_name = #{record.powerName,jdbcType=VARCHAR},
-		power_url = #{record.powerUrl,jdbcType=VARCHAR}
+		power_url =
+		#{record.powerUrl,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -185,8 +193,11 @@
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Power">
 		update power
-		set power_name = #{powerName,jdbcType=VARCHAR},
-		power_url = #{powerUrl,jdbcType=VARCHAR}
-		where power_id = #{powerId,jdbcType=INTEGER}
+		set
+		power_name = #{powerName,jdbcType=VARCHAR},
+		power_url =
+		#{powerUrl,jdbcType=VARCHAR}
+		where power_id =
+		#{powerId,jdbcType=INTEGER}
 	</update>
 </mapper>
