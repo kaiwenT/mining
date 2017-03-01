@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hust.mining.dao.WebsiteDao;
 import com.hust.mining.model.Website;
+import com.hust.mining.model.params.WebsiteQueryCondition;
 import com.hust.mining.service.WebsiteService;
 
 @Service
@@ -76,7 +77,7 @@ public class WebsiteServiceImpl implements WebsiteService {
 	}
 
 	@Override
-	public List<Website> selectByCondition(Website website) {
+	public List<Website> selectByCondition(WebsiteQueryCondition website) {
 		List<Website> websites = websiteDao.selectByCondition(website);
 		if (websites.isEmpty()) {
 			logger.info("website is empty");

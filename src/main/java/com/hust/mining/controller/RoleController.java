@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
+import com.hust.mining.model.params.RoleQueryCondition;
 import com.hust.mining.service.RoleService;
 import com.hust.mining.util.ResultUtil;
 
@@ -52,8 +53,13 @@ public class RoleController {
 	@ResponseBody
 	@RequestMapping("/selectOneRoleInfo")
 	public Object selectOneRoleInfo(@RequestParam(value = "roleName", required = true) String roleName,
-			HttpServletRequest request) {
-		List<Role> element = roleService.selectOneRoleInfo(roleName);
+			@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
+		RoleQueryCondition role = new RoleQueryCondition();
+		role.setRoleName(roleName);
+		role.setStart(start);
+		role.setLimit(limit);
+		List<Role> element = roleService.selectOneRoleInfo(role);
 		if (null == element || element.size() == 0) {
 			return ResultUtil.errorWithMsg("rolename not exist");
 		}
@@ -71,7 +77,7 @@ public class RoleController {
 			HttpServletRequest request) {
 		boolean statue = roleService.insertRoleInfo(roleName);
 		if (statue == false) {
-			return ResultUtil.errorWithMsg("role table have been Role,unkow error");
+			return ResultUtil.errorWithMsg("role table have been Role,insert error");
 		}
 		return ResultUtil.success("insert roleinfo success");
 	}
@@ -108,7 +114,7 @@ public class RoleController {
 		role.setRoleName(roleName);
 		boolean statue = roleService.updateRoleInfo(role, powerName);
 		if (statue == false) {
-			return ResultUtil.errorWithMsg("update roleinfo error,unknow error");
+			return ResultUtil.errorWithMsg("update roleinfo error(may be roleInfo has exits),unknow error");
 		}
 		return ResultUtil.success("update roleInfo success");
 	}

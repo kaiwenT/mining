@@ -2,12 +2,14 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.RoleMapper;
 import com.hust.mining.model.Role;
 import com.hust.mining.model.RoleExample;
 import com.hust.mining.model.RoleExample.Criteria;
+import com.hust.mining.model.params.RoleQueryCondition;
 
 public class RoleDao {
 
@@ -42,10 +44,26 @@ public class RoleDao {
 		return roles;
 	}
 
-	public List<Role> selectByLikeRoleName(String roleName) {
+	public List<Role> selectByLikeRoleName(RoleQueryCondition role) {
 		RoleExample example = new RoleExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andRoleNameLike("%" + roleName + "%");
+		if (!StringUtils.isBlank(role.getRoleName())) {
+			criteria.andRoleNameLike("%" + role.getRoleName() + "%");
+		}
+		if (role.getStart() != 0) {
+			example.setStart(role.getStart());
+		}
+		if (role.getLimit() != 0) {
+			example.setLimit(role.getLimit());
+		}
+		List<Role> roles = roleMapper.selectByExample(example);
+		return roles;
+	}
+
+	public List<Role> selectByNotIncluedRoleName(String roleName) {
+		RoleExample example = new RoleExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andRoleNameNotEqualTo(roleName);
 		List<Role> roles = roleMapper.selectByExample(example);
 		return roles;
 	}

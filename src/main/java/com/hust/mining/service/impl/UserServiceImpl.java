@@ -116,6 +116,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean updateUserInfo(User user, List<String> roleName) {
+		// 根据ID找出这个用户的用户名
+		User userInfo = userDao.selectByPrimaryKey(user.getUserId());
+		List<User> users = userDao.selectBynotIncluedUserName(userInfo.getUserName());
+		for (User userInfos : users) {
+			if (userInfos.getUserName().equals(user.getUserName())) {
+				logger.info("update userName is reprtition");
+				return false;
+			}
+		}
 		int statue = userDao.updateByPrimaryKey(user);
 		userRoleDao.deleteUserRoleByUserId(user.getUserId());
 		List<Integer> roleIds = new ArrayList<Integer>();
@@ -146,6 +155,12 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean insertUserInfo(User user, List<String> roleName) {
+		// 首先要进行判断，添加的用户名在数据库中是否存在
+		List<User> insertUser = userDao.selectByUserName(user.getUserName());
+		if (!insertUser.isEmpty()) {
+			logger.info("user table has same as userName");
+			return false;
+		}
 		int statue = userDao.insert(user);
 		if (statue == 0) {
 			logger.info("insert user error ");

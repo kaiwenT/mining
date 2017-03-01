@@ -9,6 +9,7 @@ import com.hust.mining.dao.mapper.WeightMapper;
 import com.hust.mining.model.Weight;
 import com.hust.mining.model.WeightExample;
 import com.hust.mining.model.WeightExample.Criteria;
+import com.hust.mining.model.params.WeightQueryCondition;
 
 public class WeightDao {
 
@@ -49,13 +50,21 @@ public class WeightDao {
 		return weight;
 	}
 
-	public List<Weight> selectWeigth(String name) {
+	public List<Weight> selectNotIncluedWeigth(String name) {
 		WeightExample example = new WeightExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andNameNotEqualTo(name);
 		List<Weight> weight = weightMapper.selectByExample(example);
 		return weight;
 
+	}
+
+	public List<Weight> selectByWeightName(String weightName) {
+		WeightExample example = new WeightExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(weightName);
+		List<Weight> weight = weightMapper.selectByExample(example);
+		return weight;
 	}
 
 	public int insertWeight(Weight weight) {
@@ -74,14 +83,20 @@ public class WeightDao {
 		return weightMapper.updateByPrimaryKeySelective(weight);
 	}
 
-	public List<Weight> selectByCondition(Weight weight) {
+	public List<Weight> selectByCondition(WeightQueryCondition weight) {
 		WeightExample example = new WeightExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(weight.getName())) {
-			criteria.andNameEqualTo(weight.getName());
+			criteria.andNameLike("%" + weight.getName() + "%");
 		}
 		if (weight.getWeight() != null) {
 			criteria.andWeightEqualTo(weight.getWeight());
+		}
+		if (weight.getStart() != 0) {
+			example.setStart(weight.getStart());
+		}
+		if (weight.getLimit() != 0) {
+			example.setLimit(weight.getLimit());
 		}
 		List<Weight> weights = weightMapper.selectByExample(example);
 		return weights;

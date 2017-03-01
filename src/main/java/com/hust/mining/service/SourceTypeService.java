@@ -3,12 +3,13 @@ package com.hust.mining.service;
 import java.util.List;
 
 import com.hust.mining.model.SourceType;
+import com.hust.mining.model.params.SourceTypeQueryCondition;
 
 public interface SourceTypeService {
 
 	List<SourceType> selectSourceType();
 
-	List<SourceType> selectSourceTypeByName(String name);
+	List<SourceType> selectSourceTypeByName(SourceTypeQueryCondition sourceType);
 
 	int deleteSourceTypeById(int id);
 

@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
+import com.hust.mining.model.params.RoleQueryCondition;
 
 public interface RoleService {
 	List<Role> selectAllRole();
 
-	List<Role> selectOneRoleInfo(String roleName);
+	List<Role> selectOneRoleInfo(RoleQueryCondition role);
 
 	boolean insertRoleInfo(String roleName);
 

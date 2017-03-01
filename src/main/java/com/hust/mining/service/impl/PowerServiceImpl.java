@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.hust.mining.dao.PowerDao;
 import com.hust.mining.dao.RolePowerDao;
 import com.hust.mining.model.Power;
+import com.hust.mining.model.params.PowerQueryCondition;
 import com.hust.mining.service.PowerService;
 
 @Service
@@ -33,7 +34,7 @@ public class PowerServiceImpl implements PowerService {
 	}
 
 	@Override
-	public List<Power> selectOnePowerInfo(String powerName) {
+	public List<Power> selectOnePowerInfo(PowerQueryCondition powerName) {
 		List<Power> powers = powerDao.selectByLikePowerName(powerName);
 		if (powers.isEmpty()) {
 			logger.info("powerName is not exist");

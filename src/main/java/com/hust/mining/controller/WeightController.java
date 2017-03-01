@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.model.Weight;
+import com.hust.mining.model.params.WeightQueryCondition;
 import com.hust.mining.service.WeightService;
 import com.hust.mining.util.ResultUtil;
 
@@ -32,10 +33,14 @@ public class WeightController {
 	@ResponseBody
 	@RequestMapping("/selectByCondition")
 	public Object selectByCondition(@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "weight", required = true) Integer weight) {
-		Weight weightInfo = new Weight();
+			@RequestParam(value = "weight", required = true) Integer weight,
+			@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit) {
+		WeightQueryCondition weightInfo = new WeightQueryCondition();
 		weightInfo.setName(name);
 		weightInfo.setWeight(weight);
+		weightInfo.setStart(start);
+		weightInfo.setLimit(limit);
 		List<Weight> weights = weightService.selectByCondition(weightInfo);
 		if (weights.isEmpty()) {
 			return ResultUtil.errorWithMsg("the condition not exist");
@@ -52,7 +57,7 @@ public class WeightController {
 		weightInfo.setWeight(weight);
 		boolean status = weightService.insertWeight(weightInfo);
 		if (status == false) {
-			return ResultUtil.errorWithMsg("insert is error");
+			return ResultUtil.errorWithMsg("insert is error(maybe weightName is exist)");
 		}
 		return ResultUtil.success("insert data success");
 	}

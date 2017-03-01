@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hust.mining.dao.SourceTypeDao;
 import com.hust.mining.model.SourceType;
+import com.hust.mining.model.params.SourceTypeQueryCondition;
 import com.hust.mining.service.SourceTypeService;
 
 @Service
@@ -28,13 +29,13 @@ public class SourceTypeServiceImple implements SourceTypeService {
 	}
 
 	@Override
-	public List<SourceType> selectSourceTypeByName(String name) {
-		List<SourceType> sourceType = sourceTypeDao.selectSourceTypeByName(name);
-		if (sourceType.isEmpty()) {
+	public List<SourceType> selectSourceTypeByName(SourceTypeQueryCondition sourceType) {
+		List<SourceType> sourceTypes = sourceTypeDao.selectSourceTypeByName(sourceType);
+		if (sourceTypes.isEmpty()) {
 			logger.info("The name is not exist");
 			return null;
 		}
-		return sourceType;
+		return sourceTypes;
 	}
 
 	@Override

@@ -2,12 +2,14 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hust.mining.dao.mapper.SourceTypeMapper;
 import com.hust.mining.model.SourceType;
 import com.hust.mining.model.SourceTypeExample;
 import com.hust.mining.model.SourceTypeExample.Criteria;
+import com.hust.mining.model.params.SourceTypeQueryCondition;
 
 public class SourceTypeDao {
 	@Autowired
@@ -21,12 +23,20 @@ public class SourceTypeDao {
 		return sourceType;
 	}
 
-	public List<SourceType> selectSourceTypeByName(String name) {
+	public List<SourceType> selectSourceTypeByName(SourceTypeQueryCondition sourceType) {
 		SourceTypeExample example = new SourceTypeExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andNameLike(name);
-		List<SourceType> sourceType = sourceTypeMapper.selectByExample(example);
-		return sourceType;
+		if (!StringUtils.isBlank(sourceType.getName())) {
+			criteria.andNameLike("%" + sourceType.getName() + "%");
+		}
+		if (sourceType.getStart() != 0) {
+			example.setStart(sourceType.getStart());
+		}
+		if (sourceType.getLimit() != 0) {
+			example.setLimit(sourceType.getLimit());
+		}
+		List<SourceType> sourceTypes = sourceTypeMapper.selectByExample(example);
+		return sourceTypes;
 	}
 
 	public int deleteSourceTypeById(int id) {
