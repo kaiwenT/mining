@@ -25,8 +25,8 @@ public class PowerServiceImpl implements PowerService {
 	private RolePowerDao rolePowerDao;
 
 	@Override
-	public List<Power> selectAllPower() {
-		List<Power> powers = powerDao.selectAllPowers();
+	public List<Power> selectAllPower(int start,int limit) {
+		List<Power> powers = powerDao.selectAllPower(start,limit);
 		if (powers.isEmpty()) {
 			logger.info("select powers is empty");
 		}

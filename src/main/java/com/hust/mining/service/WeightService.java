@@ -7,7 +7,7 @@ import com.hust.mining.model.params.WeightQueryCondition;
 
 public interface WeightService {
 
-	List<Weight> selectAllWeight();
+	List<Weight> selectAllWeight(int start, int limit);
 
 	List<Weight> selectByCondition(WeightQueryCondition weight);
 

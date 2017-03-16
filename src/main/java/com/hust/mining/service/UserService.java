@@ -9,13 +9,13 @@ import com.hust.mining.model.params.UserQueryCondition;
 
 public interface UserService {
 
-	List<User> selectAllUserInfo(HttpServletRequest request);
+	List<User> selectAllUserInfo(int start, int limit, HttpServletRequest request);
 
 	List<User> selectSingleUserInfo(String userName, HttpServletRequest request);
 
 	boolean deleteUserInfoById(int userId, HttpServletRequest request);
 
-	boolean updateUserInfo(User user,List<String> roleName);
+	boolean updateUserInfo(User user, List<String> roleName);
 
 	boolean insertUserInfo(User user, List<String> roleName);
 

@@ -15,10 +15,12 @@ public class SourceTypeDao {
 	@Autowired
 	private SourceTypeMapper sourceTypeMapper;
 
-	public List<SourceType> selectSourceType() {
+	public List<SourceType> selectSourceType(int start, int limit) {
 		SourceTypeExample example = new SourceTypeExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
 		List<SourceType> sourceType = sourceTypeMapper.selectByExample(example);
 		return sourceType;
 	}

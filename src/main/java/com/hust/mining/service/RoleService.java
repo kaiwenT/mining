@@ -7,7 +7,9 @@ import com.hust.mining.model.Role;
 import com.hust.mining.model.params.RoleQueryCondition;
 
 public interface RoleService {
-	List<Role> selectAllRole();
+	List<Role> selectAllRole(int start, int limit);
+
+	List<Role> selectRole();
 
 	List<Role> selectOneRoleInfo(RoleQueryCondition role);
 

@@ -20,7 +20,17 @@ public class RoleDao {
 		return roleMapper.countByExample(example);
 	}
 
-	public List<Role> selectRoles() {
+	public List<Role> selectRoles(int start, int limit) {
+		RoleExample example = new RoleExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andRoleIdIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
+		List<Role> roles = roleMapper.selectByExample(example);
+		return roles;
+	}
+
+	public List<Role> selectRole() {
 		RoleExample example = new RoleExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andRoleIdIsNotNull();

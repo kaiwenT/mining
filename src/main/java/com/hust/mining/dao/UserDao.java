@@ -24,6 +24,16 @@ public class UserDao {
 		return users;
 	}
 
+	public List<User> selectAllUser(int start, int limit) {
+		UserExample example = new UserExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserIdIsNotNull();
+		example.setRow(start);
+		example.setPage(limit);
+		List<User> users = userMapper.selectByExample(example);
+		return users;
+	}
+
 	public List<User> selectByUserName(String userName) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();

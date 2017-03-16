@@ -46,17 +46,18 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/selectAllUser", method = RequestMethod.GET)
-	public Object selectAllUserInfo(HttpServletRequest request) {
-		List<User> users = userService.selectAllUserInfo(request);
+	public Object selectAllUserInfo(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
+		List<User> users = userService.selectAllUserInfo(start, limit, request);
 		if (null == users || users.size() == 0) {
 			return ResultUtil.errorWithMsg("select all user empty");
 		}
-		List<Role> roles = roleService.selectAllRole();
+		List<Role> roles = roleService.selectRole();
 		if (null == roles || roles.size() == 0) {
 			return ResultUtil.errorWithMsg("select all role empty");
 		}
 		List<UserRole> userRole = userRoleService.selectUserRole();
-		if (userRole.isEmpty() || userRole.size() == 0) {
+		if (userRole == null || userRole.size() == 0) {
 			return ResultUtil.errorWithMsg("select userRole empty");
 		}
 		Map<Object, Object> map = new HashMap<>();
@@ -193,7 +194,7 @@ public class UserController {
 		userQueryCondition.setPage(page);
 		userQueryCondition.setRow(row);
 		List<User> userInfo = userService.selectUserByPageLimit(userQueryCondition);
-		List<Role> roles = roleService.selectAllRole();
+		List<Role> roles = roleService.selectRole();
 		if (null == roles || roles.size() == 0) {
 			return ResultUtil.errorWithMsg("select all role empty");
 		}

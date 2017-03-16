@@ -31,8 +31,8 @@ public class RoleServiceImpl implements RoleService {
 	private UserRoleDao userRoleDao;
 
 	@Override
-	public List<Role> selectAllRole() {
-		List<Role> roles = roleDao.selectRoles();
+	public List<Role> selectAllRole(int start,int limit) {
+		List<Role> roles = roleDao.selectRoles(start,limit);
 		if (roles.isEmpty()) {
 			logger.info("role  is empty");
 		}
@@ -49,6 +49,15 @@ public class RoleServiceImpl implements RoleService {
 		return roles;
 	}
 
+	@Override
+	public List<Role> selectRole() {
+		List<Role> roles = roleDao.selectRole();
+		if (roles.isEmpty()) {
+			logger.info("role  is empty");
+		}
+		return roles;
+	}
+	
 	@Override
 	public boolean insertRoleInfo(String roleName) {
 		// 添加新的角色信息，信息不能重复
@@ -191,7 +200,7 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Override
 	public List<Role> selectNotHaveRole(int roleId) {
-		List<Role> roles = roleDao.selectRoles();
+		List<Role> roles = roleDao.selectRole();
 		List<Role> role = new ArrayList<>();
 		for (Role roleInfo : roles) {
 			if (roleInfo.getRoleId() != roleId) {

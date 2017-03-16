@@ -22,8 +22,8 @@ public class WeightServiceImple implements WeightService {
 	private WeightDao weightDao;
 
 	@Override
-	public List<Weight> selectAllWeight() {
-		List<Weight> weight = weightDao.selectAllWeight();
+	public List<Weight> selectAllWeight(int start, int limit) {
+		List<Weight> weight = weightDao.selectAllWeight(start, limit);
 		if (weight.isEmpty()) {
 			logger.info("weight is empty");
 			return weight;

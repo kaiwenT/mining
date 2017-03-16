@@ -26,10 +26,12 @@ public class WeightDao {
 		return list.get(0).getWeight();
 	}
 
-	public List<Weight> selectAllWeight() {
+	public List<Weight> selectAllWeight(int start, int limit) {
 		WeightExample example = new WeightExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
 		List<Weight> weight = weightMapper.selectByExample(example);
 		return weight;
 	}
