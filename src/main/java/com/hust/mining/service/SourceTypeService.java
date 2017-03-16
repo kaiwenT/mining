@@ -7,7 +7,7 @@ import com.hust.mining.model.params.SourceTypeQueryCondition;
 
 public interface SourceTypeService {
 
-	List<SourceType> selectSourceType();
+	List<SourceType> selectSourceType(int start, int limit);
 
 	List<SourceType> selectSourceTypeByName(SourceTypeQueryCondition sourceType);
 

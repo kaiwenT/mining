@@ -30,8 +30,9 @@ public class RoleController {
 	 */
 	@ResponseBody
 	@RequestMapping("/selectAllRole")
-	public Object selectAllRole(HttpServletRequest request) {
-		List<Role> roles = roleService.selectAllRole();
+	public Object selectAllRole(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
+		List<Role> roles = roleService.selectAllRole(start,limit);
 		if (null == roles || roles.size() == 0) {
 			return ResultUtil.errorWithMsg("select empty");
 		}

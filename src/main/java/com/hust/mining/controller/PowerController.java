@@ -23,8 +23,9 @@ public class PowerController {
 
 	@ResponseBody
 	@RequestMapping("/selectAllPower")
-	public Object selectAllPower(HttpServletRequest request) {
-		List<Power> powers = powerService.selectAllPower();
+	public Object selectAllPower(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
+		List<Power> powers = powerService.selectAllPower(start,limit);
 		if (null == powers || powers.size() == 0) {
 			return ResultUtil.errorWithMsg("empty is empty");
 		}

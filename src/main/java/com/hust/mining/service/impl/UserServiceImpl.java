@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	private PowerDao powerDao;
 
 	@Override
-	public List<User> selectAllUserInfo(HttpServletRequest request) {
+	public List<User> selectAllUserInfo(int start, int limit, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String loginName = "gaoyan";
 		List<User> users = userDao.selectByUserName(loginName);
@@ -53,10 +53,8 @@ public class UserServiceImpl implements UserService {
 				roleId.add(userRoleInfo.getRoleId());
 			}
 		}
-		// 如果登录的用户是普通用户 只能查询自己的角色，得到的是这个登录用户的角色ID
-		// 假如此用户的角色ID不是管理员和超级管理员，也就是说
 		if (roleId.contains(1) || roleId.contains(2)) {
-			user = userDao.selectAllUserInfo();
+			user = userDao.selectAllUser(start,limit);
 			return user;
 		}
 		user = userDao.selectByUserName(loginName);

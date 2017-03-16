@@ -20,8 +20,8 @@ public class WebsiteServiceImpl implements WebsiteService {
 	private WebsiteDao websiteDao;
 
 	@Override
-	public List<Website> selectAllWebsite() {
-		List<Website> website = websiteDao.selecAlltWebsite();
+	public List<Website> selectAllWebsite(int start, int limit) {
+		List<Website> website = websiteDao.selecAlltWebsite(start, limit);
 		if (website.isEmpty()) {
 			logger.info("website is empty");
 			return website;

@@ -19,8 +19,8 @@ public class SourceTypeServiceImple implements SourceTypeService {
 	private SourceTypeDao sourceTypeDao;
 
 	@Override
-	public List<SourceType> selectSourceType() {
-		List<SourceType> sourceType = sourceTypeDao.selectSourceType();
+	public List<SourceType> selectSourceType(int start, int limit) {
+		List<SourceType> sourceType = sourceTypeDao.selectSourceType(start, limit);
 		if (sourceType.isEmpty()) {
 			logger.info("sourceTYpe is empty");
 			return null;
@@ -33,7 +33,6 @@ public class SourceTypeServiceImple implements SourceTypeService {
 		List<SourceType> sourceTypes = sourceTypeDao.selectSourceTypeByName(sourceType);
 		if (sourceTypes.isEmpty()) {
 			logger.info("The name is not exist");
-			return null;
 		}
 		return sourceTypes;
 	}

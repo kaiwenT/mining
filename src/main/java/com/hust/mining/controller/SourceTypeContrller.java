@@ -22,8 +22,9 @@ public class SourceTypeContrller {
 
 	@ResponseBody
 	@RequestMapping(value = "/selectAllSourceType")
-	public Object selectAllSourceType() {
-		List<SourceType> sourceType = sourceTypeService.selectSourceType();
+	public Object selectAllSourceType(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit) {
+		List<SourceType> sourceType = sourceTypeService.selectSourceType(start, limit);
 		if (sourceType.isEmpty()) {
 			return ResultUtil.errorWithMsg("sourceType is empty");
 		}

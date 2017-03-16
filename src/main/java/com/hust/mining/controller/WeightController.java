@@ -22,8 +22,9 @@ public class WeightController {
 
 	@ResponseBody
 	@RequestMapping("/selectAllWeight")
-	public Object selectAllWeight() {
-		List<Weight> weight = weightService.selectAllWeight();
+	public Object selectAllWeight(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit) {
+		List<Weight> weight = weightService.selectAllWeight(start, limit);
 		if (weight.isEmpty()) {
 			return ResultUtil.errorWithMsg("weight is empty");
 		}

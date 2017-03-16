@@ -16,6 +16,7 @@ public class UserExample {
 
 	private int row;
 
+
 	public int getPage() {
 		return page;
 	}
