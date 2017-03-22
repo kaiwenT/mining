@@ -4,7 +4,7 @@ function websiteInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/website/selectAllWebsite",
+		url:"http://localhost:8080/website/selectAllWebsite",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -201,7 +201,7 @@ function websiteInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/website/selectByCondition",
+		url:"http://localhost:8080/website/selectByCondition",
 		data:{
 			url:$("#web_url").val(),
 			name:obj2,
@@ -253,7 +253,7 @@ function addWebsite(){
 	//console.log($("#urlWebsite").val())
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/website/insertWebsite",
+		url:"http://localhost:8080/website/insertWebsite",
 		data:{
 			url:$("#urlWebsite").val(),
 			name:$("#nameWibsite").val(),
@@ -299,7 +299,7 @@ function websiteInforChange(){
 	var newId=getCookie("id");
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/website/updateWebsite",
+		url:"http://localhost:8080/website/updateWebsite",
 		data:{
 			id:newId,
 			url:$("#new_url_website").val(),
@@ -338,7 +338,7 @@ $(function(){
 		function websiteInforDel(website_id){
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198:8080/website/deleteWebsite",
+				url:"http://localhost:8080/website/deleteWebsite",
 				data:{
 					websiteId:website_id,
 				} ,

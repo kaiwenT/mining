@@ -5,7 +5,7 @@ function allData (page){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
-        url:"http://182.140.244.198:8080/issue/queryOwnIssue",
+        url:"http://localhost:8080/issue/queryOwnIssue",
 		data:JSON.stringify(GetJsonData()),
 		dataType:"json",
         success:function(msg){
@@ -209,7 +209,7 @@ function searchData(page){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
-        url:"http://182.140.244.198:8080/issue/queryOwnIssue",
+        url:"http://localhost:8080/issue/queryOwnIssue",
         data:JSON.stringify(SearchJsonData()),
         dataType:"json",
         success:function(msg){
@@ -272,8 +272,8 @@ $(function(){
 	
 			$.ajax({
 				type:"post",
-				url:"http://1v5002132k.iask.in:13020/xinheng/issue/delete",
-				//url:"http://182.140.244.198:8080/issue/delete",
+//				url:"http://1v5002132k.iask.in:13020/xinheng/issue/delete",
+				url:"http://localhost:8080/issue/delete",
 				data:{
 					issueId:issueId,
 				} ,
