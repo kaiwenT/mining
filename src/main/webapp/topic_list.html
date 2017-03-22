@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>自有话题</title>
+	<link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/list.js"></script>
+</head>
+<body>
+	<div class="main">
+		<iframe src="g_header.html" width=1000px" height="177px"></iframe>
+		<div class="content">
+			<iframe src="g_left.html" width=200px" height="740px"></iframe>
+			<div class="right float_r">
+				<div class="s_nav">当前位置：<a href="#">话题管理</a>>>自有话题</div>
+				<div class="htlist">
+                	<table width="730" border="0" class="ht_tit">
+                      <tr>
+                        <td width="70" height="50">话题名称：</td>
+                        <td width="110" height="30"><input type="text" class="zyht_name" id="ht_name" /></td>
+                        <td width="130" height="30">创建起始时间：</td>
+                        <td height="30"><input type="date" class="begin_time" id="b_time" /></td>
+                        <td width="130" height="30">创建截止时间：</td>
+                        <td height="30"><input type="date" class="over_time" id="o_time" /></td>
+                      </tr>
+                      <tr>
+                        <td width="70" height="50">创建人：</td>
+                        <td width="110" height="30"><input type="text" class="cjr_name" id="cj_name" /></td>
+                        <td width="130" height="30">最后修改起始时间：</td>
+                        <td height="30"><input type="date" class="begin_time" id="lb_time" /></td>
+                        <td width="130" height="30">最后修改终止时间：</td>
+                        <td height="30"><input type="date" class="over_time" id="lo_time" /></td>
+                      </tr>
+                      <tr>
+                        <td width="70" height="50">&nbsp;</td>
+                        <td width="110" height="30">&nbsp;</td>
+                        <td width="130" height="30">&nbsp;</td>
+                        <td width="134" height="30">&nbsp;</td>
+                        <td width="130" height="30">&nbsp;</td>
+                        <td height="30"><a href="javascript:;" class="btn_search_ckht float_r"><img src="images/search.png" onclick="searchData(1)" /></a></td>
+                      </tr>
+                    </table>
+                  <table width="730" border="0" class="ht_cont">
+                      <tr class="nobd_t">
+                        <td height="50" align="center">序号</td>
+                        <td height="50" align="center">话题名称</td>
+                        <td height="50" align="center">创建人</td>
+                        <td height="50" align="center">创建时间</td>
+                        <td height="50" align="center">最后修改人</td>
+                        <td height="50" align="center">最后修改时间</td>
+                        <td height="50" align="center">操作</td>
+                      </tr>
+                    </table>
+                    <div class="user_num">
+	                  	<input id="up_page" type="button" onclick="changPageOne(-1)" value="上一页" />
+	                  	<input type="button"id="p_1" onclick="pageNumClick(this.id)" value="1"  class="cur" />
+	                  	<input type="button" id="p_2" onclick="pageNumClick(this.id)" value="2" />
+	                  	<input type="button" id="p_3" onclick="pageNumClick(this.id)" value="3" />
+	                  	<input type="button" id="other" name="1" onclick="setPageChangeView()" value="..." />
+	                  	<input id="down_page" type="button"  onclick="changPageOne(1)" value="下一页" name="1"/>
+	                  	<input type="text" class="go_num"/>
+	                  	<input type="button" value="跳转" onclick="changePage()"/>
+	                </div>
+			  </div>
+			</div>
+            <div class="clear"></div>
+		</div>
+        <iframe src="g_footer.html" width=1000px" height="80px"></iframe>
+	</div>
+</body>
+</html>

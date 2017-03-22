@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+	function fun(href){
+			window.parent.location.href=href;
+		}
+	
+</script>
+</head>
+
+<body>
+<div class="main">
+	<div class="left float_l">
+        <div class="tit_bar sb01">话题管理</div>
+        <ul>
+            <li><a href="javascript:;" onclick="fun('create_topic.html')" >创建话题</a></li>
+            <li><a href="javascript:;" onclick="fun('topic_list.html')">自有话题</a></li>
+            <li><a href="#">所有话题</a></li>
+        </ul>
+        <div class="tit_bar sb02">权限管理</div>
+        <ul>
+            <li><a href="javascript:;" onclick="fun('user_infor.html')" >用户管理</a></li>
+            <li><a href="javascript:;" onclick="fun('role_infor.html')">角色管理</a></li>
+            <li><a href="javascript:;" onclick="fun('power_infor.html')">资源管理</a></li>
+        </ul>
+        <div class="tit_bar sb03">系统配置</div>
+        <ul>
+            <li><a href="#">停用词管理</a></li>
+            <li><a href="#">未知URL管理</a></li>
+            <li><a href="javascript:;" onclick="fun('website_infor.html')">映射表管理</a></li>
+            <li><a href="javascript:;" onclick="fun('weight_infor.html')">权重表管理</a></li>
+            <li><a href="javascript:;" onclick="fun('type_infor.html')">类型管理</a></li>
+        </ul>
+        <div class="tit_bar sb04">账号管理</div>
+        <ul>
+            <li><a href="#">个人信息</a></li>
+            <li><a href="#">更改密码</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javasctipr">
+	$(function(){
+		$(".left ul li ").click(function(event){
+			$(".left ul li").removeClass("current");
+			$(this).addClass("current").siblings().removeClass("current");
+		})
+	})	
+</script>
