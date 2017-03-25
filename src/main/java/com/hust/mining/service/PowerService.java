@@ -5,10 +5,9 @@ import java.util.List;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.params.PowerQueryCondition;
 
-
 public interface PowerService {
 
-	List<Power> selectAllPower();
+	List<Power> selectAllPower(int start, int limit);
 
 	List<Power> selectOnePowerInfo(PowerQueryCondition powerName);
 

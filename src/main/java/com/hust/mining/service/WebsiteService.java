@@ -7,9 +7,9 @@ import com.hust.mining.model.params.WebsiteQueryCondition;
 
 public interface WebsiteService {
 
-	List<Website> selectAllWebsite();
+	List<Website> selectAllWebsite(int start, int limit);
 
-	List<Website> selectByCondition(WebsiteQueryCondition  website);
+	List<Website> selectByCondition(WebsiteQueryCondition website);
 
 	boolean deleteWebsiteById(long id);
 

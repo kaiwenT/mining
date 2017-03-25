@@ -43,10 +43,12 @@ public class WebsiteDao {
 		return list.get(0);
 	}
 
-	public List<Website> selecAlltWebsite() {
+	public List<Website> selecAlltWebsite(int start, int limit) {
 		WebsiteExample example = new WebsiteExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
 		List<Website> website = websiteMapper.selectByExample(example);
 		return website;
 	}

@@ -50,12 +50,8 @@ public class PowerDao {
 		if (!StringUtils.isBlank(power.getName())) {
 			criteria.andPowerNameLike("%" + power.getName() + "%");
 		}
-		if (power.getStart() != 0) {
-			example.setStart(power.getStart());
-		}
-		if (power.getLimit() != 0) {
-			example.setLimit(power.getLimit());
-		}
+		example.setStart(power.getStart());
+		example.setLimit(power.getLimit());
 		List<Power> powers = powerMapper.selectByExample(example);
 		return powers;
 
@@ -65,6 +61,16 @@ public class PowerDao {
 		PowerExample example = new PowerExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andPowerIdIsNotNull();
+		List<Power> powers = powerMapper.selectByExample(example);
+		return powers;
+	}
+
+	public List<Power> selectAllPower(int start, int limit) {
+		PowerExample example = new PowerExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andPowerIdIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
 		List<Power> powers = powerMapper.selectByExample(example);
 		return powers;
 	}

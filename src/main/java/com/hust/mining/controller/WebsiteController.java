@@ -22,8 +22,9 @@ public class WebsiteController {
 
 	@ResponseBody
 	@RequestMapping("/selectAllWebsite")
-	public Object selectAllWebsite() {
-		List<Website> website = websiteService.selectAllWebsite();
+	public Object selectAllWebsite(@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "limit", required = true) int limit) {
+		List<Website> website = websiteService.selectAllWebsite(start, limit);
 		if (website.isEmpty()) {
 			return ResultUtil.errorWithMsg("website is empty");
 		}

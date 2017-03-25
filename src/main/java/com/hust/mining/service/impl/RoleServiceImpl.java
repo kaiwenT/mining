@@ -15,6 +15,7 @@ import com.hust.mining.dao.UserRoleDao;
 import com.hust.mining.model.Power;
 import com.hust.mining.model.Role;
 import com.hust.mining.model.RolePower;
+import com.hust.mining.model.UserRole;
 import com.hust.mining.model.params.RoleQueryCondition;
 import com.hust.mining.service.RoleService;
 
@@ -31,8 +32,8 @@ public class RoleServiceImpl implements RoleService {
 	private UserRoleDao userRoleDao;
 
 	@Override
-	public List<Role> selectAllRole() {
-		List<Role> roles = roleDao.selectRoles();
+	public List<Role> selectAllRole(int start, int limit) {
+		List<Role> roles = roleDao.selectRoles(start, limit);
 		if (roles.isEmpty()) {
 			logger.info("role  is empty");
 		}
@@ -45,6 +46,15 @@ public class RoleServiceImpl implements RoleService {
 		List<Role> roles = roleDao.selectByLikeRoleName(role);
 		if (roles.isEmpty()) {
 			logger.info("roleName is not exist");
+		}
+		return roles;
+	}
+
+	@Override
+	public List<Role> selectRole() {
+		List<Role> roles = roleDao.selectRole();
+		if (roles.isEmpty()) {
+			logger.info("role  is empty");
 		}
 		return roles;
 	}
@@ -68,19 +78,30 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public boolean deleteRoleInfoById(int roleId) {
-		int statue = userRoleDao.deleteUserRoleByRoleId(roleId);
-		if (statue == 0) {
-			logger.info("delete userRole is error");
-			return false;
+		// 首先去查找一下是否有这个角色所属的信息，有的话那就删除没有的话就不需要删除
+		List<UserRole> userDao = userRoleDao.selectUserRoleByRoleId(roleId);
+		if (!userDao.isEmpty()) {
+			int statue = userRoleDao.deleteUserRoleByRoleId(roleId);
+			if (statue == 0) {
+				logger.info("delete userRole is error");
+				return false;
+			}
 		}
-		int rolePowerStatus = rolePowerDao.deleteRolePowerByRoleId(roleId);
-		if (rolePowerStatus == 0) {
-			logger.info("delete rolepower about roleidinfo is error");
-			return false;
+		List<RolePower> rolePowers = rolePowerDao.selectRolePowerByRoleId(roleId);
+		if (!rolePowers.isEmpty()) {
+			int rolePowerStatus = rolePowerDao.deleteRolePowerByRoleId(roleId);
+			if (rolePowerStatus == 0) {
+				logger.info("delete rolepower about roleidinfo is error");
+				return false;
+			}
 		}
-		int roleStatus = roleDao.deleteByPrimaryKey(roleId);
-		if (roleStatus == 0) {
-			return false;
+		List<Role> role = roleDao.selectRoleById(roleId);
+		if (!role.isEmpty()) {
+			int roleStatus = roleDao.deleteByPrimaryKey(roleId);
+			if (roleStatus == 0) {
+				logger.info("delete role is error");
+				return false;
+			}
 		}
 		return true;
 	}
@@ -191,7 +212,7 @@ public class RoleServiceImpl implements RoleService {
 	 */
 	@Override
 	public List<Role> selectNotHaveRole(int roleId) {
-		List<Role> roles = roleDao.selectRoles();
+		List<Role> roles = roleDao.selectRole();
 		List<Role> role = new ArrayList<>();
 		for (Role roleInfo : roles) {
 			if (roleInfo.getRoleId() != roleId) {
