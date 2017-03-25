@@ -51,7 +51,7 @@ function accordTimeData(){
 	$.ajax({
 		type:"post",
 		//url:"http://1v5002132k.iask.in:13020/xinheng/issue/miningByTime",
-		url:"http://localhost:8080/issue/miningByTime",
+		url:"http://182.140.244.198:8080/issue/miningByTime",
 		data:{
 			startTime: strStart,
 			endTime: strEnd
@@ -89,7 +89,7 @@ function accordFileData(){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/miningByFile",
-        url:"http://localhost:8080/issue/miningByFile",
+        url:"http://182.140.244.198:8080/issue/miningByFile",
         data:{
         	fileIds: "01346567-d049-4f90-818c-080effc5164a"
         } ,
@@ -119,7 +119,7 @@ function addLayData(){alert("lll");
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
-        url:"http://localhost:8080/result/combineSets",
+        url:"http://182.140.244.198:8080/result/combineSets",
         data:{
             "startTime":" ",
             "endTime":" "
@@ -145,7 +145,7 @@ function deleteLayData(){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
-        url:"http://localhost:8080/result/combineSets",
+        url:"http://182.140.244.198:8080/result/combineSets",
         data:{
             "startTime":" ",
             "endTime":" "

@@ -4,7 +4,7 @@ function userInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"get",
-		url:"http://localhost:8080/user/selectAllUser",
+		url:"http://182.140.244.198:8080/user/selectAllUser",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -247,7 +247,7 @@ function userInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://localhost:8080/user/getUserInfoByPageLimit",
+		url:"http://182.140.244.198:8080/user/getUserInfoByPageLimit",
 		data:{
 			userName:obj1,
 			trueName:obj2,
@@ -304,7 +304,7 @@ function userInforAdd(){
 function addUser(){
 	$.ajax({
 		type:"post",
-		url:"http://localhost:8080/user/insertUserInfo",
+		url:"http://182.140.244.198:8080/user/insertUserInfo",
 		data:{
 			userName:$("#userName").val(),
 			trueName:$("#trueName").val(),
@@ -352,7 +352,7 @@ function userInforChange(){
 	var newPassword=getCookie("passWord");
 	$.ajax({
 		type:"post",
-		url:"http://localhost:8080/user/updateUserInfo",
+		url:"http://182.140.244.198:8080/user/updateUserInfo",
 		data:{
 			userId:newId,
 			userName:$("#new_user_type").val(),
@@ -396,7 +396,7 @@ $(function(){
 	
 			$.ajax({
 				type:"post",
-				url:"http://localhost:8080/user/deleteUserInfoById",
+				url:"http://182.140.244.198:8080/user/deleteUserInfoById",
 				data:{
 					userId:user_id,
 				} ,
