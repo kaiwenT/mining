@@ -16,6 +16,7 @@ import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.util.ResultUtil;
 
@@ -25,6 +26,8 @@ public class ResultController {
     private ResultService resultService;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private RedisService redisService;
 
     @ResponseBody
     @RequestMapping("/getCountResult")
@@ -34,11 +37,11 @@ public class ResultController {
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> list = resultService.getCountResultById(resultId, issueId);
+        List<String[]> list = resultService.getCountResultById(resultId, issueId, request);
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
-        request.getSession().setAttribute(KEY.RESULT_ID, resultId);
+        redisService.setString(KEY.RESULT_ID, resultId, request);
         return ResultUtil.success(list);
     }
 
@@ -63,7 +66,7 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/combineSets")
     public Object combineSets(int[] sets, HttpServletRequest request) {
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
@@ -81,7 +84,7 @@ public class ResultController {
     @ResponseBody
     @RequestMapping("/queryResultList")
     public Object queryResultList(HttpServletRequest request) {
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
         }

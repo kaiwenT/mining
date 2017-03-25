@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.UserMapper;
 import com.hust.mining.model.User;
 import com.hust.mining.model.UserExample;
 import com.hust.mining.model.UserExample.Criteria;
 import com.hust.mining.model.params.UserQueryCondition;
-
+@Repository
 public class UserDao {
 
 	@Autowired

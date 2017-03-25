@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.model.IssueFile;
-import com.hust.mining.model.IssueFileWithBLOBs;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.service.FileService;
+import com.hust.mining.service.IssueService;
 import com.hust.mining.service.UserService;
-import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 
+@Service
 public class FileServiceImpl implements FileService {
     /**
      * Logger for this class
@@ -35,6 +35,8 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private IssueService issueService;
 
     @Override
     public int insert(Condition con, HttpServletRequest request) {
@@ -53,8 +55,8 @@ public class FileServiceImpl implements FileService {
         }
 
         String user = userService.getCurrentUser(request);
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
-        IssueFileWithBLOBs issueFile = new IssueFileWithBLOBs();
+        String issueId = issueService.getCurrentIssueId(request);
+        IssueFile issueFile = new IssueFile();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());
         issueFile.setCreator(user);
@@ -63,14 +65,7 @@ public class FileServiceImpl implements FileService {
         issueFile.setUploadTime(new Date());
         issueFile.setSize((int) (file.getSize() / 1024));
         issueFile.setSourceType(con.getSourceType());
-        try {
-            issueFile.setContent(ConvertUtil.convertToBytes(list));
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            logger.error("exception occur during inserting file into DB\t" + e.toString());
-            return 0;
-        }
-        return fileDao.insert(issueFile);
+        return fileDao.insert(issueFile, list);
     }
 
     @Override
@@ -83,24 +78,6 @@ public class FileServiceImpl implements FileService {
     public List<IssueFile> queryFilesByIssueId(String issueId) {
         // TODO Auto-generated method stub
         return fileDao.queryFilesByIssueId(issueId);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<String[]> combineFilesContentOnSameIssueId(String issueId) {
-        // TODO Auto-generated method stub
-        List<IssueFileWithBLOBs> files = fileDao.queryFilesWithBOLOBsByIssueId(issueId);
-        List<String[]> list = new ArrayList<String[]>();
-        try {
-            for (IssueFileWithBLOBs file : files) {
-                List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(file.getContent());
-                list.addAll(content);
-            }
-        } catch (Exception e) {
-            logger.error("合并issueid:{}相关的文件失败 \t" + e.toString(), issueId);
-            return null;
-        }
-        return list;
     }
 
 }

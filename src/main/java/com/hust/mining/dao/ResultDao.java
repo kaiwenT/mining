@@ -2,67 +2,73 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.dao.mapper.ResultMapper;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultExample;
 import com.hust.mining.model.ResultExample.Criteria;
-import com.hust.mining.model.ResultKey;
-import com.hust.mining.model.ResultWithBLOBs;
-import com.hust.mining.util.ConvertUtil;
+import com.hust.mining.model.ResultWithContent;
+import com.hust.mining.util.FileUtil;
 
+@Repository
 public class ResultDao {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ResultDao.class);
 
     @Autowired
     private ResultMapper resultMapper;
 
-    @SuppressWarnings("unchecked")
-    public List<int[]> getCountResultById(String resultId) {
-        ResultKey key = new ResultKey();
-        key.setRid(resultId);
-        List<int[]> list = null;
-        try {
-            list = (List<int[]>) ConvertUtil
-                    .convertBytesToObject(resultMapper.selectByPrimaryKey(key).getModifiedCountResult());
-        } catch (Exception e) {
-            logger.warn("convert countresult error：{}", e.toString());
-        }
-        return list;
-    }
-
-    public ResultWithBLOBs getResultWithBLOBsById(String resultId, String issueId) {
+    public List<String[]> getResultConentById(String resultId, String issueId, String path) {
         ResultExample example = new ResultExample();
         Criteria cri = example.createCriteria();
         cri.andRidEqualTo(resultId);
         cri.andIssueIdEqualTo(issueId);
-        List<ResultWithBLOBs> list = resultMapper.selectByExampleWithBLOBs(example);
+        List<Result> list = resultMapper.selectByExample(example);
         if (null == list || list.size() == 0) {
             return null;
         }
-        return list.get(0);
+        List<String[]> clusterResult = FileUtil.read(path + resultId);
+        return clusterResult;
     }
 
-    public int updateResultWithBLOBs(ResultWithBLOBs result) {
-        return resultMapper.updateByPrimaryKeyWithBLOBs(result);
+    public int updateResult(ResultWithContent rc) {
+        String name = rc.getResult().getRid();
+        boolean b1 = FileUtil.write(DIRECTORY.MODIFY_CLUSTER + name, rc.getModiCluster());
+        boolean b2 = FileUtil.write(DIRECTORY.MODIFY_COUNT + name, rc.getModiCount());
+        if (b1 && b2) {
+            Result result = rc.getResult();
+            return resultMapper.updateByPrimaryKeySelective(result);
+        }
+        return 0;
     }
 
     public int delResultById(String resultId) {
-        ResultKey key = new ResultKey();
-        key.setRid(resultId);
-        int del = resultMapper.deleteByPrimaryKey(key);
+        FileUtil.delete(DIRECTORY.CONTENT + resultId);
+        FileUtil.delete(DIRECTORY.MODIFY_CLUSTER + resultId);
+        FileUtil.delete(DIRECTORY.MODIFY_COUNT + resultId);
+        FileUtil.delete(DIRECTORY.ORIG_CLUSTER + resultId);
+        FileUtil.delete(DIRECTORY.ORIG_COUNT + resultId);
+        int del = resultMapper.deleteByPrimaryKey(resultId);
         return del;
     }
 
-    public int insert(ResultWithBLOBs result) {
-        int insert = resultMapper.insert(result);
-        return insert;
+    public int insert(ResultWithContent rc) {
+        String name = rc.getResult().getRid();
+        String contentpath = DIRECTORY.CONTENT + name;
+        boolean b1 = FileUtil.write(contentpath, rc.getContent());
+        String clusterpath = DIRECTORY.ORIG_CLUSTER + name;
+        boolean b2 = FileUtil.write(clusterpath, rc.getOrigCluster());
+        String countpath = DIRECTORY.ORIG_COUNT + name;
+        boolean b3 = FileUtil.write(countpath, rc.getOrigCount());
+        String modicluster = DIRECTORY.MODIFY_CLUSTER + name;
+        boolean b4 = FileUtil.write(modicluster, rc.getOrigCluster());
+        String modicount = DIRECTORY.MODIFY_COUNT + name;
+        boolean b5 = FileUtil.write(modicount, rc.getOrigCount());
+        if (b1 && b2 && b3 && b4 && b5) {
+            return resultMapper.insert(rc.getResult());
+        }
+        return 0;
     }
 
     public List<Result> queryResultsByIssueId(String issueId) {

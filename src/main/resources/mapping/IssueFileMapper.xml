@@ -12,10 +12,6 @@
 		<result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
 		<result column="creator" jdbcType="VARCHAR" property="creator" />
 	</resultMap>
-	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-		type="com.hust.mining.model.IssueFileWithBLOBs">
-		<result column="content" jdbcType="LONGVARBINARY" property="content" />
-	</resultMap>
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -30,7 +26,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -62,7 +59,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -80,29 +78,10 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		file_id, file_name, source_type, size, line_number, issue_id, upload_time,
+		file_id, file_name, source_type, size, line_number,
+		issue_id, upload_time,
 		creator
 	</sql>
-	<sql id="Blob_Column_List">
-		content
-	</sql>
-	<select id="selectByExampleWithBLOBs" parameterType="com.hust.mining.model.IssueFileExample"
-		resultMap="ResultMapWithBLOBs">
-		select
-		<if test="distinct">
-			distinct
-		</if>
-		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
-		from file
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-		<if test="orderByClause != null">
-			order by ${orderByClause}
-		</if>
-	</select>
 	<select id="selectByExample" parameterType="com.hust.mining.model.IssueFileExample"
 		resultMap="BaseResultMap">
 		select
@@ -118,16 +97,14 @@
 			order by ${orderByClause}
 		</if>
 	</select>
-	<select id="selectByPrimaryKey" parameterType="com.hust.mining.model.IssueFileKey"
-		resultMap="ResultMapWithBLOBs">
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
 		select 'true' as QUERYID,
 		<include refid="Base_Column_List" />
-		,
-		<include refid="Blob_Column_List" />
 		from file
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="com.hust.mining.model.IssueFileKey">
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from file
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</delete>
@@ -137,19 +114,21 @@
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
-		insert into file (file_id, file_name, source_type,
+	<insert id="insert" parameterType="com.hust.mining.model.IssueFile">
+		insert into file (file_id,
+		file_name, source_type,
 		size, line_number, issue_id,
-		upload_time, creator, content
-		)
-		values (#{fileId,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR},
+		upload_time,
+		creator)
+		values (#{fileId,jdbcType=VARCHAR},
+		#{fileName,jdbcType=VARCHAR},
 		#{sourceType,jdbcType=VARCHAR},
-		#{size,jdbcType=INTEGER}, #{lineNumber,jdbcType=INTEGER}, #{issueId,jdbcType=VARCHAR},
-		#{uploadTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
-		#{content,jdbcType=LONGVARBINARY}
-		)
+		#{size,jdbcType=INTEGER}, #{lineNumber,jdbcType=INTEGER},
+		#{issueId,jdbcType=VARCHAR},
+		#{uploadTime,jdbcType=TIMESTAMP},
+		#{creator,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
+	<insert id="insertSelective" parameterType="com.hust.mining.model.IssueFile">
 		insert into file
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="fileId != null">
@@ -176,9 +155,6 @@
 			<if test="creator != null">
 				creator,
 			</if>
-			<if test="content != null">
-				content,
-			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="fileId != null">
@@ -204,9 +180,6 @@
 			</if>
 			<if test="creator != null">
 				#{creator,jdbcType=VARCHAR},
-			</if>
-			<if test="content != null">
-				#{content,jdbcType=LONGVARBINARY},
 			</if>
 		</trim>
 	</insert>
@@ -244,25 +217,7 @@
 			<if test="record.creator != null">
 				creator = #{record.creator,jdbcType=VARCHAR},
 			</if>
-			<if test="record.content != null">
-				content = #{record.content,jdbcType=LONGVARBINARY},
-			</if>
 		</set>
-		<if test="_parameter != null">
-			<include refid="Update_By_Example_Where_Clause" />
-		</if>
-	</update>
-	<update id="updateByExampleWithBLOBs" parameterType="map">
-		update file
-		set file_id = #{record.fileId,jdbcType=VARCHAR},
-		file_name = #{record.fileName,jdbcType=VARCHAR},
-		source_type = #{record.sourceType,jdbcType=VARCHAR},
-		size = #{record.size,jdbcType=INTEGER},
-		line_number = #{record.lineNumber,jdbcType=INTEGER},
-		issue_id = #{record.issueId,jdbcType=VARCHAR},
-		upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
-		creator = #{record.creator,jdbcType=VARCHAR},
-		content = #{record.content,jdbcType=LONGVARBINARY}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -270,18 +225,25 @@
 	<update id="updateByExample" parameterType="map">
 		update file
 		set file_id = #{record.fileId,jdbcType=VARCHAR},
-		file_name = #{record.fileName,jdbcType=VARCHAR},
-		source_type = #{record.sourceType,jdbcType=VARCHAR},
-		size = #{record.size,jdbcType=INTEGER},
-		line_number = #{record.lineNumber,jdbcType=INTEGER},
-		issue_id = #{record.issueId,jdbcType=VARCHAR},
-		upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
-		creator = #{record.creator,jdbcType=VARCHAR}
+		file_name =
+		#{record.fileName,jdbcType=VARCHAR},
+		source_type =
+		#{record.sourceType,jdbcType=VARCHAR},
+		size =
+		#{record.size,jdbcType=INTEGER},
+		line_number =
+		#{record.lineNumber,jdbcType=INTEGER},
+		issue_id =
+		#{record.issueId,jdbcType=VARCHAR},
+		upload_time =
+		#{record.uploadTime,jdbcType=TIMESTAMP},
+		creator =
+		#{record.creator,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.IssueFile">
 		update file
 		<set>
 			<if test="fileName != null">
@@ -305,32 +267,21 @@
 			<if test="creator != null">
 				creator = #{creator,jdbcType=VARCHAR},
 			</if>
-			<if test="content != null">
-				content = #{content,jdbcType=LONGVARBINARY},
-			</if>
 		</set>
-		where file_id = #{fileId,jdbcType=VARCHAR}
-	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hust.mining.model.IssueFileWithBLOBs">
-		update file
-		set file_name = #{fileName,jdbcType=VARCHAR},
-		source_type = #{sourceType,jdbcType=VARCHAR},
-		size = #{size,jdbcType=INTEGER},
-		line_number = #{lineNumber,jdbcType=INTEGER},
-		issue_id = #{issueId,jdbcType=VARCHAR},
-		upload_time = #{uploadTime,jdbcType=TIMESTAMP},
-		creator = #{creator,jdbcType=VARCHAR},
-		content = #{content,jdbcType=LONGVARBINARY}
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.IssueFile">
 		update file
-		set file_name = #{fileName,jdbcType=VARCHAR},
-		source_type = #{sourceType,jdbcType=VARCHAR},
+		set
+		file_name = #{fileName,jdbcType=VARCHAR},
+		source_type =
+		#{sourceType,jdbcType=VARCHAR},
 		size = #{size,jdbcType=INTEGER},
 		line_number = #{lineNumber,jdbcType=INTEGER},
-		issue_id = #{issueId,jdbcType=VARCHAR},
-		upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+		issue_id =
+		#{issueId,jdbcType=VARCHAR},
+		upload_time =
+		#{uploadTime,jdbcType=TIMESTAMP},
 		creator = #{creator,jdbcType=VARCHAR}
 		where file_id = #{fileId,jdbcType=VARCHAR}
 	</update>

@@ -4,14 +4,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.IssueMapper;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
 import com.hust.mining.model.IssueExample.Criteria;
-import com.hust.mining.model.IssueKey;
 import com.hust.mining.model.params.IssueQueryCondition;
 
+@Repository
 public class IssueDao {
 
     @Autowired
@@ -26,9 +27,7 @@ public class IssueDao {
     }
 
     public Issue selectById(String issueId) {
-        IssueKey key = new IssueKey();
-        key.setIssueId(issueId);
-        return issueMapper.selectByPrimaryKey(key);
+        return issueMapper.selectByPrimaryKey(issueId);
     }
 
     public int updateIssueInfo(Issue issue) {

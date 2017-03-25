@@ -1,6 +1,12 @@
 package com.hust.mining.constant;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class Constant {
+
+    private void init() {
+        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent);
+    }
 
     public final static String INVALID_TIME = "1970-01-01";
     public final static String EMOTION_EN = "emotion";
@@ -31,9 +37,15 @@ public class Constant {
     public final static String TYPE_MODIFIED = "modified";
 
     public static class KEY {
+        public final static String SESSION_ID = "JSESSIONID";
         public final static String ISSUE_ID = "issueId";
         public final static String RESULT_ID = "resultId";
         public static final String USER_NAME = "username";
+        public static final String REDIS_CLUSTER_RESULT = "redis_cluster_result";
+        public static final String REDIS_COUNT_RESULT = "redis_count_result";
+        public static final String REDIS_CONTENT = "redis_content";
+        public static final String MINING_AMOUNT_TYPE = "typeAmount";
+        public static final String MINING_AMOUNT_MEDIA = "mediaAmount";
     }
 
     public static class Index {
@@ -82,6 +94,39 @@ public class Constant {
         public static final String SHIPING = "视频";
         public static final String WEIBO = "微博";
         public static final String WEIZHI = "未知";
+    }
+
+    @Value("${upload_file}")
+    private String dirFile;
+    @Value("${orig_cluster}")
+    private String dirOrigCluster;
+    @Value("${orig_count}")
+    private String dirOrigCount;
+    @Value("${modify_cluster}")
+    private String dirModiCluster;
+    @Value("${modify_count}")
+    private String dirModiCount;
+    @Value("${content}")
+    private String dirContent;
+
+    public static class DIRECTORY {
+
+        public static String FILE;
+        public static String ORIG_CLUSTER;
+        public static String ORIG_COUNT;
+        public static String MODIFY_CLUSTER;
+        public static String MODIFY_COUNT;
+        public static String CONTENT;
+
+        public static void init(String dirFile, String dirOrigCluster, String dirOrigCount, String dirModiCluster,
+                String dirModiCount, String dirContent) {
+            FILE = dirFile;
+            ORIG_CLUSTER = dirOrigCluster;
+            ORIG_COUNT = dirOrigCount;
+            MODIFY_CLUSTER = dirModiCluster;
+            MODIFY_COUNT = dirModiCount;
+            CONTENT = dirContent;
+        }
     }
 
 }

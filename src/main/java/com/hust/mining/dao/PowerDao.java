@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.PowerMapper;
 import com.hust.mining.model.Power;
@@ -11,6 +12,7 @@ import com.hust.mining.model.PowerExample;
 import com.hust.mining.model.PowerExample.Criteria;
 import com.hust.mining.model.params.PowerQueryCondition;
 
+@Repository
 public class PowerDao {
 
 	@Autowired

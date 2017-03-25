@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.WebsiteMapper;
 import com.hust.mining.model.Website;
 import com.hust.mining.model.WebsiteExample;
 import com.hust.mining.model.WebsiteExample.Criteria;
 import com.hust.mining.model.params.WebsiteQueryCondition;
-
+@Repository
 public class WebsiteDao {
 
 	@Autowired

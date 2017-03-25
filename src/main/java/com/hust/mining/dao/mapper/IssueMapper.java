@@ -2,7 +2,6 @@ package com.hust.mining.dao.mapper;
 
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueExample;
-import com.hust.mining.model.IssueKey;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +10,7 @@ public interface IssueMapper {
 
     int deleteByExample(IssueExample example);
 
-    int deleteByPrimaryKey(IssueKey key);
+    int deleteByPrimaryKey(String issueId);
 
     int insert(Issue record);
 
@@ -19,7 +18,7 @@ public interface IssueMapper {
 
     List<Issue> selectByExample(IssueExample example);
 
-    Issue selectByPrimaryKey(IssueKey key);
+    Issue selectByPrimaryKey(String issueId);
 
     int updateByExampleSelective(@Param("record") Issue record, @Param("example") IssueExample example);
 

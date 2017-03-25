@@ -2,8 +2,6 @@ package com.hust.mining.dao.mapper;
 
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.IssueFileExample;
-import com.hust.mining.model.IssueFileKey;
-import com.hust.mining.model.IssueFileWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,27 +10,21 @@ public interface IssueFileMapper {
 
     int deleteByExample(IssueFileExample example);
 
-    int deleteByPrimaryKey(IssueFileKey key);
+    int deleteByPrimaryKey(String fileId);
 
-    int insert(IssueFileWithBLOBs record);
+    int insert(IssueFile record);
 
-    int insertSelective(IssueFileWithBLOBs record);
-
-    List<IssueFileWithBLOBs> selectByExampleWithBLOBs(IssueFileExample example);
+    int insertSelective(IssueFile record);
 
     List<IssueFile> selectByExample(IssueFileExample example);
 
-    IssueFileWithBLOBs selectByPrimaryKey(IssueFileKey key);
+    IssueFile selectByPrimaryKey(String fileId);
 
-    int updateByExampleSelective(@Param("record") IssueFileWithBLOBs record, @Param("example") IssueFileExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") IssueFileWithBLOBs record, @Param("example") IssueFileExample example);
+    int updateByExampleSelective(@Param("record") IssueFile record, @Param("example") IssueFileExample example);
 
     int updateByExample(@Param("record") IssueFile record, @Param("example") IssueFileExample example);
 
-    int updateByPrimaryKeySelective(IssueFileWithBLOBs record);
-
-    int updateByPrimaryKeyWithBLOBs(IssueFileWithBLOBs record);
+    int updateByPrimaryKeySelective(IssueFile record);
 
     int updateByPrimaryKey(IssueFile record);
 }

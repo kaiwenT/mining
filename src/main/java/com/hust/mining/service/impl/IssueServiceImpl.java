@@ -2,39 +2,37 @@ package com.hust.mining.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
 import com.hust.mining.model.Issue;
-import com.hust.mining.model.IssueFileWithBLOBs;
-import com.hust.mining.model.ResultWithBLOBs;
+import com.hust.mining.model.IssueFile;
+import com.hust.mining.model.Result;
+import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
-import com.hust.mining.service.ClusterService;
 import com.hust.mining.service.IssueService;
-import com.hust.mining.service.StatisticService;
+import com.hust.mining.service.MiningService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(IssueServiceImpl.class);
 
     @Autowired
     private IssueDao issueDao;
@@ -43,16 +41,16 @@ public class IssueServiceImpl implements IssueService {
     @Autowired
     private UserService userService;
     @Autowired
-    private ClusterService clusterService;
-    @Autowired
-    private StatisticService statService;
+    private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public int createIssue(String issueName, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = "gaoyan";
+        String user = userService.getCurrentUser(request);
         Issue issue = new Issue();
         issue.setIssueId(UUID.randomUUID().toString());
         issue.setIssueName(issueName);
@@ -62,7 +60,7 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastUpdateTime(issue.getCreateTime());
         int insert = issueDao.insert(issue);
         if (insert > 0) {
-            request.getSession().setAttribute(KEY.ISSUE_ID, issue.getIssueId());
+            redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
         }
         return insert;
     }
@@ -70,11 +68,11 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public String getCurrentIssueId(HttpServletRequest request) {
         // TODO Auto-generated method stub
-        Object obj = request.getSession().getAttribute(KEY.ISSUE_ID);
+        String obj = redisService.getString(KEY.ISSUE_ID, request);
         if (null == obj) {
             return StringUtils.EMPTY;
         }
-        return "15cc68df-8b93-4273-9932-acf853b95131";
+        return obj;
     }
 
     @Override
@@ -90,7 +88,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int updateIssueInfo(Issue issue, HttpServletRequest request) {
+    public int updateIssueInfo(Issue issue,HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         issue.setLastOperator(user);
@@ -99,9 +97,9 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int deleteIssueById(String issueId, HttpServletRequest request) {
+    public int deleteIssueById(String issueId,HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String user = "gaoyan";
+        String user = userService.getCurrentUser(request);
         return issueDao.deleteIssueById(issueId, user);
     }
 
@@ -109,108 +107,139 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setStart(start);
         con.setEnd(end);
-        List<IssueFileWithBLOBs> files = fileDao.queryFilesByCondition(con);
-        ResultWithBLOBs result = mining(files);
-        if (null == result) {
+        List<IssueFile> files = fileDao.queryFilesByCondition(con);
+        String[] filenames = new String[files.size()];
+        for (int i = 0; i < files.size(); i++) {
+            filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
+        }
+        List<String[]> content = fileDao.getFileContent(filenames);
+        if (null == content) {
             return null;
         }
-        String user = "gaoyan";
+        Map<String, Object> res = mining(content);
+        if (null == res) {
+            return null;
+        }
+        // 开始插入数据库
+        String user = userService.getCurrentUser(request);
+        content = (List<String[]>) res.get("content");
+        List<int[]> count = (List<int[]>) res.get("countResult");
+        List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
+        Result result = new Result();
+        result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
-        int update = resultDao.insert(result);
+        ResultWithContent rc = new ResultWithContent();
+        rc.setResult(result);
+        rc.setContent(content);
+        rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
+        rc.setOrigCount(ConvertUtil.toStringList(count));
+        int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
         }
-        request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
+        // 插入数据库完成
+
+        // 开始更新issue状态
+        redisService.setString(KEY.RESULT_ID, result.getRid(), request);
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
-        try {
-            List<int[]> count = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<String[]> list = new ArrayList<String[]>();
-            for (int[] array : count) {
-                String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
-                String[] row = new String[old.length + 1];
-                System.arraycopy(old, 0, row, 0, old.length);
-                row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
-                list.add(row);
-            }
-            return list;
-        } catch (Exception e) {
-            logger.info("exception occur when convert:{}", e.toString());
+        // 状态更新完成
+
+        // 开始根据统计结果映射源数据
+        List<String[]> list = new ArrayList<String[]>();
+        for (int[] array : count) {
+            String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
+            String[] row = new String[old.length + 1];
+            System.arraycopy(old, 0, row, 1, old.length);
+            row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
+            list.add(row);
         }
-        return null;
+        // 映射完成
+        redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        redisService.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster(), request);
+        redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
+        return list;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
         con.setFileIds(fileIds);
-        List<IssueFileWithBLOBs> files = fileDao.queryFilesByCondition(con);
-        ResultWithBLOBs result = mining(files);
-        if (null == result) {
+        List<IssueFile> files = fileDao.queryFilesByCondition(con);
+        String[] filenames = new String[files.size()];
+        for (int i = 0; i < files.size(); i++) {
+            filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
+        }
+        List<String[]> content = fileDao.getFileContent(filenames);
+        if (null == content) {
             return null;
         }
-        String user = "gaoyan";
+        Map<String, Object> res = mining(content);
+        if (null == res) {
+            return null;
+        }
+        // 开始插入数据库
+        String user = userService.getCurrentUser(request);
+        content = (List<String[]>) res.get("content");
+        List<int[]> count = (List<int[]>) res.get("countResult");
+        List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
+        Result result = new Result();
+        result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
-        int update = resultDao.insert(result);
+        ResultWithContent rc = new ResultWithContent();
+        rc.setResult(result);
+        rc.setContent(content);
+        rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
+        rc.setOrigCount(ConvertUtil.toStringList(count));
+        int update = resultDao.insert(rc);
         if (update <= 0) {
             return null;
         }
-        request.getSession().setAttribute(KEY.RESULT_ID, result.getRid());
+        // 插入数据库完成
+
+        // 开始更新issue状态
+        redisService.setString(KEY.RESULT_ID, result.getRid(), request);
         Issue issue = new Issue();
         issue.setIssueId(issueId);
         issue.setLastOperator(user);
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
-        try {
-            List<int[]> count = (List<int[]>) ConvertUtil.convertBytesToObject(result.getModifiedCountResult());
-            List<String[]> content = (List<String[]>) ConvertUtil.convertBytesToObject(result.getContent());
-            List<String[]> list = new ArrayList<String[]>();
-            for (int[] array : count) {
-                String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
-                String[] row = new String[old.length + 1];
-                System.arraycopy(old, 0, row, 0, old.length);
-                row[old.length] = array[Index.COUNT_ITEM_AMOUNT] + "";
-                list.add(row);
-            }
-            return list;
-        } catch (Exception e) {
-            logger.info("exception occur when convert:{}", e.toString());
+        // 状态更新完成
+
+        // 开始根据统计结果映射源数据
+        List<String[]> list = new ArrayList<String[]>();
+        for (int[] array : count) {
+            String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
+            String[] row = new String[old.length + 1];
+            System.arraycopy(old, 0, row, 1, old.length);
+            row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
+            list.add(row);
         }
-        return null;
+        // 映射完成
+        redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        redisService.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster(), request);
+        redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
+        return list;
     }
 
-    @SuppressWarnings("unchecked")
-    private ResultWithBLOBs mining(List<IssueFileWithBLOBs> files) {
-        if (files == null) {
-            return null;
-        }
-        List<String[]> content = new ArrayList<>();
-        for (IssueFileWithBLOBs file : files) {
-            try {
-                List<String[]> tmp = (List<String[]>) ConvertUtil.convertBytesToObject(file.getContent());
-                content.addAll(tmp);
-            } catch (Exception e) {
-                logger.info("convert failed, fileName : {}", file.getFileName());
-            }
-        }
-        if (content.size() == 0) {
+    private Map<String, Object> mining(List<String[]> content) {
+        if (content == null || content.size() == 0) {
             return null;
         }
         // 去重开始
@@ -229,20 +258,14 @@ public class IssueServiceImpl implements IssueService {
         }
         // 去重结束
         // 聚类
-        List<List<Integer>> clusterResult = clusterService.cluster(list);
+        List<List<Integer>> clusterResult = miningService.cluster(list);
         // 统计
-        List<int[]> countResult = statService.count(clusterResult, list);
-        ResultWithBLOBs result = new ResultWithBLOBs();
-        result.setRid(UUID.randomUUID().toString());
-        try {
-            result.setContent(ConvertUtil.convertToBytes(list));
-            result.setOrigResult(ConvertUtil.convertToBytes(clusterResult));
-            result.setModifiedResult(ConvertUtil.convertToBytes(clusterResult));
-            result.setCountResult(ConvertUtil.convertToBytes(countResult));
-            result.setModifiedCountResult(ConvertUtil.convertToBytes(countResult));
-        } catch (Exception e) {
-            logger.error("exception occur when convert to byte : {}", e.toString());
-        }
+        List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);
+        List<int[]> countResult = miningService.count(list, cluster);
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("clusterResult", clusterResult);
+        result.put("countResult", countResult);
+        result.put("content", list);
         return result;
     }
 

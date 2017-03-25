@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ResultUtil;
 
@@ -41,12 +43,14 @@ public class IssueController {
     private UserService userService;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private RedisService redisService;
 
     @ResponseBody
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
             HttpServletRequest request) {
-        if (issueService.createIssue(issueName, request) == 0) {
+        if (issueService.createIssue(issueName,request) == 0) {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("创建话题失败");
         }
@@ -57,7 +61,7 @@ public class IssueController {
     @RequestMapping("/delete")
     public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
-        if (issueService.deleteIssueById(issueId, request) > 0) {
+        if (issueService.deleteIssueById(issueId,request) > 0) {
             return ResultUtil.success("删除话题成功");
         }
         return ResultUtil.errorWithMsg("删除话题失败");
@@ -93,11 +97,11 @@ public class IssueController {
     @RequestMapping("/miningByTime")
     public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByTime(startTime, endTime, request);
+        List<String[]> count = issueService.miningByTime(startTime, endTime,request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -108,11 +112,11 @@ public class IssueController {
     @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
             HttpServletRequest request) {
-        String issueId = "15cc68df-8b93-4273-9932-acf853b95131";
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByFileIds(fileIds, request);
+        List<String[]> count = issueService.miningByFileIds(fileIds,request);
         if (count == null) {
             return ResultUtil.unknowError();
         }

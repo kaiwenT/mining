@@ -6,9 +6,11 @@ import java.util.List;
 import org.ansj.domain.Result;
 import org.ansj.recognition.impl.FilterRecognition;
 import org.ansj.splitWord.analysis.NlpAnalysis;
+import org.springframework.stereotype.Service;
 
 import com.hust.mining.service.SegmentService;
 
+@Service
 public class SegmentServiceImpl implements SegmentService {
 
     private static FilterRecognition filter = new FilterRecognition();

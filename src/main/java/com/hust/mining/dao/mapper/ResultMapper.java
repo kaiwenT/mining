@@ -2,8 +2,6 @@ package com.hust.mining.dao.mapper;
 
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultExample;
-import com.hust.mining.model.ResultKey;
-import com.hust.mining.model.ResultWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,27 +10,21 @@ public interface ResultMapper {
 
     int deleteByExample(ResultExample example);
 
-    int deleteByPrimaryKey(ResultKey key);
+    int deleteByPrimaryKey(String rid);
 
-    int insert(ResultWithBLOBs record);
+    int insert(Result record);
 
-    int insertSelective(ResultWithBLOBs record);
-
-    List<ResultWithBLOBs> selectByExampleWithBLOBs(ResultExample example);
+    int insertSelective(Result record);
 
     List<Result> selectByExample(ResultExample example);
 
-    ResultWithBLOBs selectByPrimaryKey(ResultKey key);
+    Result selectByPrimaryKey(String rid);
 
-    int updateByExampleSelective(@Param("record") ResultWithBLOBs record, @Param("example") ResultExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") ResultWithBLOBs record, @Param("example") ResultExample example);
+    int updateByExampleSelective(@Param("record") Result record, @Param("example") ResultExample example);
 
     int updateByExample(@Param("record") Result record, @Param("example") ResultExample example);
 
-    int updateByPrimaryKeySelective(ResultWithBLOBs record);
-
-    int updateByPrimaryKeyWithBLOBs(ResultWithBLOBs record);
+    int updateByPrimaryKeySelective(Result record);
 
     int updateByPrimaryKey(Result record);
 }

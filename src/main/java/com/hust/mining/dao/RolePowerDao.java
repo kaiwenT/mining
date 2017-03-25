@@ -3,12 +3,13 @@ package com.hust.mining.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.RolePowerMapper;
 import com.hust.mining.model.RolePower;
 import com.hust.mining.model.RolePowerExample;
 import com.hust.mining.model.RolePowerExample.Criteria;
-
+@Repository
 public class RolePowerDao {
 
 	@Autowired

@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.SourceTypeMapper;
 import com.hust.mining.model.SourceType;
 import com.hust.mining.model.SourceTypeExample;
 import com.hust.mining.model.SourceTypeExample.Criteria;
 import com.hust.mining.model.params.SourceTypeQueryCondition;
-
+@Repository
 public class SourceTypeDao {
 	@Autowired
 	private SourceTypeMapper sourceTypeMapper;
