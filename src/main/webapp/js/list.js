@@ -6,8 +6,9 @@ function allData (page){
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
         url:"http://localhost:8080/issue/queryOwnIssue",
-		data:JSON.stringify(GetJsonData()),
+		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
+		contentType : "application/json",
         success:function(msg){
             //console.log(msg);
             if(msg.status=="OK"){
@@ -35,15 +36,15 @@ function allData (page){
 allData (1)
 function GetJsonData(page) {
     var json = {
-		"issueId":"",
-		"issueName":"" ,
-		"createStartTime":"2016-01-01",
-		"createEndTime":"2017-01-04",
-		"user":"",
-		"lastUpdateStartTime":"2016-01-01",
-		"lastUpdateEndTime":"2017-01-04",
-		"pageNo":(parseInt(page)-1),
-		"pageSize":1
+		issueId:'',
+		issueName:'',
+		createStartTime:'2016-01-01',
+		createEndTime:'2017-01-04',
+		user:'',
+		lastUpdateStartTime:'2016-01-01',
+		lastUpdateEndTime:'2017-01-04',
+		pageNo:parseInt(page),
+		pageSize:10
     };
     return json;
 }
