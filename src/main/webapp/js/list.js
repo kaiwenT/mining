@@ -8,17 +8,24 @@ function allData (page){
         url:"http://182.140.244.198:8080/issue/queryOwnIssue",
 		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
-		contentType : "application/json",
+		contentType:"application/json",
         success:function(msg){
             //console.log(msg);
             if(msg.status=="OK"){
                 //alert("success") ;
 				var items = msg.result.list ;
 				var cookie_value1;
+				$('.ht_cont tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
 					//alert(msg.tagName);
 					cookie_value1="'"+item.issueId+"'";
-					row= '<tr><td height="40" align="center">'+(idx+1)+'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+'</a></td><td height="40" align="center">'+item.creator+'</td><td height="40" align="center">'+item.createTime.year+'年'+item.createTime.month+'月'+item.createTime.date+'日'+'&nbsp;'+item.createTime.hours+':'+item.createTime.minutes+':'+item.createTime.seconds+'</td><td height="40" align="center">'+item.lastOperator+'</td><td height="40" align="center">'+item.lastUpdateTime.year+'年'+item.lastUpdateTime.month+'月'+item.lastUpdateTime.date+'日'+'&nbsp;'+item.lastUpdateTime.hours+':'+item.lastUpdateTime.minutes+':'+item.lastUpdateTime.seconds+'</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'"  /></td></tr>'
+					row= '<tr><td height="40" align="center">'+(idx+1)+
+					'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+
+					'</a></td><td height="40" align="center">'+item.creator+
+					'</td><td height="40" align="center">'+item.createTime.year+'年'+item.createTime.month+'月'+item.createTime.date+'日'+'&nbsp;'+item.createTime.hours+':'+item.createTime.minutes+':'+item.createTime.seconds+
+					'</td><td height="40" align="center">'+item.lastOperator+
+					'</td><td height="40" align="center">'+item.lastUpdateTime.year+'年'+item.lastUpdateTime.month+'月'+item.lastUpdateTime.date+'日'+'&nbsp;'+item.lastUpdateTime.hours+':'+item.lastUpdateTime.minutes+':'+item.lastUpdateTime.seconds+
+					'</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'" /></td></tr>'
 					$('.ht_cont').append(row);
 					
 				});
@@ -36,15 +43,15 @@ function allData (page){
 allData (1)
 function GetJsonData(page) {
     var json = {
-		issueId:'',
-		issueName:'',
-		createStartTime:'2016-01-01',
-		createEndTime:'2017-01-04',
-		user:'',
-		lastUpdateStartTime:'2016-01-01',
-		lastUpdateEndTime:'2017-01-04',
-		pageNo:parseInt(page),
-		pageSize:10
+		"issueId":"",
+		"issueName":"" ,
+		"createStartTime":"2016-01-01",
+		"createEndTime":"2017-04-04",
+		"user":"",
+		"lastUpdateStartTime":"2016-01-01",
+		"lastUpdateEndTime":"2017-04-04",
+		"pageNo":parseInt(page),
+		"pageSize":10
     };
     return json;
 }
@@ -211,14 +218,13 @@ function searchData(page){
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
         url:"http://182.140.244.198:8080/issue/queryOwnIssue",
-        data:JSON.stringify(SearchJsonData()),
+        data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         success:function(msg){
            //console.log(msg);
             if(msg.status=="OK"){
                 //alert("success") ;
-				$('.ht_cont').html("");
-				$('.ht_cont').html('<tr class="nobd_t"><td height="50" align="center">序号</td><td height="50" align="center">话题名称</td><td height="50" align="center">创建人</td><td height="50" align="center">创建时间</td><td height="50" align="center">最后修改人</td><td height="50" align="center">最后修改时间</td><td height="50" align="center">操作</td></tr>');
+                $('.ht_cont tr:not(:first)').html("");
 				var items = msg.result.list ;
 				$.each(items,function(idx,item) {
 					//alert(obj.tagName);
@@ -255,8 +261,8 @@ function SearchJsonData(page) {
 		"user":obj3,
 		"lastUpdateStartTime":obj4,
 		"lastUpdateEndTime":obj5,
-		"pageNo":(parseInt(page)-1),
-		"pageSize":1
+		"pageNo":parseInt(page),
+		"pageSize":10
     };
     return json;
 }
@@ -273,7 +279,7 @@ $(function(){
 	
 			$.ajax({
 				type:"post",
-//				url:"http://1v5002132k.iask.in:13020/xinheng/issue/delete",
+				//url:"http://1v5002132k.iask.in:13020/xinheng/issue/delete",
 				url:"http://182.140.244.198:8080/issue/delete",
 				data:{
 					issueId:issueId,
@@ -285,14 +291,14 @@ $(function(){
 					if(msg.status=="OK"){
 						alert("success");
 						$('.ht_cont').html("");
-						searchData()
+						searchData(1)
 					}else{
 						alert("fail");
 					}
 		
 				} ,
 				error:function(){
-					//���������
+					
 				}
 			});
 		}

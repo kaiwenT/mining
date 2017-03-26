@@ -6,7 +6,6 @@ function dataShow(){
     $.ajax({
         type:"post",
 //      url:"http://1v5002132k.iask.in:13020/xinheng/file/queryIssueFiles",
-//        url:"http://182.140.244.198:8080/file/queryIssueFiles",
         url:"http://182.140.244.198:8080/file/queryIssueFiles",
         data:{
             //issueId:"d6093f1f-0c95-4538-a007-e85e8bc85526",
@@ -56,16 +55,19 @@ function dataShow(){
 						},
 						"fileId": "118027da-3eac-4fc4-8313-3c4e5d277890"
 					  }]
-				  }
+				  	}
 					
 				}
-				var tabs = json.result.list ; 
+				var tabs = json.result.list; 
 				console.log(json);
 				$.each(tabs,function( i,item){
-					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+'</td><td width="95" align="center" valign="middle">'+item.creator+'</td><td width="173" align="center" valign="middle">'+item.uploadTime.year+'-'+item.uploadTime.month+'-'+item.uploadTime.date+'&nbsp;'+item.uploadTime.hours+':'+item.uploadTime.seconds+'</td><td align="center" valign="middle"><a href="javascript:;" class="btn_sc"><img src="images/julei.png" /></a><a href="javascript:;" class="btn_jl"><img src="images/delete.png" onclick="" /></a></td></tr>'
-					$('.files_list table').append( row );
-				});
-				
+					cookie_value1="'"+item.fileId+"'";
+					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
+					'</td><td width="95" align="center" valign="middle">'+item.creator+
+					'</td><td width="173" align="center" valign="middle">'+item.uploadTime.year+'-'+item.uploadTime.month+'-'+item.uploadTime.date+'&nbsp;'+item.uploadTime.hours+':'+item.uploadTime.seconds+
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><a href="javascript:;" class="btn_jl"><img src="images/delete.png" onclick="" /></a></td></tr>'
+					$('.files_list table').append(row);
+				});				
             }else{
                 alert("fail");
             }
@@ -77,3 +79,12 @@ function dataShow(){
     });
 }
 dataShow()
+function setCookie(value1){
+	//alert(name+value);
+	var cookie_name1="id";
+	var Days = 1; //此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
+	window.location.href = "summary_file.html";
+}

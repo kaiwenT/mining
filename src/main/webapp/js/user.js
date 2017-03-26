@@ -311,7 +311,7 @@ function addUser(){
 			password:$("#passWord").val(),
 			telphone:$("#userTel").val(),
 			email:$("#userEmail").val(),
-			roleName:$("#roleName").val()
+			roleName:$("#roleName option:selected").val()
 		},
 		dataType:"json",
 		success: function(msg){

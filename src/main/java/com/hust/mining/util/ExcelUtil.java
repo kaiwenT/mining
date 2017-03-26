@@ -24,9 +24,9 @@ public class ExcelUtil {
 
     public static List<String[]> read(String filename, InputStream inputStream, int startRow) throws IOException {
         if (inputStream == null) {
-            inputStream = new FileInputStream(new File(filename));
+            throw new IllegalArgumentException("inputStream is null");
         }
-        return read(filename, inputStream, startRow);
+        return read(filename, inputStream, startRow, null);
     }
 
     public static List<String[]> read(String filename, InputStream inputStream, int rows, Integer...indexes)

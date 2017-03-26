@@ -53,7 +53,8 @@ a:hover { color:#000000; }
 .s_nav{ line-height:50px; font-size: 16px; border-bottom:1px solid #999;}
 
 /* 查看话题*/
-.ckht{ width:750px; margin-top:30px; } 
+.ckht{ width:750px; margin-top:30px; position: relative;} 
+.sur_result{position: absolute; right:200px; top:50px;}
 .ckht_list{ width:700px; margin-left:50px;  }
 .ckht_list li{ line-height: 30px; font-size: 16px; }
 .files_list table{ margin:20px auto;}
@@ -89,7 +90,7 @@ a:hover { color:#000000; }
 .btn_search_ckht{ margin-right:5px;}
 .ht_cont{ margin:0 auto; }
 .ht_cont tr{ border-top:1px solid #cccccc;}
-.ht_cont tr a{ display:block; line-height:40px;}
+.ht_cont tr a{ display:block; line-height:40px; height:40px;}
 .ht_cont .nobd_t{ border-top:none}
 .ht_cont img{ cursor:pointer;}
 .yema{ float:right; heiht:30px; margin-top:30px; margin-right:20px;}
