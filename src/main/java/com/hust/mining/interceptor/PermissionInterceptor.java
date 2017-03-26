@@ -45,7 +45,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             // 先判断
             if ("/".equals(url) || "/index.html".equals(url)) {
                 if (null != redisService.getString(KEY.USER_NAME, request)) {
-                    response.sendRedirect("/page/infoManager.html");
+                    response.sendRedirect("/page/topic_list.html");
                 } else {
                     return true;
                 }
@@ -58,7 +58,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     // 在这里可以重新获取
                     List<String> userPowerUrl =
                             userService.selectUserPowerUrl(redisService.getString(KEY.USER_NAME, request));
-                    request.getSession().setAttribute("userPowerUrl", userPowerUrl);
                     redisService.setObject("userPowerUrl", userPowerUrl, request);
                     if (userPowerUrl.contains(requestPath)) {
                         return true;
@@ -68,9 +67,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
                         fail(response);
                     }
                 } else {
-                    LOG.warn("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(),
-                            request.getRequestURI());
-                    fail(response);
+                    LOG.warn("{} did not login, please login",request.getRequestedSessionId());
+                    response.sendRedirect("/page/index.html");
                 }
             }
         } catch (Exception e) {
