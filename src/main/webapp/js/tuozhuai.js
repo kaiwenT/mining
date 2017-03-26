@@ -49,7 +49,7 @@ $(function(){
         xhr.onreadystatechange=state_Change(filename,fileList[0]);
         
                
-        xhr.open("post", "http://182.140.244.198:8080/file/getColumnTitle", true); 
+        xhr.open("post", "http://182.140.244.198/file/getColumnTitle", true); 
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); 
          
         var fd = new FormData(); 
@@ -144,7 +144,7 @@ function up_del(){
 		function upFile(){
 			$.ajax({
 		        type:"post",
-		        url:"http://182.140.244.198:8080/file/upload",
+		        url:"http://182.140.244.198/file/upload",
 				data:{
 		            file:file_array[now_count-1],
 		            urlIndex:urlIndex,

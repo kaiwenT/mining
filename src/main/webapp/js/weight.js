@@ -4,7 +4,7 @@ function weightInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/weight/selectAllWeight",
+		url:"http://182.140.244.198/weight/selectAllWeight",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -191,7 +191,7 @@ function weightInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/weight/selectByCondition",
+		url:"http://182.140.244.198/weight/selectByCondition",
 		data:{
 			name:$("#name").val(),
 			weight:$("#weight").val(),
@@ -235,7 +235,7 @@ function weightInforAdd(){
 function addWeight(){
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/weight/insertWeight",
+		url:"http://182.140.244.198/weight/insertWeight",
 		data:{
 			name:$("#add_type").val(),
 			weight:$("#add_weight").val()
@@ -277,7 +277,7 @@ function weightInforChange(){
 	var newId=getCookie("id");
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198:8080/weight/updateWeight",
+		url:"http://182.140.244.198/weight/updateWeight",
 		data:{
 			id:newId,
 			name:$("#new_name_weight").val(),
@@ -314,7 +314,7 @@ $(function(){
 	
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198:8080/weight/deleteWeight",
+				url:"http://182.140.244.198/weight/deleteWeight",
 				data:{
 					weightId:weight_id,
 				} ,

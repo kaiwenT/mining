@@ -6,7 +6,7 @@ function dataShow(){
     $.ajax({
         type:"post",
 //      url:"http://1v5002132k.iask.in:13020/xinheng/file/queryIssueFiles",
-        url:"http://182.140.244.198:8080/file/queryIssueFiles",
+        url:"http://182.140.244.198/file/queryIssueFiles",
         data:{
             //issueId:"d6093f1f-0c95-4538-a007-e85e8bc85526",
             issueId:newId

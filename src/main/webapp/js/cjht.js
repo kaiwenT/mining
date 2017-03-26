@@ -5,8 +5,8 @@ function creatInt (){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/issue/create",
-//        url:"http://182.140.244.198:8080/issue/create",
-        url:"http://182.140.244.198:8080/issue/create",
+//        url:"http://182.140.244.198/issue/create",
+        url:"http://182.140.244.198/issue/create",
 		data:{
             issueName: $("#chuangjian").val(),
         } ,
