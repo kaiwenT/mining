@@ -4,7 +4,7 @@ function roleInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/role/selectAllRole",
+		url:"/role/selectAllRole",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -182,7 +182,7 @@ function roleInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/role/selectOneRoleInfo",
+		url:"/role/selectOneRoleInfo",
 		data:{
 			roleName:roleInfo,
 			start:(parseInt(page)-1),
@@ -222,7 +222,7 @@ function addRoleInfo(){
 	console.log($(".addRole").val())
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/role/insertRoleInfo",
+		url:"/role/insertRoleInfo",
 		data:{
 			roleName:$(".addRole").val()
 		},
@@ -261,7 +261,7 @@ function changeRole(){
 	var newId=getCookie("id");
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/role/updateRoleInfo",
+		url:"/role/updateRoleInfo",
 		data:{
 			roleId:newId,
 			roleName:$(".roleChange").val(),
@@ -296,7 +296,7 @@ $(function(){
 		function roleInforDel(role_id){
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198/role/deleteRoleInfoById",
+				url:"/role/deleteRoleInfoById",
 				data:{
 					roleId:role_id
 				} ,

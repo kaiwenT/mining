@@ -4,7 +4,7 @@ function websiteInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/website/selectAllWebsite",
+		url:"/website/selectAllWebsite",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -201,7 +201,7 @@ function websiteInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/website/selectByCondition",
+		url:"/website/selectByCondition",
 		data:{
 			url:$("#web_url").val(),
 			name:obj2,
@@ -253,7 +253,7 @@ function addWebsite(){
 	//console.log($("#urlWebsite").val())
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/website/insertWebsite",
+		url:"/website/insertWebsite",
 		data:{
 			url:$("#urlWebsite").val(),
 			name:$("#nameWibsite").val(),
@@ -299,7 +299,7 @@ function websiteInforChange(){
 	var newId=getCookie("id");
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/website/updateWebsite",
+		url:"/website/updateWebsite",
 		data:{
 			id:newId,
 			url:$("#new_url_website").val(),
@@ -338,7 +338,7 @@ $(function(){
 		function websiteInforDel(website_id){
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198/website/deleteWebsite",
+				url:"/website/deleteWebsite",
 				data:{
 					websiteId:website_id,
 				} ,

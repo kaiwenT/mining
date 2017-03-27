@@ -4,7 +4,7 @@ function powerInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/power/selectAllPower",
+		url:"/power/selectAllPower",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -192,7 +192,7 @@ function powerInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/power/selectOnePowerInfo",
+		url:"/power/selectOnePowerInfo",
 		data:{
 			powerName:powerInfor,
 			start:(parseInt(3*page-3)),
@@ -236,7 +236,7 @@ function powerInforAdd() {
 function addPower(){
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/power/insertPowerInfo",
+		url:"/power/insertPowerInfo",
 		data:{
 			powerName:$("#namePower").val(),
 			powerUrl:$("#urlPower").val()
@@ -276,7 +276,7 @@ function powerInforChange(){
 	var newId=getCookie("id");
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/power/updatePowerInfo",
+		url:"/power/updatePowerInfo",
 		data:{
 			powerId:newId,
 			powerName:$("#new_name_power").val(),
@@ -310,7 +310,7 @@ $(function(){
 		function powerInforDel(power_id){
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198/power/deletePowerById",
+				url:"/power/deletePowerById",
 				data:{
 					powerId:power_id,
 				} ,

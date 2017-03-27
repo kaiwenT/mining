@@ -4,7 +4,7 @@ function typeInforShow(page){
 	search_click=false;
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/sourceType/selectAllSourceType",
+		url:"/sourceType/selectAllSourceType",
 		data:{
 			start:(parseInt(3*page-3)),
 			limit:3
@@ -189,7 +189,7 @@ function typeInforSearch(page){
 	setFirstSelected();
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/sourceType/selectSourceTypeByName",
+		url:"/sourceType/selectSourceTypeByName",
 		data:{
 			name:$("#type_search").val(),
 			start:(parseInt(3*page-3)),
@@ -234,7 +234,7 @@ function AddtypeInfor(){
 	console.log(submit);
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/sourceType/insertSourceType",
+		url:"/sourceType/insertSourceType",
 		data:{
 			name:submit
 		},
@@ -274,7 +274,7 @@ function ChangetypeInfor(){
 	console.log(newId);
 	$.ajax({
 		type:"post",
-		url:"http://182.140.244.198/sourceType/updateSourceType",
+		url:"/sourceType/updateSourceType",
 		data:{
 			name:$("#new_name_type").val(),
 			id:newId
@@ -310,7 +310,7 @@ $(function(){
 	
 			$.ajax({
 				type:"post",
-				url:"http://182.140.244.198/sourceType/deleteSourceTypeById",
+				url:"/sourceType/deleteSourceTypeById",
 				data:{
 					id:typeId,
 				} ,

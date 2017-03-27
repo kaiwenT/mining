@@ -34,9 +34,9 @@ public class AuthController {
             username.setPath("/");
             response.addCookie(username);
             redisService.setString(KEY.USER_NAME, userName, request);
-            return "redirect:page/topic_list.html";
+            return "redirect:/topic_list.html";
         }
-        return "redirect:page/error.jsp";
+        return "redirect:/error.jsp";
     }
 
     @RequestMapping(value = "logout")

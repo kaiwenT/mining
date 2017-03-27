@@ -45,34 +45,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> selectAllUserInfo(int start, int limit, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String loginName = (String) session.getAttribute("username");
-        List<User> users = userDao.selectByUserName(loginName);
         List<User> user = new ArrayList<>();
         // 要根据userID 去判断找到对应的ROleid
-        List<Integer> roleId = new ArrayList<>();
-        List<UserRole> userRole = userRoleDao.selectAllUserRole();
-        for (UserRole userRoleInfo : userRole) {
-            if (userRoleInfo.getUserId() == users.get(0).getUserId()) {
-                roleId.add(userRoleInfo.getRoleId());
-            }
-        }
-        if (roleId.contains(1) || roleId.contains(2)) {
-            user = userDao.selectAllUser(start,limit);
-            return user;
-        }
-        user = userDao.selectByUserName(loginName);
-        if (user.isEmpty()) {
-            logger.info("user is empty");
-            return user;
-        }
+        user = userDao.selectAllUser(start, limit);
         return user;
     }
 
     @Override
     public List<User> selectSingleUserInfo(String userName, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String loginName = (String) session.getAttribute("username");;
+        String loginName = (String) session.getAttribute("username");
+        ;
         List<User> users = userDao.selectByUserName(loginName);
         List<User> user = new ArrayList<>();
         List<Integer> roleId = new ArrayList<>();

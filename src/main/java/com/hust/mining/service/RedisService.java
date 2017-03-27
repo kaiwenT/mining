@@ -63,14 +63,8 @@ public class RedisService {
     }
 
     private String getSessionid(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        String sessionid = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(KEY.SESSION_ID)) {
-                sessionid = cookie.getValue();
-            }
-        }
-        if (sessionid == null) {
+        String sessionid = request.getSession().getId();
+        if (sessionid == null || sessionid == "") {
             logger.error("获取sessionid错误");
         }
         return sessionid;
