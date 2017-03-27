@@ -1,6 +1,5 @@
-var file_array;
+var file_array = new Array();
 var now_count = 0;
-
 $(function() {
     // 阻止浏览器默认行。
     $(document).on({
@@ -23,13 +22,13 @@ $(function() {
     box.addEventListener("drop", function(e) {
         e.preventDefault(); // 取消默认浏览器拖拽效果
         var fileList = e.dataTransfer.files; // 获取文件对象
-        file_array = e.dataTransfer.files;
         // 检测是否是拖拽文件到页面的操作
         if (fileList.length == 0) {
             return false;
         }
         // 检测文件是不是excel文件
         for (var index = 0; index < fileList.length; index++) {
+            file_array[file_array.length] = fileList[index];
             var filename = fileList[index].name;
             if (filename.lastIndexOf("xls") !== -1
                     || filename.lastIndexOf("xlsx") !== -1) {
@@ -37,7 +36,7 @@ $(function() {
                 var fd = new FormData();
                 fd.append("file", fileList[index]);
                 var settings = {
-                    "async" : true,
+                    "async" : false,
                     "crossDomain" : true,
                     "url" : "/file/getColumnTitle",
                     "method" : "POST",
@@ -45,7 +44,7 @@ $(function() {
                     "contentType" : false,
                     "mimeType" : "multipart/form-data",
                     "data" : fd
-                }
+                };
                 $.ajax(settings).done(function(response) {
                     reSetView(response, filename);
                 });
@@ -62,9 +61,12 @@ function reSetView(response, filename) {
         return;
     }
     var array = msg.result;
-    // console.log(result.length + ", " + array.length);
     var trable_spinner = getSpinner(array);// 下拉框
-    var li_context = '<li>文件：<input type="text" class="files_name" value="'
+    var date_ = new Date();
+    var now_time = date_.toLocaleDateString();// 当前日期
+    var li_context = '<li>文件：<input type="text" class="files_name"  name="'
+            + now_count
+            + '" value="'
             + filename
             + '" /> URL：<select class="select01">'
             + trable_spinner
@@ -79,7 +81,7 @@ function reSetView(response, filename) {
 function getSpinner(array) {
     var item = "";
     for (var i = 0; i < array.length; i++) {
-        item += '<option>' + array[i] + '</option>';
+        item += '<option value= '+ i +'>' + array[i] + '</option>';
     }
     item += "";
     return item;
@@ -92,18 +94,11 @@ var data12 = {
 }
 
 function up_del() {
-    $(".up_del").on("click", ".btn_up_del03", function() {
-        var num = $("up_del lu li").length;
-        console.log(num);
-        /*
-         * for (i=0;i<($("up_del li").lengthi++){ }
-         */
-    });
-    $(".up_del li")
-            .on(
-                    "click",
-                    ".btn_up_del01",
+    $(".btn_up_del01")
+            .click(
                     function() {
+                        var arrary = $(this).parent("li").children(
+                                ".files_name").attr("name");
                         var fileName = $(this).parent("li").children(
                                 ".files_name").val();
                         var urlIndex = $(this).parent("li").children(
@@ -114,63 +109,72 @@ function up_del() {
                                 "select.select03").val();
                         var sourceType = $(this).parent("li").children(
                                 "select.select04").val();
+                        console.log(arrary);
                         console.log(fileName);
                         console.log(time);
                         console.log(urlIndex);
                         console.log(titleIndex);
                         console.log(sourceType);
-                        upFile();
-                        function upFile() {
-                            var form = new FormData();
-                            form.append("file", file_array[now_count - 1]);
-                            form.append("urlIndex", urlIndex);
-                            form.append("titleIndex", titleIndex);
-                            form.append("timeIndex", time);
-                            form.append("sourceType", sourceType);
-                            var settings = {
-                                "async" : true,
-                                "crossDomain" : true,
-                                "url" : "http://localhost:8080/file/upload",
-                                "method" : "POST",
-                                "headers" : {
-                                    "cache-control" : "no-cache",
-                                    "postman-token" : "9cec5fe2-4e14-00c3-bad0-574a8060cdb2"
-                                },
-                                "processData" : false,
-                                "contentType" : false,
-                                "mimeType" : "multipart/form-data",
-                                "data" : form
-                            }
-                            $
-                                    .ajax(settings)
-                                    .done(
-                                            function(response) {
-                                                console.log(response);
-                                                var msg = JSON.parse(response);
-                                                if (msg.status == "OK") {
-                                                    alert("上传成功");
-                                                    // alert(msg.tagName);
-                                                    cookie_value1 = "'"
-                                                            + item.fileId + "'";
-                                                    row = '<tr><td width="257" align="center" valign="middle">'
-                                                            + fileName
-                                                            + '</td><td width="95" align="center" valign="middle">gaoyan</td><td width="173" align="center" valign="middle">'
-                                                            + time
-                                                            + '</td><td align="center" valign="middle"><img src="images/julei.png" onClick="setCookie('
-                                                            + cookie_value1
-                                                            + ')" class="btn_sc"><img src="images/delete.png"  class="btn_jl"></td></tr>'
-                                                    $('.up_list').append(row);
-                                                } else {
-                                                    alert("fail");
-                                                }
-                                            });
-                        }
+                        /* cookie_value1="'"+item.fileId+"'"; */
+                        upFile(file_array[parseInt(arrary)], urlIndex,
+                                titleIndex, time, sourceType);
                     })
 
-    $(".up_del li").on("click", ".btn_up_del02", function() {
+    $(".btn_up_del02").click(function() {
         $(this).parent("li").remove();
     });
-    $(".up_del").on("click", ".btn_up_del04", function() {
-        $(this).parent(".up_del").remove();
-    });
 }
+$(".btn_up_del03").click(
+        function() {
+            alert(file_array.length);
+            for (i = 0; i < file_array.length; i++) {
+                var file = file_array[i];
+                var aaa = $("#file_ul li:eq(i)").children(".files_name").val();
+                var urlIndex = $("#file_ul li:eq(i)").children(
+                        "select.select01").val();
+                var titleIndex = $("#file_ul li:eq(i)").children(
+                        "select.select02").val();
+                var sourceType = $("#file_ul li:eq(i)").children(
+                        "select.select04").val();
+                var time = $("#file_ul li:eq(i)").children("select.select03")
+                        .val();
+                upFile(file, urlIndex, titleIndex, time, sourceType);
+            }
+        });
+function upFile(filex, urlIndex, titleIndex, time, sourceType) {
+    var form = new FormData();
+    form.append("file", filex);
+    form.append("urlIndex", urlIndex);
+    form.append("titleIndex", titleIndex);
+    form.append("timeIndex", time);
+    form.append("sourceType", sourceType);
+
+    var settings = {
+        "async" : true,
+        "crossDomain" : true,
+        "url" : "/file/upload",
+        "method" : "POST",
+        "processData" : false,
+        "contentType" : false,
+        "mimeType" : "multipart/form-data",
+        "data" : form
+    }
+
+    $
+            .ajax(settings)
+            .done(
+                    function(response) {
+                        console.log(response);
+                        var msg = JSON.parse(response);
+                        if (msg.status == "OK") {
+                            // alert(msg.tagName);
+                            // cookie_value1="'"+item.fileId+"'";
+                            dataShow();
+                        } else {
+                            alert("上传失败");
+                        }
+                    });
+}
+$(".btn_up_del04").click(function() {
+    $(this).parent(".up_del").remove();
+});

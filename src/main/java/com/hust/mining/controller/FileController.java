@@ -57,35 +57,30 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public Object upload(@RequestParam(value = "file", required = true) MultipartFile[] file,
-            @RequestParam(value = "titleIndex", required = true) int[] titleIndex,
-            @RequestParam(value = "timeIndex", required = true) int[] timeIndex,
-            @RequestParam(value = "urlIndex", required = true) int[] urlIndex,
-            @RequestParam(value = "sourceType", required = true) String[] sourceType, HttpServletRequest request) {
+    public Object upload(@RequestParam(value = "file", required = true) MultipartFile file,
+            @RequestParam(value = "titleIndex", required = true) int titleIndex,
+            @RequestParam(value = "timeIndex", required = true) int timeIndex,
+            @RequestParam(value = "urlIndex", required = true) int urlIndex,
+            @RequestParam(value = "sourceType", required = true) String sourceType, HttpServletRequest request) {
         if (issueService.getCurrentIssueId(request) == null) {
             return ResultUtil.errorWithMsg("请选择或者创建一个话题");
         }
         // 数组之间必须是一一对应关系
-        List<String> info = new ArrayList<>();
-        for (int i = 0; i < file.length; i++) {
-            if (file[i].isEmpty()) {
-                logger.info(file[i] + "is empty");
-                info.add(file[i] + "is empty");
-                continue;
-            }
-            Condition condition = new Condition();
-            condition.setFile(file[i]);
-            condition.setTimeIndex(timeIndex[i]);
-            condition.setUrlIndex(urlIndex[i]);
-            condition.setTitleIndex(titleIndex[i]);
-            condition.setSourceType(sourceType[i]);
-            if (fileService.insert(condition, request) == 0) {
-                logger.info("file insert failed");
-                info.add("file insert failed");
-                continue;
-            }
+        if (file.isEmpty()) {
+            logger.info(file.getName() + "is empty");
+            return ResultUtil.errorWithMsg("文件为空");
         }
-        return ResultUtil.success(info);
+        Condition condition = new Condition();
+        condition.setFile(file);
+        condition.setTimeIndex(timeIndex);
+        condition.setUrlIndex(urlIndex);
+        condition.setTitleIndex(titleIndex);
+        condition.setSourceType(sourceType);
+        if (fileService.insert(condition, request) == 0) {
+            logger.info("file insert failed");
+            return ResultUtil.errorWithMsg("上传失败");
+        }
+        return ResultUtil.success("上传成功");
     }
 
     // @SuppressWarnings("unchecked")
@@ -140,7 +135,7 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId,request);
+            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId, request);
             if (map == null) {
                 response.sendError(404, "导出错误");
                 return;
