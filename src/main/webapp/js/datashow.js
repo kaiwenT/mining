@@ -34,7 +34,7 @@ function dataShow(){
 					cookie_value1="'"+item.fileId+"'";
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
-					'</td><td width="173" align="center" valign="middle">'+new Date(items.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
+					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
 					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><a href="javascript:;" class="btn_jl"><img src="images/delete.png" onclick="" /></a></td></tr>'
 					$('.files_list table').append(row);
 				});				

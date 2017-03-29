@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.dao.FileDao;
+import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.service.FileService;
@@ -56,6 +57,9 @@ public class FileServiceImpl implements FileService {
 
         String user = userService.getCurrentUser(request);
         String issueId = issueService.getCurrentIssueId(request);
+        Issue issue = new Issue();
+        issue.setIssueId(issueId);
+        issueService.updateIssueInfo(issue, request);
         IssueFile issueFile = new IssueFile();
         issueFile.setFileId(UUID.randomUUID().toString());
         issueFile.setFileName(file.getOriginalFilename());
