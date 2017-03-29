@@ -161,10 +161,16 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
-    public Object queryIssueFiles(@RequestParam(value = "issueId", required = true) String issueId,
+    public Object queryIssueFiles(@RequestParam(value = "issueId", required = false) String issueId,
             HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
         IssueQueryCondition con = new IssueQueryCondition();
+        if (StringUtils.isBlank(issueId)) {
+            issueId = redisService.getString(KEY.ISSUE_ID, request);
+        }
+        if (StringUtils.isBlank(issueId)) {
+            return ResultUtil.errorWithMsg("查询话题文件失败");
+        }
         con.setIssueId(issueId);
         con.setUser(user);
         List<Issue> issues = issueService.queryIssue(con);
