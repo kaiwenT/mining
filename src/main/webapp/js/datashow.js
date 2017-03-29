@@ -22,7 +22,7 @@ function dataShow(){
 					ct = '<span>'+new Date(items.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</span>',
 					lo = '<span>'+items.lastOperator+'</span>',
 					lut ='<span>'+new Date(items.lastUpdateTime.time).format('yyyy-MM-dd hh:mm:ss')+'</span>'
-					
+
 					$('.ckht_list li').eq(0).append( name ),
 					$('.ckht_list li').eq(1).append( admin ),
 					$('.ckht_list li').eq(2).append( ct ),

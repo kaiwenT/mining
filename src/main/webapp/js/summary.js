@@ -65,7 +65,7 @@ function accordTimeData(){
 				//console.log(msg)
 				$('.summary_tab table').html('');
 				$.each(news,function(i,item){
-					rows= '<tr><td width="280"><div class="tab_tit"><input type="checkbox" class="choose" />'+'标题：'+item[0]+'</div></td><td width="120" align="center"><div class="tab_from">'+'网站：'+item[1]+'</div></td><td width="230" align="center">'+'发布时间：'+item[2]+'</td><td width="80" align="center">'+'数量：'+item[3]+'</td></tr>'
+					rows= '<tr><td width="280"><div class="tab_tit"><input type="checkbox" class="choose" />'+'数量：'+item[0]+'</div></td><td width="120" align="center"><div class="tab_from">'+'网站：'+item[1]+'</div></td><td width="230" align="center">'+'标题：'+item[2]+'</td><td width="80" align="center">'+'时间：'+item[3]+'</td></tr>'
 					$('.summary_tab table').append( rows );
 				})
 			}else{
