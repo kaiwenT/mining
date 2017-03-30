@@ -1,5 +1,6 @@
 package com.hust.mining.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -72,6 +73,14 @@ public class FileDao {
         if (null != con.getFileIds() && con.getFileIds().size() != 0) {
             criteria.andFileIdIn(con.getFileIds());
         }
+        return issueFileMapper.selectByExample(example);
+    }
+
+    public List<IssueFile> searchFilesByTime(String issueId, Date start, Date end) {
+        IssueFileExample example = new IssueFileExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andIssueIdEqualTo(issueId);
+        criteria.andUploadTimeBetween(start, end);
         return issueFileMapper.selectByExample(example);
     }
 }

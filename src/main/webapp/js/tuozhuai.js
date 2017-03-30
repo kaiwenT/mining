@@ -74,7 +74,7 @@ function reSetView(response, filename) {
             + trable_spinner
             + '</select> 时间：<select class="select03">'
             + trable_spinner
-            + '</select> 类型：<select class="select04"><option> 微博</option><option> 新闻</option></select><img src="images/delete.png"  class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
+            + '</select> 类型：<select class="select04"><option> 微博</option><option> 新闻</option></select><img src="images/delete.png" onclick="fileDel()"  class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
     $("#file_ul").append(li_context);
     up_del();
 }
@@ -160,21 +160,21 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         "data" : form
     }
 
-    $
-            .ajax(settings)
-            .done(
-                    function(response) {
-                        console.log(response);
-                        var msg = JSON.parse(response);
-                        if (msg.status == "OK") {
-                            // alert(msg.tagName);
-                            // cookie_value1="'"+item.fileId+"'";
-                            dataShow();
-                        } else {
-                            alert("上传失败");
-                        }
-                    });
+    $.ajax(settings).done(
+    function(response) {
+        console.log(response);
+        var msg = JSON.parse(response);
+        if (msg.status == "OK") {
+            // alert(msg.tagName);
+            // cookie_value1="'"+item.fileId+"'";
+            dataShow();
+        } else {
+            alert("上传失败");
+        }
+    });
 }
-$(".btn_up_del04").click(function() {
-    $(this).parent(".up_del").remove();
-});
+function allDel(){
+	$(".up_del li").remove();
+	$(".up_del .btn_up_del04").remove();
+	$(".up_del .btn_up_del03").remove();
+}

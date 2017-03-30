@@ -35,7 +35,7 @@ function dataShow(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><a href="javascript:;" class="btn_jl"><img src="images/delete.png" onclick="" /></a></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" onclick="" /></td></tr>'
 					$('.files_list table').append(row);
 				});				
             }else{
@@ -56,5 +56,39 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	window.location.href = "summary_file.html";
+	window.location.href = "summary.html";
+}
+
+function getCookie(name) {
+	
+	console.log(document.cookie);
+	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
+	if(arr !=null) 
+		return unescape(arr[2]); 
+	return null;
+}
+
+function fileDel(){
+	var file_id=getCookie("id")
+	console.log(file_id);
+	$.ajax({
+		type:"post",
+		url:"/file/delete",
+		data:{
+			fileId:file_id
+		},
+		dataType:"json",
+		success: function(msg){
+			console.log(msg);
+			if( msg.status == "OK"){
+				//alert("删除成功");	
+				$(this).parents("tr").remove();
+			}else{
+				alert("fail");
+			}
+		},
+		error: function(){
+			
+		}
+	})	
 }

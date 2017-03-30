@@ -2,9 +2,9 @@
  * Created by Administrator on 2016/12/18.
  */
 
-//4.1根据时间汇总
+//4.1汇总
 
-function accordTimeData(){
+function fileSummary(){
 	var value = $(".summary_time input[name = 'timeradio']:checked").val();
 	var end = new Date;
 	var strEnd = "" + end.getFullYear() + "-";
@@ -61,12 +61,14 @@ function accordTimeData(){
 			//console.log(msg);
 			if(msg.status == "OK"){
 				//alert("success") ;
-				var news = msg.result;
+				var items = msg.result;
 				//console.log(msg)
 				$('.summary_tab table').html('');
-				$.each(news,function(i,item){
-					rows= '<tr><td width="280"><div class="tab_tit"><input type="checkbox" class="choose" />'+'数量：'+item[0]+'</div></td><td width="120" align="center"><div class="tab_from">'+'网站：'+item[1]+'</div></td><td width="230" align="center">'+'标题：'+item[2]+'</td><td width="80" align="center">'+'时间：'+item[3]+'</td></tr>'
-					$('.summary_tab table').append( rows );
+				$.each(items,function(i,item){
+					/*rows= '<tr><td width="280"><div class="tab_tit"><input type="checkbox" class="choose" />'+'数量：'+item[0]+'</div></td><td width="120" align="center"><div class="tab_from">'+'网站：'+item[1]+'</div></td><td width="230" align="center">'+'标题：'+item[2]+'</td><td width="80" align="center">'+'时间：'+item[3]+'</td></tr>'
+					$('.summary_tab table').append( rows );*/
+					rows = '<tr><td height="32" align="center"><input type="checkbox" /></td><td height="32" align="center">'+item[1]+'</td><td height="32" align="center">'+高岩+'</td><td height="32" align="center">'+item[2]+'</td></tr>'
+					$('.summary_up table').append( rows );
 				})
 			}else{
 				alert("fail");
@@ -77,41 +79,6 @@ function accordTimeData(){
 			//���������
 		}
 	});
-}
-
-
-
-//4.2根据文件汇总
-function accordFileData(){
-	
-	$(".summary_cont").css('display','block');
-	
-    $.ajax({
-        type:"post",
-        //url:"http://1v5002132k.iask.in:13020/xinheng/issue/miningByFile",
-        url:"/issue/miningByFile",
-        data:{
-        	fileIds: "01346567-d049-4f90-818c-080effc5164a"
-        } ,
-        dataType:"json",
-        success:function(msg){
-            console.log(msg);
-            if(msg.status=="OK"){
-                //alert("success") ;
-				var items = msg.result;
-				$.each(items,function(i,item){
-					
-                    rows = '<tr><td height="32" align="center"><input type="checkbox" /></td><td height="32" align="center">'+item[1]+'</td><td height="32" align="center">'+高岩+'</td><td height="32" align="center">'+item[2]+'</td></tr>'
-					$('.summary_up table').append( rows );
-				})
-            }else{
-                alert("fail");
-            }
-        } ,
-        error:function(){
-            //���������
-        }
-    });
 }
 
 //�ϲ�����е���
@@ -145,7 +112,7 @@ function deleteLayData(){
     $.ajax({
         type:"post",
         //url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
-        url:"/result/combineSets",
+        url:"/result/deleteSets",
         data:{
             "startTime":" ",
             "endTime":" "
@@ -155,10 +122,12 @@ function deleteLayData(){
             console.log(msg);
             if(msg.status=="OK"){
                 alert("success") ;
+                $("summary_tab table tr[i]").html('');
+                
+                
             }else{
                 alert("fail");
             }
-
         } ,
         error:function(){
             //���������

@@ -54,7 +54,7 @@ a:hover { color:#000000; }
 
 /* 查看话题*/
 .ckht{ width:750px; margin-top:30px; position: relative;} 
-.sur_result{position: absolute; right:200px; top:50px;}
+.sur_result{position: absolute; right:50px; top:120px;}
 .ckht_list{ width:700px; margin-left:50px;  }
 .ckht_list li{ line-height: 30px; font-size: 16px; }
 .files_list table{ margin:20px auto;}
@@ -110,16 +110,17 @@ a:hover { color:#000000; }
 .summary_r img{ cursor:pointer;}
 .btn_hz{ display:block;}
 .summary_time{ width:750px; margin-top:20px; }
-.summary_time li{ float:left; /*background:url(../images/huizong.png) no-repeat left center;*/ line-height: 38px; margin-right:15px; }
-/*.summary_time li:hover{ background:url(../images/huizong_h.png) no-repeat left center; }*/
+.summary_time li{ float:left;  line-height: 38px; margin-right:5px; }
 .summary_time li input{ width:15px; height:15px; background:#dddddd; margin-right:5px; }
-.summary_time li input.lol_begin{ width:140px; height:36px; padding-left:10px; line-height:36px;}
-.summary_time li input.lol_end{ width:140px; height:36px; padding-left:10px; line-height:36px;}
-.summary_wrap{ width:750px; display:none; }
+.summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}
+.summary_time li input.lol_end{ width:105px; height:30px; line-height:30px; font-size:12px;}
+.summary_time li.file_search{margin-top:5px; cursor: pointer;}
+.summary_time li.file_summary{margin-top:5px; cursor: pointer;}
+.summary_wrap{ width:750px;/* display:none;*/ }
 .summary_show{ display:block; }
 .summary_up{ width:750px; margin-top:20px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
 .summary_up table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
-.summary_cont{ width:748px; height:525px;  margin-top:20px;  border:1px solid #0e63ab; display:none; }
+.summary_cont{ width:748px; height:525px;  margin-top:20px;  border:1px solid #0e63ab; /*display:none; */}
 .summary_tab{width:715px; height:415px;;overflow-y:scroll; line-height: 50px;  padding:10px 15px;}
 .summary_tab tr{ border-bottom:1px solid #999999;}
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}

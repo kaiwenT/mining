@@ -84,4 +84,10 @@ public class FileServiceImpl implements FileService {
         return fileDao.queryFilesByIssueId(issueId);
     }
 
+    @Override
+    public List<IssueFile> searchFilesByTime(String issueId, Date start, Date end) {
+        // TODO Auto-generated method stub
+        return fileDao.searchFilesByTime(issueId, start, end);
+    }
+
 }

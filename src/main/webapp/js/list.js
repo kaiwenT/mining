@@ -230,6 +230,7 @@ function searchData(page){
         url:"/issue/queryOwnIssue",
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
+        contentType:"application/json",
         success:function(msg){
            // console.log(msg);
             if(msg.status=="OK"){

@@ -2,7 +2,9 @@ package com.hust.mining.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +16,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -213,5 +218,24 @@ public class FileController {
             logger.warn("read column title fail" + e.toString());
         }
         return ResultUtil.errorWithMsg("获取列表题失败");
+    }
+
+    @ResponseBody
+    @RequestMapping("/searchFileByCon")
+    public Object searchFileByCon(@RequestParam(value = "startTime", required = true) Date startTime,
+            @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
+        String issueId = "7dd9ef19-ce27-40d8-bcf7-2fb09ce9be35";
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+        }
+        List<IssueFile> list = fileService.searchFilesByTime(issueId, startTime, endTime);
+        return ResultUtil.success(list);
+    }
+    
+    @InitBinder
+    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        CustomDateEditor editor = new CustomDateEditor(df, false);
+        binder.registerCustomEditor(Date.class, editor);
     }
 }
