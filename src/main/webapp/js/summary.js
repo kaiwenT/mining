@@ -171,7 +171,9 @@ function freshData() {
                                 .each(
                                         items,
                                         function(i, item) {
-                                            rows = '<tr><td height="32" align="center"><input type="checkbox" /></td><td height="32" align="center"><a href="'
+                                            rows = '<tr><td height="32" align="center"><input type="checkbox" class="'
+                                                    + i
+                                                    + '"/></td><td height="32" align="center"><a href="'
                                                     + item[1]
                                                     + '">'
                                                     + item[2]
