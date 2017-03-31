@@ -224,7 +224,7 @@ public class FileController {
     @RequestMapping("/searchFileByCon")
     public Object searchFileByCon(@RequestParam(value = "startTime", required = true) Date startTime,
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
-        String issueId = "7dd9ef19-ce27-40d8-bcf7-2fb09ce9be35";
+        String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
         }
