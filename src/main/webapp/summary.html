@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="css/style.css">
   	<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
   	<script type="text/javascript" src="js/summary.js"></script>
+  	<script type="text/javascript" src="js/dateformat.js"></script>
 </head>
 <body>
 	<div class="main">
@@ -17,13 +18,13 @@
 				<div class="data_summary">
                 	<div class="summary_time">
                     	<ul>
-                    		<li><input type="radio" name="timeradio" value="1" onClick="accordTimeData()"  />最近一周</li>
-                    		<li><input type="radio" name="timeradio" value="2" onClick="accordTimeData()" />最近一月</li>
-                    		<li><input type="radio" name="timeradio" value="3" onClick="accordTimeData()" />最近一季度</li>
+                    		<li><input type="radio" name="timeradio" value="1" />最近一周</li>
+                    		<li><input type="radio" name="timeradio" value="2" />最近一月</li>
+                    		<li><input type="radio" name="timeradio" value="3" />最近一季度</li>
                     		<li><input type="radio" name="timeradio" value="4" />自定义</li>
                     		<li>起：<input type="date" class="lol_begin" /></li>
                     		<li class="nomg_r">止：<input type="date" class="lol_end" /></li>
-                    		<li class="file_search"><img src="images/ss.png" /></li>
+                    		<li class="file_search"><img src="images/ss.png" onclick="fileSearch()"/></li>
                     		<li class="file_summary"><img src="images/hz.png" onclick="fileSummary()" /></li>
                             <div class="clear"></div>
                     	</ul>
