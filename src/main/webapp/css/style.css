@@ -120,9 +120,10 @@ a:hover { color:#000000; }
 .summary_show{ display:block; }
 .summary_up{ width:750px; margin-top:20px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
 .summary_up table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
-.summary_cont{ width:748px; height:525px;  margin-top:20px;  border:1px solid #0e63ab; /*display:none; */}
-.summary_tab{width:715px; height:415px;;overflow-y:scroll; line-height: 50px;  padding:10px 15px;}
+.summary_cont{ width:748px; height:525px;  margin-top:20px; /* border:1px solid #0e63ab;*/ /*display:none; */}
+.summary_tab{width:750px; height:415px;;overflow-y:scroll; border:1px solid #0e63ab;  }
 .summary_tab tr{ border-bottom:1px solid #999999;}
+.summary_tab table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
 .summary_tab tr a{display: inline-block; height:52px;}
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
