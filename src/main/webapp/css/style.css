@@ -124,7 +124,7 @@ a:hover { color:#000000; }
 .summary_tab{width:750px; height:415px;;overflow-y:scroll; border:1px solid #0e63ab;  }
 .summary_tab tr{ border-bottom:1px solid #999999;}
 .summary_tab table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
-.summary_tab tr a{display: inline-block; height:52px;}
+.summary_tab tr a{display: inline-block; height:32px; height:32px; overflow: hidden;}
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .choose{ margin-right:10px;}
