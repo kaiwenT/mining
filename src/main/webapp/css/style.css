@@ -123,6 +123,7 @@ a:hover { color:#000000; }
 .summary_cont{ width:748px; height:525px;  margin-top:20px;  border:1px solid #0e63ab; /*display:none; */}
 .summary_tab{width:715px; height:415px;;overflow-y:scroll; line-height: 50px;  padding:10px 15px;}
 .summary_tab tr{ border-bottom:1px solid #999999;}
+.summary_tab tr a{display: inline-block; height:52px;}
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .choose{ margin-right:10px;}
