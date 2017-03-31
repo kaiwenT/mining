@@ -21,9 +21,9 @@ function fileSummary(){
 			// console.log(msg);
 			if(msg.status == "OK"){
 				var items = msg.result;
-// $('.summary_tab table').html('');
+				$('.summary_tab table tr:not(:first)').html('');
 				$.each(items,function(i,item){
-					rows='<tr><td><input type="checkbox" class="choose" /><a href="#">标题：'+item[2]+'</a></td><td width="120" align="center">网站：'+item[1]+'</td><td width="230" align="center">发布时间：'+item[3]+'</td><td width="80" align="center">数量：'+item[0]+'</td></tr>'
+					rows='<tr><td height="32" align="center"><input type="checkbox"  /></td><td height="32" align="center"><a href="'+item[1]+'">'+item[2]+'</a></td><td height="32" align="center">'+item[3]+'</td><td height="32" align="center">'+item[0]+'</td></tr>'
 					$('.summary_tab table').append( rows );
 				})
 			}else{
