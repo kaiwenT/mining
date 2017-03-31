@@ -50,7 +50,7 @@ public class IssueController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
             HttpServletRequest request) {
-        if (issueService.createIssue(issueName,request) == 0) {
+        if (issueService.createIssue(issueName, request) == 0) {
             logger.info("create issue fail");
             return ResultUtil.errorWithMsg("创建话题失败");
         }
@@ -61,7 +61,7 @@ public class IssueController {
     @RequestMapping("/delete")
     public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
-        if (issueService.deleteIssueById(issueId,request) > 0) {
+        if (issueService.deleteIssueById(issueId, request) > 0) {
             return ResultUtil.success("删除话题成功");
         }
         return ResultUtil.errorWithMsg("删除话题失败");
@@ -101,7 +101,7 @@ public class IssueController {
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByTime(startTime, endTime,request);
+        List<String[]> count = issueService.miningByTime(startTime, endTime, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -110,13 +110,12 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/miningByFile")
-    public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
-            HttpServletRequest request) {
+    public Object miningByFileIds(@RequestBody List<String> fileIds, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
         }
-        List<String[]> count = issueService.miningByFileIds(fileIds,request);
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }

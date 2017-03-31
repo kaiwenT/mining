@@ -2,28 +2,28 @@
  * Created by Administrator on 2016/12/18.
  */
 
-//4.1汇总
+// 4.1汇总
 
 function fileSummary(){
 	var fileId = $(".summary_up input:checked").attr("class");
 	console.log(fileId);
-	
-	//console.log(value);
+	var fileIds = [];
+	fileIds.push(fileId);
+	// console.log(value);
 		
 	$.ajax({
 		type:"post",
-		url:"/issue/miningByTime",
-		data:{
-			fileId:fileId
-		} ,
+		url:"/issue/miningByFile",
+		data:JSON.stringify(fileIds),
 		dataType:"json",
+		contentType:"application/json",
 		success:function(msg){
-			//console.log(msg);
+			// console.log(msg);
 			if(msg.status == "OK"){
 				var items = msg.result;
-//				$('.summary_tab table').html('');
+// $('.summary_tab table').html('');
 				$.each(items,function(i,item){
-					rows='<tr><td><input type="checkbox" class="choose" /><a href="#">'+标题：12岁女学生上吊死亡+'</a></td><td width="120" align="center">'+网站：新华网+'</td><td width="230" align="center">'+发布时间：2016-12-17 12:00:00+'</td><td width="80" align="center">'+数量：260+'</td></tr>'
+					rows='<tr><td><input type="checkbox" class="choose" /><a href="#">标题：'+item[2]+'</a></td><td width="120" align="center">网站：'+item[1]+'</td><td width="230" align="center">发布时间：'+item[3]+'</td><td width="80" align="center">数量：'+item[0]+'</td></tr>'
 					$('.summary_tab table').append( rows );
 				})
 			}else{
@@ -32,7 +32,7 @@ function fileSummary(){
 
 		} ,
 		error:function(){
-			//���������
+			// ���������
 		}
 	});
 }
@@ -57,14 +57,14 @@ function fileSearch(){
         var strStart = "" + start.getFullYear() + "-";
         strStart += (start.getMonth()+1) + "-";
         strStart += start.getDate();
-        //console.log(strStart);
+        // console.log(strStart);
     }else if( value == "3" ){
         $(".summary_cont").css('display','block');
         var start = new Date( end.setMonth(end.getMonth()-3));
         var strStart = "" + start.getFullYear() + "-";
         strStart += (start.getMonth()+1) + "-";
         strStart += start.getDate();
-        //console.log(strStart);
+        // console.log(strStart);
     }else if( value == "4"){
         $(".summary_cont").css('display','block');
         var strEnd = $(".lol_end").val();
@@ -74,7 +74,7 @@ function fileSearch(){
     }else{
             
     }
-    //console.log(value);
+    // console.log(value);
     $.ajax({
         type:"post",
         url:"/file/searchFileByCon",
@@ -84,11 +84,11 @@ function fileSearch(){
         } ,
         dataType:"json",
         success:function(msg){
-            //console.log(msg);
+            // console.log(msg);
             if(msg.status == "OK"){
-                //alert("success") ;
+                // alert("success") ;
                 var items = msg.result;
-                //console.log(msg)
+                // console.log(msg)
                 $('.summary_up table tr:not(:first)').html('');
                 $.each(items,function(i,item){
                     rows = '<tr><td height="32" align="center"><input type="checkbox" class="'+item.fileId+'" /></td><td height="32" align="center">'+item.fileName+'</td><td height="32" align="center">'+item.creator+'</td><td height="32" align="center">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td></tr>'
@@ -104,11 +104,11 @@ function fileSearch(){
         }
     });
 }
-//�ϲ�����е���
+// �ϲ�����е���
 function addLayData(){alert("lll");
     $.ajax({
         type:"post",
-        //url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
+        // url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
         url:"/result/combineSets",
         data:{
             "startTime":" ",
@@ -125,16 +125,16 @@ function addLayData(){alert("lll");
 
         } ,
         error:function(){
-            //���������
+            // ���������
         }
     });
 }
 
-//ɾ������е���
+// ɾ������е���
 function deleteLayData(){
     $.ajax({
         type:"post",
-        //url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
+        // url:"http://1v5002132k.iask.in:13020/xinheng/result/combineSets",
         url:"/result/deleteSets",
         data:{
             "startTime":" ",
@@ -153,7 +153,7 @@ function deleteLayData(){
             }
         } ,
         error:function(){
-            //���������
+            // ���������
         }
     });
 }
