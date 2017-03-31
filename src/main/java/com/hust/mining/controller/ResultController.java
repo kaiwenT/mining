@@ -31,11 +31,17 @@ public class ResultController {
 
     @ResponseBody
     @RequestMapping("/getCountResult")
-    public Object getCountResult(@RequestParam(value = "resultId", required = true) String resultId,
+    public Object getCountResult(@RequestParam(value = "resultId", required = false) String resultId,
             HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
+        }
+        if (StringUtils.isBlank(resultId)) {
+            resultId = resultService.getCurrentResultId(request);
+        }
+        if (StringUtils.isBlank(resultId)) {
+            return ResultUtil.errorWithMsg("不存在记录");
         }
         List<String[]> list = resultService.getCountResultById(resultId, issueId, request);
         if (null == list || list.size() == 0) {
@@ -47,7 +53,7 @@ public class ResultController {
 
     @ResponseBody
     @RequestMapping("/deleteSets")
-    public Object delSets(@RequestParam(value = "sets", required = true) int[] sets, HttpServletRequest request) {
+    public Object delSets(@RequestBody int[] sets, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");
@@ -65,7 +71,7 @@ public class ResultController {
 
     @ResponseBody
     @RequestMapping("/combineSets")
-    public Object combineSets(int[] sets, HttpServletRequest request) {
+    public Object combineSets(@RequestBody int[] sets, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择话题");

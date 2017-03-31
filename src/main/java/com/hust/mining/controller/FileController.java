@@ -158,7 +158,7 @@ public class FileController {
         } finally {
             try {
                 outputStream.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.info("导出excel时，关闭outputstream失败");
             }
         }

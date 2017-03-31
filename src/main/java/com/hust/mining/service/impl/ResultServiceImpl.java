@@ -259,13 +259,13 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, List<String[]>> exportService(String issueId, String resultId,HttpServletRequest request) {
+    public Map<String, List<String[]>> exportService(String issueId, String resultId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         try {
-            List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT,request);
+            List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
             List<String[]> cluster = new ArrayList<String[]>();
             List<int[]> clusterIndex =
-                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT,request));
+                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request));
             for (int[] set : clusterIndex) {
                 for (int index : set) {
                     String[] row = content.get(index);
@@ -274,7 +274,8 @@ public class ResultServiceImpl implements ResultService {
                 cluster.add(new String[1]);
             }
             List<String[]> count = new ArrayList<String[]>();
-            List<int[]> countResult = (List<int[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT,request);
+            List<int[]> countResult =
+                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request));
             for (int[] row : countResult) {
                 String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
                 String[] nRow = new String[oldRow.length + 1];
