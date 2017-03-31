@@ -108,7 +108,9 @@ function fileSummary() {
                                 .each(
                                         items,
                                         function(i, item) {
-                                            rows = '<tr><td height="32" align="center"><input type="checkbox" /></td><td height="32" align="center"><a href="'
+                                            rows = '<tr><td height="32" align="center"><input type="checkbox" class="'
+                                                    + i
+                                                    + '"/></td><td height="32" align="center"><a href="'
                                                     + item[1]
                                                     + '">'
                                                     + item[2]
@@ -125,7 +127,7 @@ function fileSummary() {
 
                 },
                 error : function() {
-                   alert("数据请求失败");
+                    alert("数据请求失败");
                 }
             });
 }
@@ -134,8 +136,9 @@ function fileSummary() {
 function addLayData() {
     var sets = [];
     $(".summary_tab input:checked").each(function(i) {
-        sets.push(i);
+        sets.push($(this).attr('class'));
     });
+    console.log(sets);
     $.ajax({
         type : "post",
         url : "/result/combineSets",
@@ -194,8 +197,9 @@ function freshData() {
 function deleteLayData() {
     var sets = [];
     $(".summary_tab input:checked").each(function(i) {
-        sets.push(i);
+        sets.push($(this).attr('class'));
     });
+    console.log(sets);
     $.ajax({
         type : "post",
         url : "/result/deleteSets",
@@ -209,17 +213,6 @@ function deleteLayData() {
                 alert(msg.result);
             }
         },
-        error : function() {
-            alert("数据请求失败");
-        }
-    });
-}
-
-
-function download(){
-    $.ajax({
-        type : "post",
-        url : "/file/download",
         error : function() {
             alert("数据请求失败");
         }
