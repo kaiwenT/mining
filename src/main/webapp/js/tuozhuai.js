@@ -118,6 +118,7 @@ function up_del() {
                         /* cookie_value1="'"+item.fileId+"'"; */
                         upFile(file_array[parseInt(arrary)], urlIndex,
                                 titleIndex, time, sourceType);
+                        dataShow();
                     })
 
     $(".btn_up_del02").click(function() {
@@ -150,7 +151,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("sourceType", sourceType);
 
     var settings = {
-        "async" : true,
+        "async" : false,
         "crossDomain" : true,
         "url" : "/file/upload",
         "method" : "POST",
@@ -167,7 +168,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         if (msg.status == "OK") {
             // alert(msg.tagName);
             // cookie_value1="'"+item.fileId+"'";
-            dataShow();
+            
         } else {
             alert("上传失败");
         }

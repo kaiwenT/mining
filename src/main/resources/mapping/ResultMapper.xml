@@ -7,6 +7,7 @@
 		<result column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="creator" jdbcType="VARCHAR" property="creator" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="comment" jdbcType="VARCHAR" property="comment" />
 	</resultMap>
 	<sql id="Example_Where_Clause">
 		<where>
@@ -74,7 +75,7 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		rid, issue_id, creator, create_time
+		rid, issue_id, creator, create_time, comment
 	</sql>
 	<select id="selectByExample" parameterType="com.hust.mining.model.ResultExample"
 		resultMap="BaseResultMap">
@@ -111,11 +112,12 @@
 	<insert id="insert" parameterType="com.hust.mining.model.Result">
 		insert into result (rid,
 		issue_id, creator,
-		create_time)
-		values (#{rid,jdbcType=VARCHAR},
-		#{issueId,jdbcType=VARCHAR},
+		create_time, comment)
+		values
+		(#{rid,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR},
 		#{creator,jdbcType=VARCHAR},
-		#{createTime,jdbcType=TIMESTAMP})
+		#{createTime,jdbcType=TIMESTAMP},
+		#{comment,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.hust.mining.model.Result">
 		insert into result
@@ -132,6 +134,9 @@
 			<if test="createTime != null">
 				create_time,
 			</if>
+			<if test="comment != null">
+				comment,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="rid != null">
@@ -145,6 +150,9 @@
 			</if>
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="comment != null">
+				#{comment,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -170,6 +178,9 @@
 			<if test="record.createTime != null">
 				create_time = #{record.createTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="record.comment != null">
+				comment = #{record.comment,jdbcType=VARCHAR},
+			</if>
 		</set>
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
@@ -183,7 +194,9 @@
 		creator =
 		#{record.creator,jdbcType=VARCHAR},
 		create_time =
-		#{record.createTime,jdbcType=TIMESTAMP}
+		#{record.createTime,jdbcType=TIMESTAMP},
+		comment =
+		#{record.comment,jdbcType=VARCHAR}
 		<if test="_parameter != null">
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
@@ -200,6 +213,9 @@
 			<if test="createTime != null">
 				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
+			<if test="comment != null">
+				comment = #{comment,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where rid = #{rid,jdbcType=VARCHAR}
 	</update>
@@ -210,7 +226,8 @@
 		creator =
 		#{creator,jdbcType=VARCHAR},
 		create_time =
-		#{createTime,jdbcType=TIMESTAMP}
+		#{createTime,jdbcType=TIMESTAMP},
+		comment = #{comment,jdbcType=VARCHAR}
 		where rid = #{rid,jdbcType=VARCHAR}
 	</update>
 </mapper>

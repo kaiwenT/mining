@@ -7,7 +7,7 @@ function fileSearch() {
     var end = new Date;
     var strEnd = "" + end.getFullYear() + "-";
     strEnd += (end.getMonth() + 1) + "-";
-    strEnd += end.getDate();
+    strEnd += end.getDate() + 1;
 
     if (value == "1") {
         $(".summary_cont").css('display', 'block');

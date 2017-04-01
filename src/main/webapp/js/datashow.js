@@ -35,7 +35,7 @@ function dataShow(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" onclick="" /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" onclick="fileDel()" /></td></tr>'
 					$('.files_list table').append(row);
 				});				
             }else{
@@ -73,7 +73,7 @@ function fileDel(){
 	console.log(file_id);
 	$.ajax({
 		type:"post",
-		url:"/file/delete",
+		url:"/file/deleteFileById",
 		data:{
 			fileId:file_id
 		},

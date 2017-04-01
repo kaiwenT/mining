@@ -4,14 +4,31 @@
 <meta charset="utf-8">
 <title>无标题文档</title>
 <link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/dateformat.js"></script>
 </head>
 
 <body>
 	<div class="top">
-		<span class="b_tit">四川电信集团舆情信息挖掘系统</span> 
-		<span class="s_tit">您好，高岩&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：<script>
-            new Date();
-        </script> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">退出</a></span>
+		<span class="b_tit">四川电信集团舆情信息挖掘系统</span> <span class="s_tit">您好，<script
+				language="javascript">
+        function user(){
+			$.ajax({
+                url : "/getCurrentUser",
+                type:"post",
+                succcess:function(msg){
+                    if(msg.status=='OK'){
+                        user = msg.result;
+                    }
+                    document.write(user);
+                }
+            });
+			window.onload = user();
+        }    
+        </script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间：<script>
+                                    document.write(new Date()
+                                            .format('yyyy-MM-dd'));
+                                </script> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+				href="#">退出</a></span>
 	</div>
 </body>
 </html>

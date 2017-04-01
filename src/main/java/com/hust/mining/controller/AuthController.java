@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.ResultUtil;
 
 @Controller
 @RequestMapping("/")
@@ -43,5 +44,11 @@ public class AuthController {
     public String logout(HttpServletRequest request) {
         redisService.del(KEY.USER_NAME, request);
         return "redirect:/index.html";
+    }
+    
+    @RequestMapping(value="getCurrentUser")
+    public Object getCurrentUser(HttpServletRequest request){
+        String user = userService.getCurrentUser(request);
+        return ResultUtil.success(user);
     }
 }

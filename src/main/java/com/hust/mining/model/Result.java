@@ -1,9 +1,8 @@
 package com.hust.mining.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Result implements Serializable{
+public class Result {
     private String rid;
 
     private String issueId;
@@ -11,6 +10,8 @@ public class Result implements Serializable{
     private String creator;
 
     private Date createTime;
+
+    private String comment;
 
     public String getRid() {
         return rid;
@@ -42,5 +43,13 @@ public class Result implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment == null ? null : comment.trim();
     }
 }

@@ -88,7 +88,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int updateIssueInfo(Issue issue,HttpServletRequest request) {
+    public int updateIssueInfo(Issue issue, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         issue.setLastOperator(user);
@@ -97,7 +97,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public int deleteIssueById(String issueId,HttpServletRequest request) {
+    public int deleteIssueById(String issueId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         return issueDao.deleteIssueById(issueId, user);
@@ -197,11 +197,16 @@ public class IssueServiceImpl implements IssueService {
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
+        String comment = "";
+        for (IssueFile file : files) {
+            comment += file.getFileName();
+        }
         Result result = new Result();
         result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
         result.setCreator(user);
         result.setCreateTime(new Date());
+        result.setComment(comment);
         ResultWithContent rc = new ResultWithContent();
         rc.setResult(result);
         rc.setContent(content);
