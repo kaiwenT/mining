@@ -1,5 +1,7 @@
 package com.hust.mining.controller;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.constant.Constant.KEY;
+import com.hust.mining.model.User;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ResultUtil;
@@ -51,7 +54,8 @@ public class AuthController {
     @ResponseBody
     @RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
     public Object getCurrentUser(HttpServletRequest request) {
-        String user = userService.getCurrentUser(request);
-        return ResultUtil.success(user);
+        String username = userService.getCurrentUser(request);
+        List<User> user = userService.selectSingleUserInfo(username, request);
+        return ResultUtil.success(user.get(0).getTrueName());
     }
 }

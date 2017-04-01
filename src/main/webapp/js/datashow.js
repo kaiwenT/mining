@@ -6,7 +6,6 @@ function dataShow(){
 	$('.files_list table').html("");
     $.ajax({
         type:"post",
-// url:"http://1v5002132k.iask.in:13020/xinheng/file/queryIssueFiles",
         url:"/file/queryIssueFiles",
         data:{
             issueId:newId

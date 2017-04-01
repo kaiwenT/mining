@@ -53,23 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> selectSingleUserInfo(String userName, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String loginName = (String) session.getAttribute("username");
-        ;
-        List<User> users = userDao.selectByUserName(loginName);
-        List<User> user = new ArrayList<>();
-        List<Integer> roleId = new ArrayList<>();
-        List<UserRole> userRole = userRoleDao.selectAllUserRole();
-        for (UserRole userRoleInfo : userRole) {
-            if (userRoleInfo.getUserId() == users.get(0).getUserId()) {
-                roleId.add(userRoleInfo.getRoleId());
-            }
-        }
-        if (!roleId.contains(1) || !roleId.contains(2)) {
-            user = userDao.selectByUserName(loginName);
-            return user;
-        }
-        user = userDao.selectByUserName(userName);
+        List<User> user = userDao.selectByUserName(userName);
         if (user.isEmpty()) {
             logger.info("userName is not exist");
             return user;
