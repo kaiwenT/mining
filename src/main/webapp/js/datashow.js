@@ -3,7 +3,6 @@
 function dataShow(){
 	var newId=getCookie("id");
 	console.log(newId);
-	$('.files_list table').html("");
     $.ajax({
         type:"post",
         url:"/file/queryIssueFiles",
@@ -35,7 +34,7 @@ function dataShow(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" class="'+item.fileId+'" onclick="fileDel()"  /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
 					$('.files_list table').append(row);
 				});				
             }else{
@@ -68,27 +67,27 @@ function getCookie(name) {
 	return null;
 }
 
-function fileDel(){
-	var file_id=$(this).attr("class");
-	console.log(file_id);
-	$.ajax({
-		type:"post",
-		url:"/file/deleteFileById",
-		data:{
-			fileId:file_id
-		},
-		dataType:"json",
-		success: function(msg){
-			console.log(msg);
-			if( msg.status == "OK"){
-				//alert("删除成功");	
-				dataShow();
-			}else{
-				alert("fail");
-			}
-		},
-		error: function(){
-			
-		}
-	})	
+function bind(){
+	$(".up_list tr").on("click",".btn_jl",function(){
+		var file_id = $(this).attr("id");
+		console.log(file_id);
+		$.ajax({
+		        type:"post",
+		        url:"/file/deleteFileById",
+		        data:{
+		            fileid:file_id
+		        },
+		        dataType:"json",
+		        success: function(msg){
+		            if( msg.status == "OK"){
+		                dataShow();
+		            }else{
+		                alert("fail");
+		            }
+		        },
+		        error: function(){
+		            
+		        }
+		    })  
+	})
 }
