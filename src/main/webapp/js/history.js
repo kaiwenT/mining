@@ -1,6 +1,30 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
+
+$(document).ready(function(){
+    $.ajax({
+        type:"post",
+        url:"/result/queryResultList",
+        success:function(msg){
+            var items = msg.result;
+            $('.summary_up table tr:not(:first)').html('');
+            $.each(items,function(i, item) {
+                        rows = '<tr><td height="32" align="center">'
+                                + item.comment
+                                + '</td><td height="32" align="center">'
+                                + item.creator
+                                + '</td><td height="32" align="center">'
+                                + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
+                                + '</td><td height="32" align="center"><img src="images/delete.png" onclick="fileDel()" /></td></tr>'
+                        $('.summary_up table').append(rows);
+                    })
+        },
+        error : function(msg){
+            alert("数据请求失败");
+        }
+    });
+});
 /* 搜索 */
 function fileSearch() {
     var value = $(".summary_time input[name = 'timeradio']:checked").val();

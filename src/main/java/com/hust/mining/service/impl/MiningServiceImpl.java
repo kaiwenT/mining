@@ -140,10 +140,10 @@ public class MiningServiceImpl implements MiningService {
             if (CommonUtil.isEmptyArray(row)) {
                 continue;
             }
-            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(array[Index.URL_INDEX]));
+            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(row[Index.URL_INDEX]));
             String level = website.getLevel();
             String type = website.getType();
-            String timeKey = CommonUtil.getTimeKey(array[Index.TIME_INDEX], interval);
+            String timeKey = CommonUtil.getTimeKey(row[Index.TIME_INDEX], interval);
             Map<String, Map<String, Integer>> timeMap = map.get(timeKey);
             if (timeMap == null) {
                 timeMap = new HashMap<String, Map<String, Integer>>();

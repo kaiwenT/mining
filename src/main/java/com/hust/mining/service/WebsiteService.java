@@ -10,6 +10,8 @@ public interface WebsiteService {
 	List<Website> selectAllWebsite(int start, int limit);
 
 	List<Website> selectByCondition(WebsiteQueryCondition website);
+	
+	List<Website> selectAllWebsiteUnknow(int start, int limit);
 
 	boolean deleteWebsiteById(long id);
 

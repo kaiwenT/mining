@@ -30,6 +30,17 @@ public class WebsiteController {
 		}
 		return ResultUtil.success(website);
 	}
+	
+	@ResponseBody
+    @RequestMapping("/selectAllWebsiteUnknow")
+    public Object selectAllWebsiteUnknow(@RequestParam(value = "start", required = true) int start,
+            @RequestParam(value = "limit", required = true) int limit) {
+        List<Website> website = websiteService.selectAllWebsiteUnknow(start, limit);
+        if (website.isEmpty()) {
+            return ResultUtil.errorWithMsg("website is empty");
+        }
+        return ResultUtil.success(website);
+    }
 
 	@ResponseBody
 	@RequestMapping("/insertWebsite")
