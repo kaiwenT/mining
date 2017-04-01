@@ -6,8 +6,8 @@ function userInforShow(page){
 		type:"get",
 		url:"/user/selectAllUser",
 		data:{
-			start:(parseInt(3*page-3)),
-			limit:3
+			start:(parseInt(10*page-10)),
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){
@@ -254,7 +254,7 @@ function userInforSearch(page){
 			roleName:obj3,
 			telphone:obj4,
 			email:obj5,
-			page:(parseInt(3*page-3)),
+			page:(parseInt(10*page-10)),
 			row:0
 		},
 		dataType:"json",

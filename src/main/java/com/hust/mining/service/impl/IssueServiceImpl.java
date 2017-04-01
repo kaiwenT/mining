@@ -198,8 +198,12 @@ public class IssueServiceImpl implements IssueService {
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
         String comment = "";
-        for (IssueFile file : files) {
-            comment += file.getFileName();
+        for (int i = 0; i < files.size(); i++) {
+            if (i == 0) {
+                comment = files.get(i).getFileName();
+            } else {
+                comment += "\t" + files.get(i).getFileName();
+            }
         }
         Result result = new Result();
         result.setRid(UUID.randomUUID().toString());

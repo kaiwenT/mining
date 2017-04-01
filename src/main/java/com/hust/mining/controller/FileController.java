@@ -177,7 +177,6 @@ public class FileController {
             return ResultUtil.errorWithMsg("查询话题文件失败");
         }
         con.setIssueId(issueId);
-        con.setUser(user);
         List<Issue> issues = issueService.queryIssue(con);
         if (issues.isEmpty()) {
             return ResultUtil.errorWithMsg("查询话题文件失败");

@@ -6,8 +6,8 @@ function typeInforShow(page){
 		type:"post",
 		url:"/sourceType/selectAllSourceType",
 		data:{
-			start:(parseInt(3*page-3)),
-			limit:3
+			start:(parseInt(10*page-10)),
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){
@@ -41,7 +41,7 @@ typeInforShow(1)
 function setCookie(value1,value2){
 	//alert(name+value);
 	var cookie_name1="id";
-	var cookie_name2="name";
+	var cookie_name2="typeName";
 	var Days = 1; //此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
@@ -192,7 +192,7 @@ function typeInforSearch(page){
 		url:"/sourceType/selectSourceTypeByName",
 		data:{
 			name:$("#type_search").val(),
-			start:(parseInt(3*page-3)),
+			start:(parseInt(10*page-10)),
 			limit:0
 		},
 		dataType:"json",

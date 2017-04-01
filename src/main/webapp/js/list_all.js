@@ -5,7 +5,7 @@ function allData (page){
     $.ajax({
         type:"post",
         // url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
-        url:"/issue/queryOwnIssue",
+        url:"/issue/queryAllIssue",
 		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
 		contentType:"application/json",
@@ -226,30 +226,23 @@ function searchData(page){
 	setFirstSelected();
     $.ajax({
         type:"post",
+        // url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
         url:"/issue/queryOwnIssue",
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         contentType:"application/json",
         success:function(msg){
-            // console.log(msg);
+           // console.log(msg);
             if(msg.status=="OK"){
                 // alert("success") ;
-                var items = msg.result.list ;
-                var cookie_value1;
                 $('.ht_cont tr:not(:first)').html("");
-                $.each(items,function(idx,item) {
-                    // alert(msg.tagName);
-                    cookie_value1="'"+item.issueId+"'";
-                    row= '<tr><td height="40" align="center">'+(idx+1)+
-                    '</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+
-                    '</a></td><td height="40" align="center">'+item.creator+
-                    '</td><td height="40" align="center">'+ new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
-                    '</td><td height="40" align="center">'+item.lastOperator+
-                    '</td><td height="40" align="center">'+ new Date(item.lastUpdateTime.time).format('yyyy-MM-dd hh:mm:ss')+
-                    '</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'" /></td></tr>'
-                    $('.ht_cont').append(row);
-                    
-                });
+				var items = msg.result.list ;
+				$.each(items,function(idx,item) {
+					// alert(obj.tagName);
+					row= '<tr><td height="40" align="center">'+(idx+1)+'</td><td height="40" align="center"><a href="#">'+item.issueName+'</a></td><td height="40" align="center">'+item.creator+'</td><td height="40" align="center">'+item.createTime.year+'-'+item.createTime.month+'-'+item.createTime.date+'&nbsp;'+item.createTime.hours+':'+item.createTime.seconds+'</td><td height="40" align="center">'+item.lastOperator+'</td><td height="40" align="center">'+item.lastUpdateTime.year+'-'+item.lastUpdateTime.month+'-'+item.lastUpdateTime.date+'&nbsp;'+item.lastUpdateTime.hours+':'+item.lastUpdateTime.seconds+'</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'" /></td>'
+					$('.ht_cont').append(row);
+					
+				});
 				
             }else{
                 alert("fail");
@@ -292,6 +285,7 @@ $(function(){
 		var issueId = $(this).attr("class");
 		console.log(issueId);
 		deleteData(issueId);
+		
 		function deleteData(issueId){
 	
 			$.ajax({
@@ -306,6 +300,8 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
+						alert("success");
+						$('.ht_cont').html("");
 						searchData(1)
 					}else{
 						alert("fail");

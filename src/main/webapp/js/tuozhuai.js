@@ -94,32 +94,30 @@ var data12 = {
 }
 
 function up_del() {
-    $(".btn_up_del01")
-            .click(
-                    function() {
-                        var arrary = $(this).parent("li").children(
-                                ".files_name").attr("name");
-                        var fileName = $(this).parent("li").children(
-                                ".files_name").val();
-                        var urlIndex = $(this).parent("li").children(
-                                "select.select01").val();
-                        var titleIndex = $(this).parent("li").children(
-                                "select.select02").val();
-                        var time = $(this).parent("li").children(
-                                "select.select03").val();
-                        var sourceType = $(this).parent("li").children(
-                                "select.select04").val();
-                        console.log(arrary);
-                        console.log(fileName);
-                        console.log(time);
-                        console.log(urlIndex);
-                        console.log(titleIndex);
-                        console.log(sourceType);
-                        /* cookie_value1="'"+item.fileId+"'"; */
-                        upFile(file_array[parseInt(arrary)], urlIndex,
-                                titleIndex, time, sourceType);
-                        dataShow();
-                    })
+    $(".btn_up_del01").click(function() {
+        var arrary = $(this).parent("li").children(
+                ".files_name").attr("name");
+        var fileName = $(this).parent("li").children(
+                ".files_name").val();
+        var urlIndex = $(this).parent("li").children(
+                "select.select01").val();
+        var titleIndex = $(this).parent("li").children(
+                "select.select02").val();
+        var time = $(this).parent("li").children(
+                "select.select03").val();
+        var sourceType = $(this).parent("li").children(
+                "select.select04").val();
+        console.log(arrary);
+        console.log(fileName);
+        console.log(time);
+        console.log(urlIndex);
+        console.log(titleIndex);
+        console.log(sourceType);
+        /* cookie_value1="'"+item.fileId+"'"; */
+        upFile(file_array[parseInt(arrary)], urlIndex,
+                titleIndex, time, sourceType);
+        dataShow();
+    })
 
     $(".btn_up_del02").click(function() {
         $(this).parent("li").remove();

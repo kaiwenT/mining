@@ -30,6 +30,7 @@ a:hover { color:#000000; }
 .b_tit{ display: block; height:117px; line-height:117px; font-size: 48px; margin-top: 20px; text-align: center; }
 .s_tit{ display: block; line-height:40px; font-size: 16px; text-align: right; padding-right:20px;}
 .s_tit a{ color:#fff;}
+.s_tit i{ font-style: normal;}
 
 /*底部*/
 .copyright{ width:1000px; height:70px; background:#397fbb; line-height:70px; text-align:center; font-size:16px; color:#fff; margin-top:10px;}
@@ -55,8 +56,10 @@ a:hover { color:#000000; }
 /* 查看话题*/
 .ckht{ width:750px; margin-top:30px; position: relative;} 
 .sur_result{position: absolute; right:50px; top:120px;}
+.his_result{position: absolute; right:160px; top:120px;}
 .ckht_list{ width:700px; margin-left:50px;  }
 .ckht_list li{ line-height: 30px; font-size: 16px; }
+.up_list_wrap{width:700px; height:290px; overflow-y:scroll}
 .files_list table{ margin:20px auto;}
 .files_list table td{ border:1px solid #999999; font-size:14px; background:#ffffff;}
 .files_list table .d_blue{ background:#86c6ea;}

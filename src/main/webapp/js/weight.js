@@ -6,8 +6,8 @@ function weightInforShow(page){
 		type:"post",
 		url:"/weight/selectAllWeight",
 		data:{
-			start:(parseInt(3*page-3)),
-			limit:3
+			start:(parseInt(10*page-10)),
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){
@@ -41,7 +41,7 @@ weightInforShow(1)
 function setCookie(value1,value2,value3){
 	//alert(name+value);
 	var cookie_name1="id";
-	var cookie_name2="name";
+	var cookie_name2="weightName";
 	var cookie_name3="weight";
 	var Days = 1; //此 cookie 将被保存 1 天
 	var exp　= new Date();
@@ -195,7 +195,7 @@ function weightInforSearch(page){
 		data:{
 			name:$("#name").val(),
 			weight:$("#weight").val(),
-			start:(parseInt(3*page-3)),
+			start:(parseInt(10*page-10)),
 			limit:0
 		},
 		dataType:"json",

@@ -6,8 +6,8 @@ function websiteInforShow(page){
 		type:"post",
 		url:"/website/selectAllWebsite",
 		data:{
-			start:(parseInt(3*page-3)),
-			limit:3
+			start:(parseInt(10*page-10)),
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){
@@ -45,7 +45,7 @@ websiteInforShow(1)
 function setCookie(value1,value2,value3,value4,value5){
 	//alert(name+value);
 	var cookie_name1="id";
-	var cookie_name2="name";
+	var cookie_name2="websiteName";
 	var cookie_name3="type";
 	var cookie_name4="url";
 	var cookie_name5="level";
@@ -208,7 +208,7 @@ function websiteInforSearch(page){
 			//level:obj3,
 			levle:obj3,
 			type:obj4,
-			start:(parseInt(3*page-3)),
+			start:(parseInt(10*page-10)),
 			limit:0
 		},
 		dataType:"json",

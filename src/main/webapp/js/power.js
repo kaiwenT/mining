@@ -6,8 +6,8 @@ function powerInforShow(page){
 		type:"post",
 		url:"/power/selectAllPower",
 		data:{
-			start:(parseInt(3*page-3)),
-			limit:3
+			start:(parseInt(10*page-10)),
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){
@@ -43,7 +43,7 @@ powerInforShow(1);
 function setCookie(value1,value2,value3){
 	//alert(name+value);
 	var cookie_name1="id";
-	var cookie_name2="name";
+	var cookie_name2="powerName";
 	var cookie_name3="url";
 	var Days = 1; //此 cookie 将被保存 1 天
 	var exp　= new Date();
@@ -195,7 +195,7 @@ function powerInforSearch(page){
 		url:"/power/selectOnePowerInfo",
 		data:{
 			powerName:powerInfor,
-			start:(parseInt(3*page-3)),
+			start:(parseInt(10*page-10)),
 			limit:0
 		},
 		dataType:"json",

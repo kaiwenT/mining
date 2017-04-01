@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.service.RedisService;
@@ -24,7 +25,7 @@ public class AuthController {
     @Autowired
     private RedisService redisService;
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestParam(value = "form-username", required = true) String userName,
             @RequestParam(value = "form-password", required = true) String passwd, HttpServletResponse response,
             HttpServletRequest request) {
@@ -40,14 +41,16 @@ public class AuthController {
         return "redirect:/error.jsp";
     }
 
-    @RequestMapping(value = "logout")
-    public String logout(HttpServletRequest request) {
+    @ResponseBody
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Object logout(HttpServletRequest request) {
         redisService.del(KEY.USER_NAME, request);
-        return "redirect:/index.html";
+        return ResultUtil.successWithoutMsg();
     }
-    
-    @RequestMapping(value="getCurrentUser")
-    public Object getCurrentUser(HttpServletRequest request){
+
+    @ResponseBody
+    @RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
+    public Object getCurrentUser(HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
         return ResultUtil.success(user);
     }

@@ -30,12 +30,13 @@ function dataShow(){
 					$('.ckht_list li').eq(4).append( lut );
 				});
 				var tabs = msg.result.list; 
+				$('.up_list tr:not(:first)').html("");
 				$.each(tabs,function(i,item){
 					cookie_value1="'"+item.fileId+"'";
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" onclick="fileDel()" /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" class="'+item.fileId+'" onclick="fileDel()"  /></td></tr>'
 					$('.files_list table').append(row);
 				});				
             }else{
@@ -69,7 +70,7 @@ function getCookie(name) {
 }
 
 function fileDel(){
-	var file_id=getCookie("id")
+	var file_id=$(this).attr("class");
 	console.log(file_id);
 	$.ajax({
 		type:"post",
@@ -82,7 +83,7 @@ function fileDel(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				//alert("删除成功");	
-				$(this).parents("tr").remove();
+				dataShow();
 			}else{
 				alert("fail");
 			}
