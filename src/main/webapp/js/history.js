@@ -66,7 +66,9 @@ function historyData(rid) {
                                                     + item[3]
                                                     + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
-                                                    + ')">'
+                                                    + ',\''
+                                                    + item[2]
+                                                    + '\')">'
                                                     + item[0]
                                                     + '</a></td></tr>';
                                             $('.summary_tab table')
@@ -114,8 +116,9 @@ function historyDel() {
     })
 }
 
-function toPaint(currentSet) {
+function toPaint(currentSet, title) {
     setCookie('currentSet', currentSet);
+    setCookie('title', title);
     window.location.href = "/data_results.html";
 }
 
@@ -194,7 +197,9 @@ function freshData() {
                                                     + item[3]
                                                     + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
-                                                    + ')">'
+                                                    + ',\''
+                                                    + item[2]
+                                                    + '\')">'
                                                     + item[0]
                                                     + '</a></td></tr>';
                                             $('.summary_tab table')

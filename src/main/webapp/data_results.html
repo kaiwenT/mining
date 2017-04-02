@@ -17,26 +17,24 @@
 			<div class="right float_r">
 				<div class="s_nav">
 					当前位置：
-					<a href="#">任务管理</a>
+					<a href="/topic_list.html">任务管理</a>
 					>>
 					<a href="#">结果查看</a>
-					>>
-					<a href="#">多悦小学</a>
-					>>小学女生宿舍上吊
+					>>统计结果
 				</div>
 
 				<div class="data_xq">
 					<ul class="data_xq_tit">
-						<li class="stop">统计结果</li>
-						<li>折线图</li>
-						<li>柱状图</li>
+						<li class="stop">分类统计</li>
+						<li>折线/柱状图</li>
+						<li>全局统计</li>
 						<li>饼图</li>
 						<div class="clear"></div>
 					</ul>
 					<div class="data_xq_cont stop_zs">
 						<span>类型统计结果：</span>
 						<div class="table_collection ">
-							<table width="1000" border="0" class="info_count">
+							<table width="1000" border="0" class="info_count" id="info_count" >
 								<tr>
 									<td width="100" height="32" align="center" bgcolor="#86c6ea">&nbsp;</td>
 									<td width="80" height="32" align="center" bgcolor="#86c6ea">论坛</td>
@@ -55,7 +53,7 @@
 						</div>
 						<span>网民关注度：</span>
 						<div class="table_collection">
-							<table width="1000" border="0" class="info_atten">
+							<table width="1000" border="0" class="info_atten" id="info_atten" >
 								<tr>
 									<td width="100" height="32" align="center" bgcolor="#86c6ea">&nbsp;</td>
 									<td width="80" height="32" align="center" bgcolor="#86c6ea">论坛</td>
@@ -74,7 +72,7 @@
 						</div>
 						<span>媒体统计结果：</span>
 						<div class="table_collection">
-							<table width="730" border="0" class="media_count">
+							<table width="730" border="0" class="media_count" id = "media_count">
 								<tr>
 									<td width="148" height="32" align="center" bgcolor="#86c6ea">&nbsp;</td>
 									<td width="148" height="32" align="center" bgcolor="#86c6ea">中央媒体</td>
@@ -86,7 +84,7 @@
 						</div>
 						<span>媒体关注度：</span>
 						<div class="table_collection">
-							<table width="730" border="0" class="media_atten">
+							<table width="730" border="0" class="media_atten" id="media_atten">
 								<tr>
 									<td width="148" height="32" align="center" bgcolor="#86c6ea">&nbsp;</td>
 									<td width="148" height="32" align="center" bgcolor="#86c6ea">论坛</td>
@@ -99,11 +97,55 @@
 					</div>
 					<div class="data_xq_cont">
 						<span>类型统计结果：
-							<div id="zx_type" style="width: 600px; height: 400px;"></div>
-						</span> <span>网民关注度：</span> <span>媒体统计结果：</span> <span>媒体关注度：</span>
+						<div id="line_chart01"  class="line-chart" style="width: 700px;height:400px;"></div>
+						</span> 
+						<span>网民关注度：</span>
+						<div id="line_chart02"  class="line-chart" style="width: 700px;height:400px;"></div>
+						<span>媒体统计结果：</span>
+						<div id="line_chart03"  class="line-chart" style="width: 700px;height:400px;"></div>
+						<span>媒体关注度：</span>
+						<div id="line_chart04"  class="line-chart" style="width: 700px;height:400px;"></div>
 					</div>
 					<div class="data_xq_cont">
-						<span>类型统计结果：</span> <span>网民关注度：</span> <span>媒体统计结果：</span> <span>媒体关注度：</span>
+						<span>类型全局结果：</span>
+						<div class="table_collection ">
+							<table width="1000" border="0" class="info_amount" id="info_amount" >
+								<tr>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">论坛</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">新闻</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">博客</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">报纸</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">微信</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">贴吧</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">问答</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">手机</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">视频</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">微博</td>
+									<td width="80" height="32" align="center" bgcolor="#86c6ea">其他</td>
+								</tr>
+							</table>
+						</div>
+						<span>媒体全局统计结果：</span>
+						<div class="table_collection">
+							<table width="730" border="0" class="media_amount" id = "media_amount">
+								<tr>
+									<td width="148" height="32" align="center" bgcolor="#86c6ea">中央媒体</td>
+									<td width="148" height="32" align="center" bgcolor="#86c6ea">省级媒体</td>
+									<td width="148" height="32" align="center" bgcolor="#86c6ea">其他媒体</td>
+									<td width="148" height="32" align="center" bgcolor="#86c6ea">未知</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="data_xq_cont">
+						<span>类型统计结果：</span>
+						<div id="pie_chart01"  class="pie-chart"></div>
+						<span>网民关注度：</span>
+						<div id="pie_chart02"  class="pie-chart"></div>
+						<span>媒体统计结果：</span>
+						<div id="pie_chart03"  class="pie-chart"></div>
+						<span>媒体关注度：</span>
+						<div id="pie_chart04"  class="pie-chart"></div>
 					</div>
 				</div>
 			</div>

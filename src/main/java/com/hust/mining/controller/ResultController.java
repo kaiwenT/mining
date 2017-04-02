@@ -106,12 +106,12 @@ public class ResultController {
     public Object resetResultById(@RequestParam(value = "resultId", required = true) String resultId,
             HttpServletRequest request) {
         redisService.setString(KEY.RESULT_ID, resultId, request);
-        if (resultService.reset(request)) {
+        if(resultService.reset(request)){
             return ResultUtil.success("重置成功");
         }
         return ResultUtil.errorWithMsg("重置失败");
     }
-
+    
     @ResponseBody
     @RequestMapping("/delResultById")
     public Object delResultById(@RequestParam(value = "resultId", required = true) String resultId,
@@ -134,18 +134,6 @@ public class ResultController {
         if (null == map || map.isEmpty()) {
             return ResultUtil.errorWithMsg("统计失败");
         }
-        redisService.setObject(KEY.PAINT_MAP, map, request);
         return ResultUtil.success(map);
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/convertPaint")
-    public Object convertPaint(HttpServletRequest request) {
-        Map<String,Object> map = (Map<String, Object>) redisService.getObject(KEY.PAINT_MAP, request);
-        if(null == map || map.isEmpty()){
-            return ResultUtil.successWithoutMsg();
-        }
-        
-        return null;
     }
 }

@@ -9,9 +9,10 @@ $(function() {
                         .siblings().removeClass('stop_zs');
             });
 });
-
+var title = "";
 function paint() {
     var currentSet = getCookie('currentSet');
+    title = getCookie('title');
     var json = {
         interval : 2,
         currentSet : currentSet
@@ -23,7 +24,8 @@ function paint() {
         dataType : "json",
         contentType : "application/json",
         success : function(msg) {
-            parse(msg.result.time);
+            parseTime(msg.result.time);
+            parseAmount(msg.result.count);
         },
         error : function() {
             alert("请求失败");
@@ -31,8 +33,7 @@ function paint() {
     });
 }
 paint();
-
-function parse(json) {
+function parseTime(json) {
     var netAttenHtml = '';
     var typeHtml = '';
     var mediaAttenHtml = '';
@@ -47,50 +48,116 @@ function parse(json) {
         var media = json[time].media;
         mediaHtml += parse_media(time, media);
     }
-    console.log(mediaHtml);
     $('.media_count').append(mediaHtml);
     $('.media_atten').append(mediaAttenHtml);
     $('.info_count').append(typeHtml);
     $('.info_atten').append(netAttenHtml);
-
+    var icvalue = getTableData(document.getElementById('info_count'));
+    paintzx('line_chart01', icvalue.xAxis, icvalue.legend, icvalue.series);
+    var iavalue = getTableData(document.getElementById('info_atten'));
+    paintzx('line_chart02', iavalue.xAxis, iavalue.legend, iavalue.series);
+    var mcvalue = getTableData(document.getElementById('media_count'));
+    paintzx('line_chart03', mcvalue.xAxis, mcvalue.legend, mcvalue.series);
+    var mavalue = getTableData(document.getElementById('media_atten'));
+    paintzx('line_chart04', mavalue.xAxis, mavalue.legend, mavalue.series);
 }
 
 function parse_type(time, json) {
-    var row = '<tr><td>' + time + '</td><td>' + parseData(json['论坛'])
-            + '</td><td>' + parseData(json['新闻']) + '</td><td>'
-            + parseData(json['博客']) + '</td><td>' + parseData(json['报纸'])
-            + '</td><td>' + parseData(json['微信']) + '</td><td>'
-            + parseData(json['贴吧']) + '</td><td>' + parseData(json['问答'])
-            + '</td><td>' + parseData(json['手机']) + '</td><td>'
-            + parseData(json['视频']) + '</td><td>' + parseData(json['微博'])
-            + '</td><td>' + parseData(json['其他']) + '</td></tr>';
+    var row = '<tr><td>' + time + '</td><td>' + convertData(json['论坛'])
+            + '</td><td>' + convertData(json['新闻']) + '</td><td>'
+            + convertData(json['博客']) + '</td><td>' + convertData(json['报纸'])
+            + '</td><td>' + convertData(json['微信']) + '</td><td>'
+            + convertData(json['贴吧']) + '</td><td>' + convertData(json['问答'])
+            + '</td><td>' + convertData(json['手机']) + '</td><td>'
+            + convertData(json['视频']) + '</td><td>' + convertData(json['微博'])
+            + '</td><td>' + convertData(json['其他']) + '</td></tr>';
     return row;
 }
 
 function parse_media(time, json) {
-    var row = '<tr><td>' + time + '</td><td>' + parseData(json['中央'])
-            + '</td><td>' + parseData(json['省级']) + '</td><td>'
-            + parseData(json['其他']) + '</td><td>' + parseData(json['未知'])
+    var row = '<tr><td>' + time + '</td><td>' + convertData(json['中央'])
+            + '</td><td>' + convertData(json['省级']) + '</td><td>'
+            + convertData(json['其他']) + '</td><td>' + convertData(json['未知'])
             + '</td></tr>';
     return row;
 }
 
-function parseData(json) {
+function parseAmount(json) {
+    var typeHtml = '';
+    var levelHtml = '';
+    var typeJson = json.type;
+    var levelJson = json.level;
+    typeHtml = '<tr><td>' + convertData(typeJson['论坛'])
+            + '</td><td>' + convertData(typeJson['新闻']) + '</td><td>'
+            + convertData(typeJson['博客']) + '</td><td>'
+            + convertData(typeJson['报纸']) + '</td><td>'
+            + convertData(typeJson['微信']) + '</td><td>'
+            + convertData(typeJson['贴吧']) + '</td><td>'
+            + convertData(typeJson['问答']) + '</td><td>'
+            + convertData(typeJson['手机']) + '</td><td>'
+            + convertData(typeJson['视频']) + '</td><td>'
+            + convertData(typeJson['微博']) + '</td><td>'
+            + convertData(typeJson['其他']) + '</td></tr>';
+    levelHtml = '<tr><td>' + convertData(levelJson['中央'])
+            + '</td><td>' + convertData(levelJson['省级']) + '</td><td>'
+            + convertData(levelJson['其他']) + '</td><td>' + convertData(levelJson['未知'])
+            + '</td></tr>';
+    $('.info_amount').append(typeHtml);
+    $('.media_amount').append(levelHtml);
+}
+function convertData(json) {
     if (json === undefined) {
         return 0;
     } else {
         return json;
     }
 }
-$(function(){
-    var myChart = echarts.init(document.getElementById('zx_type'));
+
+function getTableData(table) {
+    var xAxis = new Array();
+    var legend = new Array();
+    var series = new Array();
+    for (var j = 0; j < table.rows[0].cells.length; j++) {
+        var json = {
+            "name" : "",
+            "type" : "bar",
+            "data" : []
+        };
+        for (var i = 0; i < table.rows.length; i++) {
+            if (j == 0 && i == 0) {
+                continue;
+            } else if (j == 0 && i > 0) {
+                xAxis.push(table.rows[i].cells[j].innerText);
+            } else {
+                if (i == 0) {
+                    json.name = table.rows[i].cells[j].innerText;
+                    legend.push(json.name);
+                } else {
+                    json.data.push(table.rows[i].cells[j].innerText);
+                }
+            }
+        }
+        if (j == 0) {
+            continue;
+        }
+        series.push(json);
+    }
+    var value = {
+        xAxis : xAxis,
+        legend : legend,
+        series : series
+    };
+    return value;
+}
+
+function paintzx(id, xAxis, legend, series) {
+    var myChart = echarts.init(document.getElementById(id));
     // 指定图表的配置项和数据
     var option = {
-        title : {
-            text : '销量柱状图', // 标题文本内容
-        },
         toolbox : { // 可视化的工具箱
             show : true,
+            orient : 'vertical',
+            top : 'middle',
             feature : {
                 dataView : { // 数据视图
                     show : true
@@ -105,31 +172,24 @@ $(function(){
                     show : true
                 },
                 magicType : {// 动态类型切换
-                    type : [ 'bar', 'line','pie' ]
+                    type : [ 'bar', 'line' ]
                 }
             }
         },
         tooltip : { // 弹窗组件
             show : true
         },
+        legend : {
+            data : legend,
+        },
         xAxis : {
-            data : [ "衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子" ]
+            data : xAxis
         },
         yAxis : {},
-        series : [ {
-            name : '销量',
-            type : 'bar',
-            data : [ 5, 20, 36, 10, 10, 20 ]
-        }, {
-            name : '测试',
-            type : 'bar',
-            data : [ 2, 23, 16, 14, 1, 22 ]
-        } ]
-
+        series : series
     };
-
     myChart.setOption(option);
-});
+}
 
 function paintbt() {
 
