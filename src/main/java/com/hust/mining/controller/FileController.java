@@ -68,7 +68,7 @@ public class FileController {
             @RequestParam(value = "urlIndex", required = true) int urlIndex,
             @RequestParam(value = "sourceType", required = true) String sourceType, HttpServletRequest request) {
         if (issueService.getCurrentIssueId(request) == null) {
-            return ResultUtil.errorWithMsg("请选择或者创建一个话题");
+            return ResultUtil.errorWithMsg("请选择或者创建一个任务");
         }
         // 数组之间必须是一一对应关系
         if (file.isEmpty()) {
@@ -129,7 +129,7 @@ public class FileController {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
-            logger.info("从session中无法s获得话题的话题id");
+            logger.info("从session中无法s获得任务的任务id");
             return;
         }
         String resultId = resultService.getCurrentResultId(request);
@@ -174,12 +174,12 @@ public class FileController {
             issueId = redisService.getString(KEY.ISSUE_ID, request);
         }
         if (StringUtils.isBlank(issueId)) {
-            return ResultUtil.errorWithMsg("查询话题文件失败");
+            return ResultUtil.errorWithMsg("查询任务文件失败");
         }
         con.setIssueId(issueId);
         List<Issue> issues = issueService.queryIssue(con);
         if (issues.isEmpty()) {
-            return ResultUtil.errorWithMsg("查询话题文件失败");
+            return ResultUtil.errorWithMsg("查询任务文件失败");
         }
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
         redisService.setString(KEY.ISSUE_ID, issueId, request);
@@ -195,7 +195,7 @@ public class FileController {
             HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+            return ResultUtil.errorWithMsg("获取当前任务失败,请重新进入任务");
         }
         int i = fileService.deleteById(fileId);
         if (i > 0) {
@@ -225,7 +225,7 @@ public class FileController {
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+            return ResultUtil.errorWithMsg("获取当前任务失败,请重新进入任务");
         }
         List<IssueFile> list = fileService.searchFilesByTime(issueId, startTime, endTime);
         return ResultUtil.success(list);

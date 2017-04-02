@@ -52,9 +52,9 @@ public class IssueController {
             HttpServletRequest request) {
         if (issueService.createIssue(issueName, request) == 0) {
             logger.info("create issue fail");
-            return ResultUtil.errorWithMsg("创建话题失败");
+            return ResultUtil.errorWithMsg("创建任务失败");
         }
-        return ResultUtil.success("创建话题成功");
+        return ResultUtil.success("创建任务成功");
     }
 
     @ResponseBody
@@ -62,9 +62,9 @@ public class IssueController {
     public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
             HttpServletRequest request) {
         if (issueService.deleteIssueById(issueId, request) > 0) {
-            return ResultUtil.success("删除话题成功");
+            return ResultUtil.success("删除任务成功");
         }
-        return ResultUtil.errorWithMsg("删除话题失败");
+        return ResultUtil.errorWithMsg("删除任务失败");
     }
 
     @ResponseBody
@@ -99,7 +99,7 @@ public class IssueController {
             @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         List<String[]> count = issueService.miningByTime(startTime, endTime, request);
         if (count == null) {
@@ -113,7 +113,7 @@ public class IssueController {
     public Object miningByFileIds(@RequestBody List<String> fileIds, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {

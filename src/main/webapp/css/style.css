@@ -53,7 +53,7 @@ a:hover { color:#000000; }
 .right{ width:750px; min-height:720px; background: #f7f7f7; padding:0 20px; }
 .s_nav{ line-height:50px; font-size: 16px; border-bottom:1px solid #999;}
 
-/* 查看话题*/
+/* 查看任务*/
 .ckht{ width:750px; margin-top:30px; position: relative;} 
 .sur_result{position: absolute; right:50px; top:120px;}
 .his_result{position: absolute; right:160px; top:120px;}
@@ -78,13 +78,13 @@ a:hover { color:#000000; }
 .btn_up_del03{float:right; margin-top:10px; margin-right:10px;}
 .btn_up_del04{float:right; margin-top:10px;}
 
-/*查看话题*/
+/*查看任务*/
 .cjht{ width:750px; height:200px;}
 .ht_name{ width:515px; margin:60px auto; font-size:18px; line-height:34px;}
 .input_ht_name{ width:340px; height:34px; line-height:34px; background:#dddddd; padding-left:10px;}
 .btn_cj{ display:inline-block; float:right; }
 
-/*自有话题*/
+/*自有任务*/
 .htlist{ width:750px; overflow:hidden; padding:30px 0;}
 .ht_tit{ width:730px; margin:0 auto; font-size:14px;}
 .zyht_name,.cjr_name{ width:90px; height:30px; line-height:30px; background:#dddddd; margin-right:10px; padding-left:10px; font-size:12px;}

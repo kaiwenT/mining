@@ -1,5 +1,5 @@
 // JavaScript Document
-//3.1话题详情展示
+//3.1任务详情展示
 function dataShow(){
 	var newId=getCookie("id");
 	console.log(newId);

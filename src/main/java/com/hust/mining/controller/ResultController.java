@@ -35,7 +35,7 @@ public class ResultController {
             HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         if (StringUtils.isBlank(resultId)) {
             resultId = resultService.getCurrentResultId(request);
@@ -56,7 +56,7 @@ public class ResultController {
     public Object delSets(@RequestBody int[] sets, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isEmpty(resultId)) {
@@ -74,7 +74,7 @@ public class ResultController {
     public Object combineSets(@RequestBody int[] sets, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isEmpty(resultId)) {
@@ -92,7 +92,7 @@ public class ResultController {
     public Object queryResultList(HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("获取当前话题失败,请重新进入话题");
+            return ResultUtil.errorWithMsg("获取当前任务失败,请重新进入任务");
         }
         List<Result> list = resultService.queryResultsByIssueId(issueId);
         if (null == list || list.size() == 0) {
@@ -117,7 +117,7 @@ public class ResultController {
     public Object statistic(@RequestBody StatisticParams params, HttpServletRequest request) {
         String resultId = resultService.getCurrentResultId(request);
         if (StringUtils.isBlank(resultId)) {
-            return ResultUtil.errorWithMsg("请重新选择话题");
+            return ResultUtil.errorWithMsg("请重新选择任务");
         }
         Map<String, Object> map = resultService.statistic(params, request);
         if (null == map || map.isEmpty()) {

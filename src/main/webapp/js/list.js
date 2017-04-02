@@ -1,5 +1,5 @@
 // JavaScript Document
-//2.1话题列表显示
+//2.1任务列表显示
 function allData (page){
 	search_click=false;
     $.ajax({
@@ -220,7 +220,7 @@ function getCookie(name) {
 	return null;
 }
 
-// 2.2话题搜索
+// 2.2任务搜索
 function searchData(page){
 	search_click=true;
 	setFirstSelected();
@@ -285,7 +285,7 @@ function SearchJsonData(page) {
     return json;
 }
 
-// 2.3管理话题
+// 2.3管理任务
 
 $(function(){
 	$(".ht_cont").on("click","img",function(){
