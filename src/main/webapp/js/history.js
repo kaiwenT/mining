@@ -74,7 +74,7 @@ function historyData(rid) {
 
 /*删除*/
 function historyDel(){
-	$(".summary_up table tr")..unbind('click').on("click","img",function(){
+	$(".summary_up table tr").unbind('click').on("click","img",function(){
 		var result_id = $(this).attr("id");
 		console.log(result_id);
 		fileDel(result_id);

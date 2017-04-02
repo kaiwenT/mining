@@ -87,6 +87,7 @@ function fileSearch() {
 // 汇总
 
 function fileSummary() {
+    $('.summary_tab table tr:not(:first)').html('');
     var fileIds = [];
     $(".summary_up input:checked").each(function(i) {
         fileIds.push($(this).attr("class"));
@@ -103,7 +104,6 @@ function fileSummary() {
                     // console.log(msg);
                     if (msg.status == "OK") {
                         var items = msg.result;
-                        $('.summary_tab table tr:not(:first)').html('');
                         $
                                 .each(
                                         items,
