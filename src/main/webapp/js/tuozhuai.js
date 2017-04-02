@@ -68,14 +68,15 @@ function reSetView(response, filename, index) {
             + '" value="'
             + filename
             + '" /> URL：<select class="select01">'
-            + getSpinner(array,'链接|网址')
+            + getSpinner(array, '链接|网址')
             + '</select>标题：<select class="select02">'
-            + getSpinner(array,'标题|内容')
+            + getSpinner(array, '标题|内容')
             + '</select> 时间：<select class="select03">'
-            + getSpinner(array,'发布时间|发贴时间|时间')
-            + '</select> 类型：<select class="select04"><option> 微博</option><option selected = true> 新闻</option></select><img src="images/delete.png" onclick="fileDel()"  class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" onclick="fileDelete()" /></li>'
+            + getSpinner(array, '发布时间|发贴时间|时间')
+            + '</select> 类型：<select class="select04"><option> 微博</option><option selected = true> 新闻</option></select><img src="images/delete.png" class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
     $("#file_ul").append(li_context);
     up_del();
+    all_up();
 }
 function getSpinner(array, regex) {
     var patt = new RegExp(regex); // 注意是非全局匹配
@@ -130,7 +131,6 @@ function up_del() {
 
     $(".btn_up_del02").unbind('click').click(function() {
         var arrary = $(this).parent("li").children(".files_name").attr("name");
-        delArray.push(array);
         $(this).parent("li").remove();
     });
 }
@@ -143,23 +143,25 @@ Array.prototype.contains = function(needle) {
     return false;
 }
 function all_up() {
-    $(".btn_up_del03").click(
+    $(".btn_up_del03").unbind('click').click(
             function() {
-                for (var i = 0; i < fileList.length; i++) {
-                    if (delArray.contains(i)) {
-                        continue;
-                    }
-                    var file = fileList[i];
-                    var urlIndex = $("#file_ul li:eq(i)").children(
-                            "select.select01").val();
-                    var titleIndex = $("#file_ul li:eq(i)").children(
-                            "select.select02").val();
-                    var sourceType = $("#file_ul li:eq(i)").children(
-                            "select.select04").val();
-                    var time = $("#file_ul li:eq(i)").children(
-                            "select.select03").val();
+                var liGroup = $("#file_ul li");
+                for (var i = 0; i < liGroup.length; i++) {
+                    var num =liGroup.eq(i).children(".files_name").attr("name");
+                    var file = fileList[num];
+                    var urlIndex = liGroup.eq(i).children("select.select01").val();
+                    var titleIndex = liGroup.eq(i).children("select.select02").val();
+                    var time = liGroup.eq(i).children("select.select03").val();
+                    var sourceType = liGroup.eq(i).children("select.select04").val();
+                    console.log(num);
+                    console.log(time);
+                    console.log(urlIndex);
+                    console.log(titleIndex);
+                    console.log(sourceType);
                     upFile(file, urlIndex, titleIndex, time, sourceType);
                 }
+                localRefresh();
+                allDel();
             });
 }
 function upFile(filex, urlIndex, titleIndex, time, sourceType) {
@@ -195,6 +197,4 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
 }
 function allDel() {
     $(".up_del li").remove();
-    $(".up_del .btn_up_del04").remove();
-    $(".up_del .btn_up_del03").remove();
 }
