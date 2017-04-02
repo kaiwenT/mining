@@ -56,11 +56,11 @@ public class CommonUtil {
             return Constant.INVALID_TIME;
         }
         switch (interval) {
-            case Interval.DAY: {
-                return time.substring(5, 10);
-            }
             case Interval.HOUR: {
-                return time.substring(5, 13);
+                return time.substring(0, 13);
+            }
+            case Interval.DAY: {
+                return time.substring(0, 10);
             }
             case Interval.MONTH: {
                 return time.substring(0, 7);

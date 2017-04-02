@@ -102,6 +102,17 @@ public class ResultController {
     }
 
     @ResponseBody
+    @RequestMapping("/resetResultById")
+    public Object resetResultById(@RequestParam(value = "resultId", required = true) String resultId,
+            HttpServletRequest request) {
+        redisService.setString(KEY.RESULT_ID, resultId, request);
+        if(resultService.reset(request)){
+            return ResultUtil.success("重置成功");
+        }
+        return ResultUtil.errorWithMsg("重置失败");
+    }
+    
+    @ResponseBody
     @RequestMapping("/delResultById")
     public Object delResultById(@RequestParam(value = "resultId", required = true) String resultId,
             HttpServletRequest request) {

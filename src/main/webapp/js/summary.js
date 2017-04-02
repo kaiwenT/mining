@@ -116,8 +116,11 @@ function fileSummary() {
                                                     + item[2]
                                                     + '</a></td><td height="32" align="center">'
                                                     + item[3]
-                                                    + '</td><td height="32" align="center">'
-                                                    + item[0] + '</td></tr>'
+                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint(\''
+                                                    + i
+                                                    + '\')">'
+                                                    + item[0]
+                                                    + '</a></td></tr>';
                                             $('.summary_tab table')
                                                     .append(rows);
                                         })
@@ -132,6 +135,10 @@ function fileSummary() {
             });
 }
 
+function toPaint(currentSet) {
+    setCookie('currentSet', currentSet);
+    window.location.href = "/data_results.html";
+}
 /* 合并 */
 function addLayData() {
     var sets = [];
@@ -179,8 +186,11 @@ function freshData() {
                                                     + item[2]
                                                     + '</a></td><td height="32" align="center">'
                                                     + item[3]
-                                                    + '</td><td height="32" align="center">'
-                                                    + item[0] + '</td></tr>'
+                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint(\''
+                                                    + i
+                                                    + '\')">'
+                                                    + item[0]
+                                                    + '</a></td></tr>';
                                             $('.summary_tab table')
                                                     .append(rows);
                                         })

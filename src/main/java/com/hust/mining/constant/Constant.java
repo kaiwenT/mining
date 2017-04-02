@@ -78,7 +78,7 @@ public class Constant {
     public static class MEDIALEVEL {
         public static final String ZHONGYANG = "中央";
         public static final String SHENGJI = "省级";
-        public static final String QITA = "其他新闻网站";
+        public static final String QITA = "其他";
         public static final String WEIZHI = "未知";
     }
 
