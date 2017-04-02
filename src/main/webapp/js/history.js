@@ -53,7 +53,7 @@ function historyData(rid) {
                                             + i
                                             + '"/></td><td height="32" align="center"><a href="'
                                             + item[1]
-                                            + '">'
+                                            + '" target="_blank">'
                                             + item[2]
                                             + '</a></td><td height="32" align="center">'
                                             + item[3]
@@ -148,7 +148,7 @@ function freshData() {
                                                     + i
                                                     + '"/></td><td height="32" align="center"><a href="'
                                                     + item[1]
-                                                    + '">'
+                                                    + '" target="_blank">'
                                                     + item[2]
                                                     + '</a></td><td height="32" align="center">'
                                                     + item[3]

@@ -116,7 +116,7 @@ function bind(){
 		        dataType:"json",
 		        success: function(msg){
 		            if( msg.status == "OK"){
-		                dataShow();
+		                localRefresh();
 		            }else{
 		                alert("fail");
 		            }
