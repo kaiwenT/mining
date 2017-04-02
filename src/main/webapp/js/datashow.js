@@ -104,7 +104,7 @@ function getCookie(name) {
 }
 
 function bind(){
-	$(".up_list tr").on("click",".btn_jl",function(){
+	$(".up_list tr").unbind('click').on("click",".btn_jl",function(){
 		var file_id = $(this).attr("id");
 		console.log(file_id);
 		$.ajax({
