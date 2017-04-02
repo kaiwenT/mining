@@ -46,6 +46,7 @@ public class Constant {
         public static final String REDIS_CONTENT = "redis_content";
         public static final String MINING_AMOUNT_TYPE = "typeAmount";
         public static final String MINING_AMOUNT_MEDIA = "mediaAmount";
+        public static final String PAINT_MAP = "paintMap";
     }
 
     public static class Index {

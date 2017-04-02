@@ -127,7 +127,7 @@ a:hover { color:#000000; }
 .summary_tab{width:750px; height:415px;;overflow-y:scroll; border:1px solid #0e63ab;  }
 .summary_tab tr{ border-bottom:1px solid #999999;}
 .summary_tab table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
-.summary_tab tr a{display: inline-block; height:32px; height:32px; overflow: hidden;}
+.summary_tab tr a{display: inline-block; line-height:32px; height:32px; overflow: hidden;}
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .choose{ margin-right:10px;}
@@ -145,8 +145,9 @@ a:hover { color:#000000; }
 .data_xq_tit li.stop{  background:#0e63ab; color:#fff; }
 .data_xq_cont{ width:750px; display:none;}
 .data_xq_cont span{ display:block; font-size:16px; line-height:40px;}
+.table_collection{width:750px;height:210px; overflow-y:scroll; overflow-x:scroll;}
 .data_xq_cont table { margin-bottom:20px;}
-.data_xq_cont table td{ border:1px solid #999999;}
+.data_xq_cont table td{ border:1px solid #999999; line-height: 32px; text-align: center;}
 .data_xq_cont_del{ width:650px; margin:0 50px;  line-height:32px; font-size:16px;}
 .data_xq_cont_del input{ font-size:16px;}
 .data_xq_cont_del button{ float:right; width:80px; height:34px; border-radius:5px; font-size:16px; color:#fff;  background:#0e63ab; cursor:pointer;}
