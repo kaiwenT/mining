@@ -87,8 +87,8 @@ function parseAmount(json) {
     var levelHtml = '';
     var typeJson = json.type;
     var levelJson = json.level;
-    typeHtml = '<tr><td>' + convertData(typeJson['论坛'])
-            + '</td><td>' + convertData(typeJson['新闻']) + '</td><td>'
+    typeHtml = '<tr><td>' + convertData(typeJson['论坛']) + '</td><td>'
+            + convertData(typeJson['新闻']) + '</td><td>'
             + convertData(typeJson['博客']) + '</td><td>'
             + convertData(typeJson['报纸']) + '</td><td>'
             + convertData(typeJson['微信']) + '</td><td>'
@@ -98,12 +98,17 @@ function parseAmount(json) {
             + convertData(typeJson['视频']) + '</td><td>'
             + convertData(typeJson['微博']) + '</td><td>'
             + convertData(typeJson['其他']) + '</td></tr>';
-    levelHtml = '<tr><td>' + convertData(levelJson['中央'])
-            + '</td><td>' + convertData(levelJson['省级']) + '</td><td>'
-            + convertData(levelJson['其他']) + '</td><td>' + convertData(levelJson['未知'])
-            + '</td></tr>';
+    levelHtml = '<tr><td>' + convertData(levelJson['中央']) + '</td><td>'
+            + convertData(levelJson['省级']) + '</td><td>'
+            + convertData(levelJson['其他']) + '</td><td>'
+            + convertData(levelJson['未知']) + '</td></tr>';
     $('.info_amount').append(typeHtml);
     $('.media_amount').append(levelHtml);
+
+    var iavalue = getPieData(typeJson);
+    var lavalue = getPieData(levelJson);
+    paintbt('pie_chart01',iavalue.legend,iavalue.series);
+    paintbt('pie_chart02',lavalue.legend,lavalue.series);
 }
 function convertData(json) {
     if (json === undefined) {
@@ -150,6 +155,24 @@ function getTableData(table) {
     return value;
 }
 
+function getPieData(data) {
+    var legend = new Array();
+    var series = new Array();
+    for ( var ele in data) {
+        var json = {
+            value : data[ele],
+            name : ele
+        }
+        series.push(json);
+        legend.push(ele);
+    }
+    var value = {
+        legend : legend,
+        series : series
+    }
+    return value;
+}
+
 function paintzx(id, xAxis, legend, series) {
     var myChart = echarts.init(document.getElementById(id));
     // 指定图表的配置项和数据
@@ -191,6 +214,35 @@ function paintzx(id, xAxis, legend, series) {
     myChart.setOption(option);
 }
 
-function paintbt() {
-
+function paintbt(id, legend, series) {
+    var myChart = echarts.init(document.getElementById(id));
+    var option = {
+        title : {
+            text : title,
+            x : 'center'
+        },
+        tooltip : {
+            trigger : 'item',
+            formatter : "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend : {
+            orient : 'vertical',
+            left : 'left',
+            data : legend
+        },
+        series : [ {
+            type : 'pie',
+            radius : '55%',
+            center : [ '50%', '60%' ],
+            data : series,
+            itemStyle : {
+                emphasis : {
+                    shadowBlur : 10,
+                    shadowOffsetX : 0,
+                    shadowColor : 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        } ]
+    };
+    myChart.setOption(option);
 }

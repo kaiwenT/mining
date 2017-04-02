@@ -22,7 +22,7 @@ function historyRecord() {
                                                 + '</td><td height="32" align="center">'
                                                 + new Date(item.createTime.time)
                                                         .format('yyyy-MM-dd hh:mm:ss')
-                                                + '</td><td height="32" align="center"><img src="images/delete.png" id="'
+                                                + '</td><td height="32" align="center"><img src="images/reset.png" id="'
                                                 + item.rid
                                                 + '" onclick="historyReset()" /> <img src="images/delete.png" id="'
                                                 + item.rid
