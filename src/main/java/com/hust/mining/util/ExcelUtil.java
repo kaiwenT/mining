@@ -26,10 +26,10 @@ public class ExcelUtil {
         if (inputStream == null) {
             throw new IllegalArgumentException("inputStream is null");
         }
-        return read(filename, inputStream, startRow, null);
+        return read(filename, inputStream, startRow, -1, null);
     }
 
-    public static List<String[]> read(String filename, InputStream inputStream, int rows, Integer...indexes)
+    public static List<String[]> read(String filename, InputStream inputStream, int start, int rows, Integer...indexes)
             throws FileNotFoundException, IOException {
 
         List<String[]> list = new ArrayList<String[]>();
@@ -51,7 +51,8 @@ public class ExcelUtil {
         if (rows >= 0) {
             rowNum = rows > rowNum ? rowNum : rows;
         }
-        for (int i = 0; i <= rowNum; i++) {
+        start = start > rowNum ? rowNum : start;
+        for (int i = start, x = 1; x <= rowNum; i++, x++) {
             String[] rowStr = new String[indexes.length];
             for (int j = 0; j < indexes.length; j++) {
                 try {

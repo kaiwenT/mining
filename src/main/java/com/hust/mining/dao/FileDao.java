@@ -55,6 +55,7 @@ public class FileDao {
     public List<IssueFile> queryFilesByIssueId(String issueId) {
         IssueFileExample example = new IssueFileExample();
         example.createCriteria().andIssueIdEqualTo(issueId);
+        example.setOrderByClause("upload_time desc");
         return issueFileMapper.selectByExample(example);
     }
 
@@ -73,6 +74,7 @@ public class FileDao {
         if (null != con.getFileIds() && con.getFileIds().size() != 0) {
             criteria.andFileIdIn(con.getFileIds());
         }
+        example.setOrderByClause("upload_time desc");
         return issueFileMapper.selectByExample(example);
     }
 

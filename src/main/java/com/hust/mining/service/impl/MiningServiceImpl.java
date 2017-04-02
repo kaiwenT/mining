@@ -48,7 +48,7 @@ public class MiningServiceImpl implements MiningService {
     @Override
     public List<List<Integer>> cluster(List<String[]> list) {
         // TODO 进行聚类
-        List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 1);
+        List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 0);
         Convertor convertor = new DigitalConvertor();
         convertor.setList(segmentList);
         List<double[]> vectors = convertor.getVector();
@@ -88,7 +88,7 @@ public class MiningServiceImpl implements MiningService {
                 String[] row = content.get(tmpList[j]);
                 if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
                     origTime = row[Index.TIME_INDEX];
-                    origIndex = j;
+                    origIndex = tmpList[j];
                 }
             }
             if (origIndex == -1) {

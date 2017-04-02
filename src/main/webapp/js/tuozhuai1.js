@@ -1,4 +1,5 @@
-var fileList = new Array();
+var file_array = new Array();
+var now_count = 0;
 $(function() {
     // 阻止浏览器默认行。
     $(document).on({
@@ -20,14 +21,14 @@ $(function() {
     var box = document.getElementById('drop_area'); // 拖拽区域
     box.addEventListener("drop", function(e) {
         e.preventDefault(); // 取消默认浏览器拖拽效果
-        fileList = e.dataTransfer.files; // 获取文件对象
+        var fileList = e.dataTransfer.files; // 获取文件对象
         // 检测是否是拖拽文件到页面的操作
         if (fileList.length == 0) {
             return false;
         }
         // 检测文件是不是excel文件
         for (var index = 0; index < fileList.length; index++) {
-            // file_array[file_array.length] = fileList[index];
+            file_array[file_array.length] = fileList[index];
             var filename = fileList[index].name;
             if (filename.lastIndexOf("xls") !== -1
                     || filename.lastIndexOf("xlsx") !== -1) {
@@ -45,7 +46,7 @@ $(function() {
                     "data" : fd
                 };
                 $.ajax(settings).done(function(response) {
-                    reSetView(response, filename, index);
+                    reSetView(response, filename);
                 });
             } else {
                 alert(filename + " 不是Excel文件");
@@ -53,7 +54,7 @@ $(function() {
         }
     }, false);
 });
-function reSetView(response, filename, index) {
+function reSetView(response, filename) {
     var msg = JSON.parse(response);
     if (msg.status !== "OK") {
         alert("预览失败，请重新选择文件！");
@@ -64,7 +65,7 @@ function reSetView(response, filename, index) {
     var date_ = new Date();
     var now_time = date_.toLocaleDateString();// 当前日期
     var li_context = '<li>文件：<input type="text" class="files_name"  name="'
-            + index
+            + now_count
             + '" value="'
             + filename
             + '" /> URL：<select class="select01">'
@@ -73,14 +74,14 @@ function reSetView(response, filename, index) {
             + trable_spinner
             + '</select> 时间：<select class="select03">'
             + trable_spinner
-            + '</select> 类型：<select class="select04"><option> 微博</option><option> 新闻</option></select><img src="images/delete.png" onclick="fileDel()"  class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" onclick="fileDelete()" /></li>'
+            + '</select> 类型：<select class="select04"><option> 微博</option><option> 新闻</option></select><img src="images/delete.png" onclick="fileDel()"  class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
     $("#file_ul").append(li_context);
     up_del();
 }
 function getSpinner(array) {
     var item = "";
     for (var i = 0; i < array.length; i++) {
-        item += '<option value= ' + i + '>' + array[i] + '</option>';
+        item += '<option value= '+ i +'>' + array[i] + '</option>';
     }
     item += "";
     return item;
@@ -93,51 +94,40 @@ var data12 = {
 }
 
 function up_del() {
-    $(".btn_up_del01").unbind('click').click(
-            function() {
-                var arrary = $(this).parent("li").children(".files_name").attr(
-                        "name");
-                var fileName = $(this).parent("li").children(".files_name")
-                        .val();
-                var urlIndex = $(this).parent("li").children("select.select01")
-                        .val();
-                var titleIndex = $(this).parent("li").children(
-                        "select.select02").val();
-                var time = $(this).parent("li").children("select.select03")
-                        .val();
-                var sourceType = $(this).parent("li").children(
-                        "select.select04").val();
-                console.log(arrary);
-                console.log(fileName);
-                console.log(time);
-                console.log(urlIndex);
-                console.log(titleIndex);
-                console.log(sourceType);
-                /* cookie_value1="'"+item.fileId+"'"; */
-                upFile(fileList[parseInt(arrary)], urlIndex, titleIndex, time,
-                        sourceType);
-                dataShow();
-                $(this).parent("li").remove();
-            })
+    $(".btn_up_del01").click(function() {
+        var arrary = $(this).parent("li").children(
+                ".files_name").attr("name");
+        var fileName = $(this).parent("li").children(
+                ".files_name").val();
+        var urlIndex = $(this).parent("li").children(
+                "select.select01").val();
+        var titleIndex = $(this).parent("li").children(
+                "select.select02").val();
+        var time = $(this).parent("li").children(
+                "select.select03").val();
+        var sourceType = $(this).parent("li").children(
+                "select.select04").val();
+        console.log(arrary);
+        console.log(fileName);
+        console.log(time);
+        console.log(urlIndex);
+        console.log(titleIndex);
+        console.log(sourceType);
+        /* cookie_value1="'"+item.fileId+"'"; */
+        upFile(file_array[parseInt(arrary)], urlIndex,
+                titleIndex, time, sourceType);
+        dataShow();
+    })
 
-    $(".btn_up_del02").unbind('click').click(function() {
+    $(".btn_up_del02").click(function() {
         $(this).parent("li").remove();
     });
 }
-
-/*
- * function fileDelete(){ $(".summary_up table tr").on("click","img",function(){
- * $.ajax({ type:"post", url:"/file/getColumnTitle", data:{ resultId:result_id },
- * dataType:"json", success: function(msg){ console.log(msg); if( msg.status ==
- * "OK"){ //alert("删除成功"); historyRecord(); }else{ alert("fail"); } }, error:
- * function(){ } }) }) }
- */
-
 $(".btn_up_del03").click(
         function() {
-            alert(fileList.length);
-            for (i = 0; i < fileList.length; i++) {
-                var file = fileList[i];
+            alert(file_array.length);
+            for (i = 0; i < file_array.length; i++) {
+                var file = file_array[i];
                 var aaa = $("#file_ul li:eq(i)").children(".files_name").val();
                 var urlIndex = $("#file_ul li:eq(i)").children(
                         "select.select01").val();
@@ -169,20 +159,21 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         "data" : form
     }
 
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(
+    function(response) {
         console.log(response);
         var msg = JSON.parse(response);
         if (msg.status == "OK") {
             // alert(msg.tagName);
             // cookie_value1="'"+item.fileId+"'";
-
+            
         } else {
             alert("上传失败");
         }
     });
 }
-function allDel() {
-    $(".up_del li").remove();
-    $(".up_del .btn_up_del04").remove();
-    $(".up_del .btn_up_del03").remove();
+function allDel(){
+	$(".up_del li").remove();
+	$(".up_del .btn_up_del04").remove();
+	$(".up_del .btn_up_del03").remove();
 }

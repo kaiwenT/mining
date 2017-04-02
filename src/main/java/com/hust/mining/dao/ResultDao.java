@@ -74,6 +74,7 @@ public class ResultDao {
     public List<Result> queryResultsByIssueId(String issueId) {
         ResultExample example = new ResultExample();
         example.createCriteria().andIssueIdEqualTo(issueId);
+        example.setOrderByClause("create_time desc");
         return resultMapper.selectByExample(example);
     }
 }

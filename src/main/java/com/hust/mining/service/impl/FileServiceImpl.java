@@ -48,7 +48,7 @@ public class FileServiceImpl implements FileService {
         try {
             is = file.getInputStream();
             // 此处index传入的顺序必须与constants中定义的value值保持一致
-            list = ExcelUtil.read(file.getOriginalFilename(), is, -1, con.getUrlIndex(), con.getTitleIndex(),
+            list = ExcelUtil.read(file.getOriginalFilename(), is, 1, -1, con.getUrlIndex(), con.getTitleIndex(),
                     con.getTimeIndex());
         } catch (IOException e) {
             logger.error("读取文件出现异常\t" + e.toString());
