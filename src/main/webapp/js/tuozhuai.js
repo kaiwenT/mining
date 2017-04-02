@@ -1,4 +1,5 @@
 var fileList = new Array();
+var delArray = new Array();
 $(function() {
     // 阻止浏览器默认行。
     $(document).on({
@@ -116,40 +117,44 @@ function up_del() {
                 /* cookie_value1="'"+item.fileId+"'"; */
                 upFile(fileList[parseInt(arrary)], urlIndex, titleIndex, time,
                         sourceType);
-                dataShow();
+                localRefresh();
                 $(this).parent("li").remove();
             })
 
     $(".btn_up_del02").unbind('click').click(function() {
+        var arrary = $(this).parent("li").children(".files_name").attr("name");
+        delArray.push(array);
         $(this).parent("li").remove();
     });
 }
 
-/*
- * function fileDelete(){ $(".summary_up table tr").on("click","img",function(){
- * $.ajax({ type:"post", url:"/file/getColumnTitle", data:{ resultId:result_id },
- * dataType:"json", success: function(msg){ console.log(msg); if( msg.status ==
- * "OK"){ //alert("删除成功"); historyRecord(); }else{ alert("fail"); } }, error:
- * function(){ } }) }) }
- */
-
-$(".btn_up_del03").click(
-        function() {
-            alert(fileList.length);
-            for (i = 0; i < fileList.length; i++) {
-                var file = fileList[i];
-                var aaa = $("#file_ul li:eq(i)").children(".files_name").val();
-                var urlIndex = $("#file_ul li:eq(i)").children(
-                        "select.select01").val();
-                var titleIndex = $("#file_ul li:eq(i)").children(
-                        "select.select02").val();
-                var sourceType = $("#file_ul li:eq(i)").children(
-                        "select.select04").val();
-                var time = $("#file_ul li:eq(i)").children("select.select03")
-                        .val();
-                upFile(file, urlIndex, titleIndex, time, sourceType);
-            }
-        });
+Array.prototype.contains = function(needle) {
+    for (i in this) {
+        if (this[i] == needle)
+            return true;
+    }
+    return false;
+}
+function all_up() {
+    $(".btn_up_del03").click(
+            function() {
+                for (i = 0; i < fileList.length; i++) {
+                    if (delArray.contains(i)) {
+                        continue;
+                    }
+                    var file = fileList[i];
+                    var urlIndex = $("#file_ul li:eq(i)").children(
+                            "select.select01").val();
+                    var titleIndex = $("#file_ul li:eq(i)").children(
+                            "select.select02").val();
+                    var sourceType = $("#file_ul li:eq(i)").children(
+                            "select.select04").val();
+                    var time = $("#file_ul li:eq(i)").children(
+                            "select.select03").val();
+                    upFile(file, urlIndex, titleIndex, time, sourceType);
+                }
+            });
+}
 function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     var form = new FormData();
     form.append("file", filex);

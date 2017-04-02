@@ -48,6 +48,42 @@ function dataShow(){
     });
 }
 dataShow()
+
+function localRefresh(){
+	var newId=getCookie("id");
+	console.log(newId);
+    $.ajax({
+        type:"post",
+        url:"/file/queryIssueFiles",
+        data:{
+            issueId:newId
+        },
+        dataType:"json",
+        success:function(msg){
+            console.log(msg);
+            if(msg.status=="OK"){
+				var tabs = msg.result.list; 
+				$('.up_list tr:not(:first)').html("");
+				$.each(tabs,function(i,item){
+					cookie_value1="'"+item.fileId+"'";
+					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
+					'</td><td width="95" align="center" valign="middle">'+item.creator+
+					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
+					$('.files_list table').append(row);
+				});				
+            }else{
+                alert("查询失败");
+            }
+
+        } ,
+        error:function(){
+            // ���������
+        }
+    });
+}
+
+
 function setCookie(value1){
 	// alert(name+value);
 	var cookie_name1="id";
