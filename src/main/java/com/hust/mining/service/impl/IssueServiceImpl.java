@@ -30,6 +30,7 @@ import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ConvertUtil;
+import com.hust.mining.util.FileUtil;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -100,6 +101,14 @@ public class IssueServiceImpl implements IssueService {
     public int deleteIssueById(String issueId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
+        List<Result> results = resultDao.queryResultsByIssueId(issueId);
+        for (Result result : results) {
+            FileUtil.delete(DIRECTORY.CONTENT + result.getRid());
+            FileUtil.delete(DIRECTORY.MODIFY_CLUSTER + result.getRid());
+            FileUtil.delete(DIRECTORY.MODIFY_COUNT + result.getRid());
+            FileUtil.delete(DIRECTORY.ORIG_CLUSTER + result.getRid());
+            FileUtil.delete(DIRECTORY.ORIG_COUNT + result.getRid());
+        }
         return issueDao.deleteIssueById(issueId, user);
     }
 
