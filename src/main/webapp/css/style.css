@@ -12,7 +12,7 @@ select, input, textarea { font-size:14px; margin:0; }
 input[type="text"], input[type="password"], textarea { outline-style:none; -webkit-appearance:none; }
 textarea { resize:none; }
 table { border-collapse:collapse; }
-body { color:#000;font-family: "微软雅黑"; font-size:14px; background:#ffffff;/* overflow-y:scroll;*/  overflow-x : hidden;}
+body { color:#000;font-family: "微软雅黑"; font-size:14px; background:#ffffff;/* overflow-y:scroll;*/  overflow-x : scroll;}
 .clear{clear:both;}
 a { color:#000; text-decoration:none; }
 a:hover { color:#000000; }
