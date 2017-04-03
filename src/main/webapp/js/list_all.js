@@ -48,16 +48,23 @@ function allData (page){
 }
 allData (1)
 function GetJsonData(page) {
+    var myDate=new Date();
+    end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+    myDate.setMonth(myDate.getMonth()-1);
+    start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+    console.log(end)
+    console.log(start)
+
     var json = {
-		"issueId":"",
-		"issueName":"" ,
-		"createStartTime":"2016-01-01",
-		"createEndTime":"2017-04-04",
-		"user":"",
-		"lastUpdateStartTime":"2016-01-01",
-		"lastUpdateEndTime":"2017-04-04",
-		"pageNo":parseInt(page),
-		"pageSize":10
+        "issueId":"",
+        "issueName":"" ,
+        "createStartTime":start,
+        "createEndTime":end,
+        "user":"",
+        "lastUpdateStartTime":start,
+        "lastUpdateEndTime":end,
+        "pageNo":parseInt(page),
+        "pageSize":10
     };
     return json;
 }
