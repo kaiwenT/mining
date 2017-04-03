@@ -34,7 +34,7 @@ function dataShow(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="setCookie('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="clusterSingleFile('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
 					$('.up_list').append(row);
 				});				
             }else{
@@ -91,7 +91,7 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	window.location.href = "summary.html";
+	//window.location.href = "summary.html";
 }
 
 function getCookie(name) {
@@ -101,6 +101,29 @@ function getCookie(name) {
 	if(arr !=null) 
 		return unescape(arr[2]); 
 	return null;
+}
+
+function clusterSingleFile(id){
+	console.log(id);
+	$.ajax({
+		type:"post",
+		url:"/issue/miningSingleFile",
+		data:{
+			fileId:id
+		},
+		dataType:"json",
+		success: function(msg){
+			console.log(msg);
+			if( msg.status == "OK"){
+				window.location.href = "history.html";
+			}else{
+				alert(msg.result);
+			}
+		},
+		error: function(){
+			alert("请求失败");
+		}
+	})	
 }
 
 function bind(){
