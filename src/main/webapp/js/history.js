@@ -259,3 +259,15 @@ function deleteLayData() {
         }
     });
 }
+
+$(function(){
+	$("#historyAll").click(function(){
+		if($(this).is(":checked")){
+			$(".summary_tab tr :checkbox").attr("checked","checked");
+		}else{
+			$(".summary_tab tr :checkbox").removeAttr("checked","checked");
+		}
+	
+	})
+})
+	

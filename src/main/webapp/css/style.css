@@ -114,11 +114,11 @@ a:hover { color:#000000; }
 .btn_hz{ display:block;}
 .summary_time{ width:750px; margin-top:20px; }
 .summary_time li{ float:left;  line-height: 38px; margin-right:5px; }
-.summary_time li input{ width:15px; height:15px; background:#dddddd; margin-right:5px; }
+.summary_time li input{ width:15px; height:15px; background:#dddddd;  }
 .summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li input.lol_end{ width:105px; height:30px; line-height:30px; font-size:12px;}
-.summary_time li.file_search{margin-top:5px; cursor: pointer;}
-.summary_time li.file_summary{margin-top:5px; cursor: pointer;}
+.summary_time li.file_search{margin-top:3px; cursor: pointer;}
+.summary_time li.file_summary{margin-top:3px; cursor: pointer;}
 .summary_wrap{ width:750px;/* display:none;*/ }
 .summary_show{ display:block; }
 .summary_up{ width:750px; margin-top:20px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }

@@ -319,6 +319,23 @@ function userInforAdd(){
 	window.location.href = "user_add.html";
 }
 function addUser(){
+	if(!$("#passWord").val().match(/^[\w]{6,30}$/)){
+		$("#warnPassword").html("密码必须介于6-30位之间"); 
+		$("#passWord").focus(); 
+		return false; 
+	} 
+	if(!$("#userTel").val().match(/^(1[3-8][0-9]{9})$/)){
+		$("#warnTel").html("电话号码必须为11位！"); 
+		$("#userTel").focus(); 
+		return false; 
+	} 
+	//     /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+	if (!$("#userEmail").val().match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) { 
+		//alert("邮箱格式不正确"); 
+		$("#warnEmail").html("邮箱必须符合邮箱规范！"); 
+		$("#userEmail").focus(); 
+		return false; 
+	}
 	$.ajax({
 		type:"post",
 		url:"/user/insertUserInfo",
@@ -370,6 +387,19 @@ function getCookie(name) {
 }
 
 function userInforChange(){
+	if(!$("#new_telphone_type").val().match(/^(1[3-8][0-9]{9})$/)){
+		$("#tel_warn").html("电话号码必须为11位！"); 
+		$("#new_telphone_type").focus(); 
+		return false; 
+	} 
+	//     /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+	if (!$("#new_email_type").val().match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) { 
+		//alert("邮箱格式不正确"); 
+		$("#email_warn").html("邮箱必须符合邮箱规范！"); 
+		$("#new_email_type").focus(); 
+		return false; 
+	}
+	
 	var newRole=getCookie("roleName");
 	var newId=getCookie("userId");
 	var newPassword=getCookie("passWord");
