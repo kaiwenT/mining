@@ -24,6 +24,7 @@
 			<mvc:exclude-mapping path="/index.html" />
 			<mvc:exclude-mapping path="/login" />
 			<mvc:exclude-mapping path="/error.html" />
+			<mvc:exclude-mapping path="/favicon.ico" />
 			<bean class="com.hust.mining.interceptor.PermissionInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
