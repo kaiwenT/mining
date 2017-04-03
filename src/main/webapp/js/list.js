@@ -1,5 +1,6 @@
 // JavaScript Document
 //2.1任务列表显示
+
 function allData (page){
 	search_click=false;
     $.ajax({
@@ -48,14 +49,21 @@ function allData (page){
 }
 allData (1)
 function GetJsonData(page) {
+	var myDate=new Date();
+	end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+	myDate.setMonth(myDate.getMonth()-1);
+	start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+	console.log(end)
+	console.log(start)
+
     var json = {
 		"issueId":"",
 		"issueName":"" ,
-		"createStartTime":"2016-01-01",
-		"createEndTime":"2017-04-04",
+		"createStartTime":start,
+		"createEndTime":end,
 		"user":"",
-		"lastUpdateStartTime":"2016-01-01",
-		"lastUpdateEndTime":"2017-04-04",
+		"lastUpdateStartTime":start,
+		"lastUpdateEndTime":end,
 		"pageNo":parseInt(page),
 		"pageSize":10
     };

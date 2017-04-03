@@ -78,7 +78,7 @@ function historyData(rid) {
                                                     + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
                                                     + ',\''
-                                                    + item[2]
+                                                    + item[2].replace(/\"/g," ").replace(/\'/g," ")
                                                     + '\')">'
                                                     + item[0]
                                                     + '</a></td></tr>';
@@ -213,7 +213,7 @@ function freshData() {
                                                     + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
                                                     + ',\''
-                                                    + item[2]
+                                                    + item[2].replace(/\"/g," ").replace(/\'/g," ")
                                                     + '\')">'
                                                     + item[0]
                                                     + '</a></td></tr>';
@@ -260,13 +260,12 @@ function deleteLayData() {
     });
 }
 
-$(function(){
-	$("#historyAll").click(function(){
-		if (this.checked) {  
-            $(".summary_tab tr :checkbox").prop("checked", true);  
-        } else {  
-            $(".summary_tab tr :checkbox").prop("checked", false);  
-        }  
-	})
+$(function() {
+    $("#historyAll").click(function() {
+        if (this.checked) {
+            $(".summary_tab tr :checkbox").prop("checked", true);
+        } else {
+            $(".summary_tab tr :checkbox").prop("checked", false);
+        }
+    })
 })
-	
