@@ -2,6 +2,7 @@ package com.hust.mining.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -120,6 +121,23 @@ public class IssueController {
             return ResultUtil.unknowError();
         }
         return ResultUtil.success(count);
+    }
+
+    @ResponseBody
+    @RequestMapping("/miningSingleFile")
+    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId,
+            HttpServletRequest request) {
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        List<String> list = new ArrayList<String>();
+        list.add(fileId);
+        List<String[]> count = issueService.miningByFileIds(list, request);
+        if (count == null) {
+            return ResultUtil.unknowError();
+        }
+        return ResultUtil.successWithoutMsg();
     }
 
     @InitBinder
