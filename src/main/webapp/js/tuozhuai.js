@@ -1,5 +1,4 @@
-var fileList = new Array();
-var delArray = new Array();
+var fileArray = new Array();
 border();
 $(function() {
     // 阻止浏览器默认行。
@@ -22,7 +21,7 @@ $(function() {
     var box = document.getElementById('drop_area'); // 拖拽区域
     box.addEventListener("drop", function(e) {
         e.preventDefault(); // 取消默认浏览器拖拽效果
-        fileList = e.dataTransfer.files; // 获取文件对象
+        var fileList = e.dataTransfer.files; // 获取文件对象
         // 检测是否是拖拽文件到页面的操作
         if (fileList.length == 0) {
             return false;
@@ -35,7 +34,7 @@ $(function() {
                     || filename.lastIndexOf("xlsx") !== -1) {
                 var file = fileList[index];
                 var fd = new FormData();
-                fd.append("file", fileList[index]);
+                fd.append("file", file);
                 var settings = {
                     "async" : false,
                     "crossDomain" : true,
@@ -47,8 +46,9 @@ $(function() {
                     "data" : fd
                 };
                 $.ajax(settings).done(function(response) {
-                    reSetView(response, filename, index);
+                    reSetView(response, filename, fileArray.length);
                 });
+                fileArray.push(file);
             } else {
                 alert(filename + " 不是Excel文件");
             }
@@ -125,7 +125,7 @@ function up_del() {
                 console.log(titleIndex);
                 console.log(sourceType);
                 /* cookie_value1="'"+item.fileId+"'"; */
-                upFile(fileList[parseInt(arrary)], urlIndex, titleIndex, time,
+                upFile(fileArray[parseInt(arrary)], urlIndex, titleIndex, time,
                         sourceType);
                 localRefresh();
                 $(this).parent("li").remove();
@@ -151,7 +151,7 @@ function all_up() {
         var liGroup = $("#file_ul li");
         for (var i = 0; i < liGroup.length; i++) {
             var num = liGroup.eq(i).children(".files_name").attr("name");
-            var file = fileList[num];
+            var file = fileArray[num];
             var urlIndex = liGroup.eq(i).children("select.select01").val();
             var titleIndex = liGroup.eq(i).children("select.select02").val();
             var time = liGroup.eq(i).children("select.select03").val();
