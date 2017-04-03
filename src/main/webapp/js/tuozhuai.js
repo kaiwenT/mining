@@ -198,3 +198,12 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
 function allDel() {
     $(".up_del li").remove();
 }
+
+$(function(){
+    console.log($("#file_ul li").length)
+    if($("#file_ul li").length==0){
+        $("#file_ul").css("border","none");
+    }else{
+        $("#file_ul").css("border","2px solid blue");
+    }
+})
