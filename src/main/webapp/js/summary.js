@@ -267,11 +267,10 @@ function deleteLayData() {
 
 $(function(){
 	$("#chooseAll").click(function(){
-		if($(this).is(":checked")){
-			$(".summary_tab tr :checkbox").prop("checked","checked");
-		}else{
-			$(".summary_tab tr :checkbox").removeProp("checked","checked");
-		}
-	
-	})
+		if (this.checked) {  
+            $(".summary_tab tr :checkbox").prop("checked", true);  
+        } else {  
+            $(".summary_tab tr :checkbox").prop("checked", false);  
+        }  
+   }); 
 })

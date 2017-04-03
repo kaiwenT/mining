@@ -314,7 +314,7 @@ function weightInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("更新成功");	
+				// alert("更新成功");	
 			}else{
 				alert(msg.result);
 			}

@@ -45,7 +45,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             // 先判断
             if ("/".equals(url) || "/index.html".equals(url)) {
                 if (null != redisService.getString(KEY.USER_NAME, request)) {
-                    response.sendRedirect("/page/topic_list.html");
+                    response.sendRedirect("/topic_list.html");
                 } else {
                     return true;
                 }
@@ -68,14 +68,14 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     }
                 } else {
                     LOG.warn("{} did not login, please login",request.getRequestedSessionId());
-                    response.sendRedirect("/page/index.html");
+                    response.sendRedirect("/index.html");
                 }
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             LOG.error("permissionInterceptor error \t" + e.toString());
             try {
-                response.sendRedirect("/page/error.html");
+                response.sendRedirect("/error.html");
             } catch (Exception e1) {
                 LOG.error("跳转发生异常" + e1.toString());
             }
