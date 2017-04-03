@@ -196,7 +196,7 @@ function weightInforSearch(page){
 			name:$("#name").val(),
 			weight:$("#weight").val(),
 			start:(parseInt(10*page-10)),
-			limit:0
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){

@@ -193,7 +193,7 @@ function typeInforSearch(page){
 		data:{
 			name:$("#type_search").val(),
 			start:(parseInt(10*page-10)),
-			limit:0
+			limit:10
 		},
 		dataType:"json",
 		success: function(msg){

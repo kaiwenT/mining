@@ -255,7 +255,7 @@ function userInforSearch(page){
 			telphone:obj4,
 			email:obj5,
 			page:(parseInt(10*page-10)),
-			row:0
+			row:10
 		},
 		dataType:"json",
 		success: function(msg){
