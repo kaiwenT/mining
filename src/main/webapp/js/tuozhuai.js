@@ -1,5 +1,6 @@
 var fileList = new Array();
 var delArray = new Array();
+border();
 $(function() {
     // 阻止浏览器默认行。
     $(document).on({
@@ -75,6 +76,7 @@ function reSetView(response, filename, index) {
             + getSpinner(array, '发布时间|发贴时间|时间')
             + '</select> 类型：<select class="select04"><option> 微博</option><option selected = true> 新闻</option></select><img src="images/delete.png" class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
     $("#file_ul").append(li_context);
+    $("#file_ul").css("border", "2px solid blue");
     up_del();
     all_up();
 }
@@ -127,11 +129,13 @@ function up_del() {
                         sourceType);
                 localRefresh();
                 $(this).parent("li").remove();
+                border();
             })
 
     $(".btn_up_del02").unbind('click').click(function() {
         var arrary = $(this).parent("li").children(".files_name").attr("name");
         $(this).parent("li").remove();
+        border();
     });
 }
 
@@ -143,26 +147,25 @@ Array.prototype.contains = function(needle) {
     return false;
 }
 function all_up() {
-    $(".btn_up_del03").unbind('click').click(
-            function() {
-                var liGroup = $("#file_ul li");
-                for (var i = 0; i < liGroup.length; i++) {
-                    var num =liGroup.eq(i).children(".files_name").attr("name");
-                    var file = fileList[num];
-                    var urlIndex = liGroup.eq(i).children("select.select01").val();
-                    var titleIndex = liGroup.eq(i).children("select.select02").val();
-                    var time = liGroup.eq(i).children("select.select03").val();
-                    var sourceType = liGroup.eq(i).children("select.select04").val();
-                    console.log(num);
-                    console.log(time);
-                    console.log(urlIndex);
-                    console.log(titleIndex);
-                    console.log(sourceType);
-                    upFile(file, urlIndex, titleIndex, time, sourceType);
-                }
-                localRefresh();
-                allDel();
-            });
+    $(".btn_up_del03").unbind('click').click(function() {
+        var liGroup = $("#file_ul li");
+        for (var i = 0; i < liGroup.length; i++) {
+            var num = liGroup.eq(i).children(".files_name").attr("name");
+            var file = fileList[num];
+            var urlIndex = liGroup.eq(i).children("select.select01").val();
+            var titleIndex = liGroup.eq(i).children("select.select02").val();
+            var time = liGroup.eq(i).children("select.select03").val();
+            var sourceType = liGroup.eq(i).children("select.select04").val();
+            console.log(num);
+            console.log(time);
+            console.log(urlIndex);
+            console.log(titleIndex);
+            console.log(sourceType);
+            upFile(file, urlIndex, titleIndex, time, sourceType);
+        }
+        localRefresh();
+        allDel();
+    });
 }
 function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     var form = new FormData();
@@ -197,13 +200,13 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
 }
 function allDel() {
     $(".up_del li").remove();
+    border();
 }
 
-$(function(){
-    console.log($("#file_ul li").length)
-    if($("#file_ul li").length==0){
-        $("#file_ul").css("border","none");
-    }else{
-        $("#file_ul").css("border","2px solid blue");
+function border() {
+    if ($("#file_ul li").length == 0) {
+        $("#file_ul").css("border", "none");
+    } else {
+        $("#file_ul").css("border", "4px solid blue");
     }
-})
+}

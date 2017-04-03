@@ -69,7 +69,6 @@ a:hover { color:#000000; }
 
 .up_del{ width:750px;}
 
-#file_ul{ width:750px; padding:10px 0; border:2px solid blue; }
 @keyframes twinkling{	/*透明度由0到1*/
 			0%{
 				opacity:0.1;				/*透明度为0*/
