@@ -36,8 +36,10 @@ function websiteInforShow(page){
 			}else{
 				 alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -251,11 +253,13 @@ function websiteInforSearch(page){
 			}else{
 				 alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
-        },
+        }
 	})	
 }
 
@@ -282,15 +286,17 @@ function addWebsite(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("添加成功");	
+				window.location.href="/unknow_website_infor.html"
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
-        },
+        }
 	})	
 }
 
@@ -336,7 +342,6 @@ function websiteInforChange(){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
 		error: function(){
             alert("数据请求失败");
@@ -368,11 +373,8 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					// alert("lll");
-					console.log(msg);
 					if(msg.status=="OK"){
-						alert("删除成功");
-						websiteInforShow(1)
+					    window.location.href="/unknow_website_infor.html"
 					}else{
 						alert(msg.result);
 					}

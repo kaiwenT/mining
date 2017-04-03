@@ -16,14 +16,14 @@ function powerInforShow(page){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				//alert("success");
+				// alert("success");
 				var items = msg.result ;
 				var cookie_value1;
 				var cookie_value2;
 				var cookie_value3;
 				$('.infor_tab02 tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
+					// alert(msg.tagName);
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
@@ -32,7 +32,7 @@ function powerInforShow(page){
 					
 				});
 			}else{
-				///alert("fail");
+				// /alert("fail");
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
 		},
@@ -47,11 +47,11 @@ function powerInforShow(page){
 powerInforShow(1);
 
 function setCookie(value1,value2,value3){
-	//alert(name+value);
+	// alert(name+value);
 	var cookie_name1="id";
 	var cookie_name2="powerName";
 	var cookie_name3="url";
-	var Days = 1; //此 cookie 将被保存 1 天
+	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
@@ -62,7 +62,9 @@ function setCookie(value1,value2,value3){
 
 /**
  * 根据页码加载数据
- * @param {整型} page 页码
+ * 
+ * @param {整型}
+ *            page 页码
  */
 var search_click;
 function setViewForPage(page){
@@ -84,7 +86,9 @@ function setPageChangeView(){
 }
 /**
  * 更新页码数据
- * @param {Object} base_num
+ * 
+ * @param {Object}
+ *            base_num
  */
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
@@ -97,17 +101,19 @@ function updatePageValue(base_num){
 }
 /**
  * 页码点击
- * @param {Object} p_id 页码
+ * 
+ * @param {Object}
+ *            p_id 页码
  */
 function pageNumClick(p_id){
-	//background: #0e63ab;
-    //color: #fff;
+	// background: #0e63ab;
+    // color: #fff;
 	var button=document.getElementById(p_id);
 	var page=button.value;
 	if(page!=undefined&&page.length>0){
 		setViewForPage(page);
 		updateNowPage(page);
-		//$(this).addClass("cur").siblings().removeClass("cur");
+		// $(this).addClass("cur").siblings().removeClass("cur");
 		cleanAllSelected();
 		button.style.background='#0e63ab';
 		button.style.color='#FFFFFF';
@@ -144,7 +150,9 @@ function cleanAllSelected(){
 }
 /**
  * 上一页，下一页点击
- * @param {Object} action -1上一页，1下一页
+ * 
+ * @param {Object}
+ *            action -1上一页，1下一页
  */
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
@@ -167,15 +175,15 @@ function updateAllStyleAndData(page,action){
 	setViewForPage(page);
 	if((page-1)%3==0){// 位置：第一个按钮 123 456 789
 		setFirstSelected();
-		if(action==1||action==undefined){//点击下一页 
+		if(action==1||action==undefined){// 点击下一页
 			updatePageValue(page);
 		}
-	}else if(page%3==0){//位置：第三个按钮
+	}else if(page%3==0){// 位置：第三个按钮
 		setThirdSelected();
-		if (action==-1||action==undefined) {//点击上一页 
+		if (action==-1||action==undefined) {// 点击上一页
 			updatePageValue(page-2);
 		}
-	}else{//位置：第二个按钮
+	}else{// 位置：第二个按钮
 		setSecondSelected();
 		if(action==undefined){
 			updatePageValue(page-1);
@@ -184,14 +192,16 @@ function updateAllStyleAndData(page,action){
 }
 /**
  * 更新当前页码
- * @param {Object} page 当前页
+ * 
+ * @param {Object}
+ *            page 当前页
  */
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
 
 
-//信息搜索
+// 信息搜索
 function powerInforSearch(page){
 	search_click=true
 	var powerInfor=$("#power_Search").val();
@@ -209,39 +219,35 @@ function powerInforSearch(page){
 		    begin();
 		},
 		success: function(msg){
-			console.log(msg);
+			$(".infor_tab02 tr:not(:first)").html("");
 			if( msg.status == "OK"){
-				//alert("success");	
-				$(".infor_tab02 tr:not(:first)").html("");
+				// alert("success");
 				var items = msg.result ;
 				var cookie_value1;
 				var cookie_value2;
 				var cookie_value3;
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
+					// alert(msg.tagName);
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
 					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
-					
 				});
 			}else{
-				$(".infor_tab02 tr:not(:first)").html("");
-				alert("权限名称输入有误，请重新输入");
-				powerInforShow();
+				alert(msg.result);
 			}
 		},
 		complete:function(){
 		    stop();
 		},
 		error: function(){
-			
+			alert("数据请求失败");
 		}
 	})	
 }
 
-//用户添加
+// 用户添加
 function powerInforAdd() {
 	window.location.href = "power_add.html";
 }
@@ -260,9 +266,9 @@ function addPower(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("添加成功");
+				window.location.href = "/power_infor.html"
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
 		},
 		complete:function(){
@@ -280,7 +286,7 @@ function clearPower(){
 }
 
 
-//用户编辑
+// 用户编辑
 function getCookie(name) {
 	
 	console.log(document.cookie);
@@ -307,16 +313,16 @@ function powerInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("success");	
+				alert("修改成功");	
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
 		},
 		complete:function(){
 		    stop();
 		},
 		error: function(){
-			
+			alert("数据请求失败");
 		}
 	})	
 }
@@ -325,7 +331,7 @@ function clearNewPower(){
 	$("#new_url_power").val('');
 }
 
-//用户删除
+// 用户删除
 $(function(){
 	$(".infor_tab02").on("click",".delPower",function(){
 		var power_id = $(this).attr("id");
@@ -340,20 +346,15 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					//alert("lll");
-					console.log(msg);
 					if(msg.status=="OK"){
-						alert("删除权限成功");
-						$('.infor_tab02 tr:not(:first)').html("");
-						powerInforShow(1);
+						window.location.href = "/power_infor.html"
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
 				} ,
 				error:function(){
-					//���������
+					alert("数据请求失败");
 				}
-
 			});
 		}
 	})

@@ -251,18 +251,16 @@ function addRoleInfo(){
         },
 		success: function(msg){
 			if( msg.status == "OK"){
-				console.log(msg);
-				alert("添加成功");
+				window.location.href="/role_infor.html"
 			}else{
-			console.log(msg);
-				alert("fail");
+				alert(msg.result);
 			}
 		},
 		complete:function(){
             stop();
         },
 		error: function(){
-
+		    alert("数据请求失败");
 		}
 	})
 }
@@ -333,18 +331,14 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					// alert("lll");
-					console.log(msg);
 					if(msg.status=="OK"){
-						alert("success");
-						$('.infor_tab02 tr:not(:first)').html("");
-						roleInforShow(1)
+					    window.location.href="/role_infor.html"
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
 				},
 				error: function(){
-		            alert("请求失败");
+		            alert("数据请求失败");
 		        }
 			});
 		}

@@ -163,7 +163,7 @@ function bind(){
 		            }
 		        },
 		        error: function(){
-		            
+		            alert("数据请求失败");
 		        }
 		    })  
 	})

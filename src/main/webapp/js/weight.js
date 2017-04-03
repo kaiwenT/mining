@@ -32,8 +32,10 @@ function weightInforShow(page){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -233,8 +235,10 @@ function weightInforSearch(page){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         }
@@ -261,12 +265,14 @@ function addWeight(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("增加权重信息成功");	
+				window.location.href="/weight_infor.html"
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -312,8 +318,10 @@ function weightInforChange(){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -345,13 +353,14 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("权重信息删除成功");
-						weightInforShow(1)
+						window.location.href="/weight_infor.html"
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
-					stop();
-				} ,
+				},
+				complete : function() {
+                    stop();
+                },
 				error: function(){
 		            alert("数据请求失败");
 		        },

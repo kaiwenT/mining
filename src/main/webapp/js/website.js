@@ -282,7 +282,7 @@ function addWebsite(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("插入成功");	
+				window.location.href="/website_infor.html"	
 			}else{
 				alert(msg.result);
 			}
@@ -368,8 +368,7 @@ $(function(){
 				success:function(msg){
 					// alert("lll");
 					if(msg.status=="OK"){
-						alert("删除成功");
-						websiteInforShow(1)
+						window.location.href="/website_infor.html"
 					}else{
 						alert(msg.result);
 					}

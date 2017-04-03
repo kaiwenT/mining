@@ -42,8 +42,10 @@ function userInforShow(page){
 			}else{
 				 alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -301,8 +303,10 @@ function userInforSearch(page){
 			}else{
 				 alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -333,12 +337,14 @@ function addUser(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("添加成功");	
+			    window.location.href="/user_infor.html"
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -390,8 +396,10 @@ function userInforChange(){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -425,8 +433,7 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("删除成功");
-						userInforShow(1)
+						window.location.href="/user_infor.html";
 					}else{
 						alert(msg.result);
 					}

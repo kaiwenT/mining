@@ -147,7 +147,6 @@ function historyReset() {
             },
             dataType : "json",
             success : function(msg) {
-                console.log(msg);
                 if (msg.status == "OK") {
                     freshData();
                 } else {

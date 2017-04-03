@@ -28,11 +28,13 @@ function typeInforShow(page){
 			}else{
 			    alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
 			alert("数据请求失败");
-		},
+		}
 	})	
 }
 typeInforShow(1)
@@ -225,8 +227,10 @@ function typeInforSearch(page){
 			}else{
 				 alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -254,15 +258,17 @@ function AddtypeInfor(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("添加成功");
+				window.location.href="/type_infor.html"
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
-        },
+        }
 	})	
 }
 
@@ -304,11 +310,13 @@ function ChangetypeInfor(){
 			}else{
 				alert(msg.result);
 			}
-			stop();
 		},
+		complete : function() {
+            stop();
+        },
 		error: function(){
             alert("数据请求失败");
-        },
+        }
 	})	
 }
 function clearNewtype(){
@@ -335,8 +343,7 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("删除成功");
-						typeInforShow(1)
+						window.location.href='/type_infor.html';
 					}else{
 						alert(msg.result);
 					}

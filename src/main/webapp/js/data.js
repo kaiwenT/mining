@@ -23,13 +23,20 @@ function paint() {
         data : JSON.stringify(json),
         dataType : "json",
         contentType : "application/json",
+        beforeSend : function(){
+            begin();
+        },
         success : function(msg) {
             parseTime(msg.result.time);
             parseAmount(msg.result.count);
         },
         error : function() {
             alert("请求失败");
+        },
+        complete : function() {
+            stop();
         }
+
     });
 }
 paint();
