@@ -14,7 +14,7 @@
 			expression="com.hust.mining.*" />
 	</context:component-scan>
 
-	<!-- <mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/images/**" />
@@ -26,7 +26,7 @@
 			<mvc:exclude-mapping path="/error.html" />
 			<bean class="com.hust.mining.interceptor.PermissionInterceptor" />
 		</mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors>
 
 	<!--RequestMappingHandlerAdapter -->
 	<mvc:annotation-driven>
