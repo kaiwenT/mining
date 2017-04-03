@@ -10,6 +10,9 @@ function roleInforShow(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			if(msg.status=="OK"){
 				var items=msg.result;
@@ -27,17 +30,20 @@ function roleInforShow(page){
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
 		},
+		complete:function(){
+            stop();
+        },
 		error: function(){
-			
+			alert("请求失败");
 		}
 	})	
 }
 roleInforShow(1)
 function setCookie(value1,value2){
-	//alert(name+value);
+	// alert(name+value);
 	var cookie_name1="id";
 	var cookie_name2="role_name";
-	var Days = 1; //此 cookie 将被保存 1 天
+	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
@@ -46,7 +52,9 @@ function setCookie(value1,value2){
 }
 /**
  * 根据页码加载数据
- * @param {整型} page 页码
+ * 
+ * @param {整型}
+ *            page 页码
  */
 var search_click;
 function setViewForPage(page){
@@ -68,7 +76,9 @@ function setPageChangeView(){
 }
 /**
  * 更新页码数据
- * @param {Object} base_num
+ * 
+ * @param {Object}
+ *            base_num
  */
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
@@ -81,17 +91,19 @@ function updatePageValue(base_num){
 }
 /**
  * 页码点击
- * @param {Object} p_id 页码
+ * 
+ * @param {Object}
+ *            p_id 页码
  */
 function pageNumClick(p_id){
-	//background: #0e63ab;
-    //color: #fff;
+	// background: #0e63ab;
+    // color: #fff;
 	var button=document.getElementById(p_id);
 	var page=button.value;
 	if(page!=undefined&&page.length>0){
 		setViewForPage(page);
 		updateNowPage(page);
-		//$(this).addClass("cur").siblings().removeClass("cur");
+		// $(this).addClass("cur").siblings().removeClass("cur");
 		cleanAllSelected();
 		button.style.background='#0e63ab';
 		button.style.color='#FFFFFF';
@@ -128,7 +140,9 @@ function cleanAllSelected(){
 }
 /**
  * 上一页，下一页点击
- * @param {Object} action -1上一页，1下一页
+ * 
+ * @param {Object}
+ *            action -1上一页，1下一页
  */
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
@@ -151,15 +165,15 @@ function updateAllStyleAndData(page,action){
 	setViewForPage(page);
 	if((page-1)%3==0){// 位置：第一个按钮 123 456 789
 		setFirstSelected();
-		if(action==1||action==undefined){//点击下一页 
+		if(action==1||action==undefined){// 点击下一页
 			updatePageValue(page);
 		}
-	}else if(page%3==0){//位置：第三个按钮
+	}else if(page%3==0){// 位置：第三个按钮
 		setThirdSelected();
-		if (action==-1||action==undefined) {//点击上一页 
+		if (action==-1||action==undefined) {// 点击上一页
 			updatePageValue(page-2);
 		}
-	}else{//位置：第二个按钮
+	}else{// 位置：第二个按钮
 		setSecondSelected();
 		if(action==undefined){
 			updatePageValue(page-1);
@@ -168,14 +182,16 @@ function updateAllStyleAndData(page,action){
 }
 /**
  * 更新当前页码
- * @param {Object} page 当前页
+ * 
+ * @param {Object}
+ *            page 当前页
  */
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
 
 
-//信息搜索
+// 信息搜索
 function roleInforSearch(page){
 	var roleInfo = $("#searchRole").val();
 	search_click=true;
@@ -189,6 +205,9 @@ function roleInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			if( msg.status == "OK"){
 				$('.infor_tab02 tr:not(:first)').html("");
@@ -208,13 +227,13 @@ function roleInforSearch(page){
 			}
 		},
 		error: function(){
-			
+			alert("请求失败");
 		}
 	})	
 }
 
 
-//用户添加
+// 用户添加
 function roleInforAdd() {
 	window.location.href = "role_add.html";
 }
@@ -227,6 +246,9 @@ function addRoleInfo(){
 			roleName:$(".addRole").val()
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			if( msg.status == "OK"){
 				console.log(msg);
@@ -236,6 +258,9 @@ function addRoleInfo(){
 				alert("fail");
 			}
 		},
+		complete:function(){
+            stop();
+        },
 		error: function(){
 
 		}
@@ -246,7 +271,7 @@ function clearRole(){
 	$(".addRole").val('');
 }
 
-//用户编辑
+// 用户编辑
 function getCookie(name) {
 	
 	console.log(document.cookie);
@@ -268,6 +293,9 @@ function changeRole(){
 			powerName:''
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -276,8 +304,11 @@ function changeRole(){
 				alert("fail");
 			}
 		},
+		complete:function(){
+            stop();
+        },
 		error: function(){
-
+		    alert("请求失败");
 		}
 	})
 }
@@ -286,7 +317,7 @@ function clearNewrole(){
 }
 
 
-//用户删除
+// 用户删除
 
 $(function(){
 	$(".infor_tab02").on("click",".delRole",function(){
@@ -302,7 +333,7 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					//alert("lll");
+					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
 						alert("success");
@@ -311,10 +342,10 @@ $(function(){
 					}else{
 						alert("fail");
 					}
-				} ,
-				error:function(){
-					//���������
-				}
+				},
+				error: function(){
+		            alert("请求失败");
+		        }
 			});
 		}
 	})

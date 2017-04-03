@@ -6,29 +6,38 @@ function historyRecord() {
             .ajax({
                 type : "post",
                 url : "/result/queryResultList",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
-                    var items = msg.result;
                     $('.summary_up table tr:not(:first)').html('');
-                    $
-                            .each(
-                                    items,
-                                    function(i, item) {
-                                        rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\''
-                                                + item.rid
-                                                + '\')">'
-                                                + item.comment
-                                                + '</a></td><td height="32" align="center">'
-                                                + item.creator
-                                                + '</td><td height="32" align="center">'
-                                                + new Date(item.createTime.time)
-                                                        .format('yyyy-MM-dd hh:mm:ss')
-                                                + '</td><td height="32" align="center"><img src="images/reset.png" id="'
-                                                + item.rid
-                                                + '" onclick="historyReset()" /> <img src="images/delete.png" id="'
-                                                + item.rid
-                                                + '" onclick="historyDel()" /></td></tr>'
-                                        $('.summary_up table').append(rows);
-                                    })
+                    if (msg.status === 'OK') {
+                        var items = msg.result;
+                        $
+                                .each(
+                                        items,
+                                        function(i, item) {
+                                            rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\''
+                                                    + item.rid
+                                                    + '\')">'
+                                                    + item.comment
+                                                    + '</a></td><td height="32" align="center">'
+                                                    + item.creator
+                                                    + '</td><td height="32" align="center">'
+                                                    + new Date(
+                                                            item.createTime.time)
+                                                            .format('yyyy-MM-dd hh:mm:ss')
+                                                    + '</td><td height="32" align="center"><img src="images/reset.png" id="'
+                                                    + item.rid
+                                                    + '" onclick="historyReset()" /> <img src="images/delete.png" id="'
+                                                    + item.rid
+                                                    + '" onclick="historyDel()" /></td></tr>'
+                                            $('.summary_up table').append(rows);
+                                        });
+                    }
+                },
+                complete : function() {
+                    stop();
                 },
                 error : function(msg) {
                     alert("数据请求失败");
@@ -46,12 +55,14 @@ function historyData(rid) {
                     resultId : rid
                 },
                 dataType : "json",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
-                    console.log(msg);
+                    $('.summary_tab table tr:not(:first)').html('');
                     if (msg.status == "OK") {
                         // alert("删除成功");
                         var items = msg.result;
-                        $('.summary_tab table tr:not(:first)').html('');
                         $
                                 .each(
                                         items,
@@ -78,6 +89,9 @@ function historyData(rid) {
                         alert(msg.result);
                     }
                 },
+                complete : function() {
+                    stop();
+                },
                 error : function() {
                     alert("请求失败");
                 }
@@ -102,14 +116,13 @@ function historyDel() {
                 success : function(msg) {
                     console.log(msg);
                     if (msg.status == "OK") {
-                        // alert("删除成功");
                         historyRecord();
                     } else {
                         alert("fail");
                     }
                 },
                 error : function() {
-
+                    alert("数据请求失败")
                 }
             })
         }
@@ -179,6 +192,9 @@ function freshData() {
             .ajax({
                 type : "post",
                 url : "/result/getCountResult",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
                     if (msg.status == 'OK') {
                         var items = msg.result;
@@ -209,6 +225,9 @@ function freshData() {
                     } else {
                         alert(msg.result);
                     }
+                },
+                complete : function() {
+                    stop();
                 },
                 error : function() {
                     alert("数据请求失败");

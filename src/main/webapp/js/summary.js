@@ -49,6 +49,9 @@ function fileSearch() {
                     endTime : strEnd
                 },
                 dataType : "json",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
                     // console.log(msg);
                     if (msg.status == "OK") {
@@ -76,7 +79,9 @@ function fileSearch() {
                     } else {
                         alert(msg.result);
                     }
-
+                },
+                complete : function() {
+                    stop();
                 },
                 error : function() {
                     alert("数据请求失败");
@@ -100,6 +105,9 @@ function fileSummary() {
                 data : JSON.stringify(fileIds),
                 dataType : "json",
                 contentType : "application/json",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
                     // console.log(msg);
                     if (msg.status == "OK") {
@@ -131,15 +139,18 @@ function fileSummary() {
                     }
 
                 },
+                complete : function() {
+                    stop();
+                },
                 error : function() {
                     alert("数据请求失败");
                 }
             });
 }
 
-function toPaint(currentSet,title) {
+function toPaint(currentSet, title) {
     setCookie('currentSet', currentSet);
-    setCookie('title',title);
+    setCookie('title', title);
     window.location.href = "/data_results.html";
 }
 /* 合并 */
@@ -155,12 +166,18 @@ function addLayData() {
         data : JSON.stringify(sets),
         dataType : "json",
         contentType : "application/json",
+        beforeSend : function() {
+            begin();
+        },
         success : function(msg) {
             if (msg.status == "OK") {
                 freshData();
             } else {
                 alert(msg.result);
             }
+        },
+        complete : function() {
+            stop();
         },
         error : function() {
             alert("数据请求失败");
@@ -173,6 +190,9 @@ function freshData() {
             .ajax({
                 type : "post",
                 url : "/result/getCountResult",
+                beforeSend : function() {
+                    begin();
+                },
                 success : function(msg) {
                     if (msg.status == 'OK') {
                         var items = msg.result;
@@ -204,6 +224,9 @@ function freshData() {
                         alert(msg.result);
                     }
                 },
+                complete : function() {
+                    stop();
+                },
                 error : function() {
                     alert("数据请求失败");
                 }
@@ -223,12 +246,18 @@ function deleteLayData() {
         data : JSON.stringify(sets),
         dataType : "json",
         contentType : "application/json",
+        beforeSend : function() {
+            begin();
+        },
         success : function(msg) {
             if (msg.status == "OK") {
                 freshData();
             } else {
                 alert(msg.result);
             }
+        },
+        complete : function() {
+            stop();
         },
         error : function() {
             alert("数据请求失败");

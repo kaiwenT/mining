@@ -10,10 +10,13 @@ function userInforShow(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
-				//alert("success");	
+				// alert("success");
 				var items = msg.result.user ;
 				var array_userRole=msg.result.userRole;
 				var array_role=msg.result.role;
@@ -24,9 +27,8 @@ function userInforShow(page){
 				var cookie_value5;
 				var cookie_value6;
 				var cookie_value7;
-				$('.infor_tab02 tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
+					// alert(msg.tagName);
 					cookie_value1="'"+item.userName+"'";
 					cookie_value2="'"+item.trueName+"'";
 					cookie_value3="'"+item.telphone+"'";
@@ -38,13 +40,13 @@ function userInforShow(page){
 					$('.infor_tab02').append(row);
 				});
 			}else{
-				//alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+				 alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 userInforShow(1);
@@ -54,7 +56,7 @@ function getRoleName(userId,array_userRole,array_role){
 		$.each(array_userRole, function(i,item) {
 			if(item.userId==userId){
 				var roleId=item.roleId;
-				//console.log(roleId);    
+				// console.log(roleId);
 				if(roleId>=0){
 					name = getRoleNames(roleId,array_role);
 				}else{
@@ -63,25 +65,25 @@ function getRoleName(userId,array_userRole,array_role){
 			}
 		});
 	}catch(e){
-		//TODO handle the exception
+		// TODO handle the exception
 	}
 	return name;
 }
 function getRoleNames(id,array){
 	var name;
 	$.each(array, function(i,item) {
-		//console.log(id+", "+item.roleId);
+		// console.log(id+", "+item.roleId);
 		if(item.roleId==id){
-			//var name=item.roleName;
+			// var name=item.roleName;
 			name=item.roleName;
-			//return item.roleName;
+			// return item.roleName;
 		}
 	});
-	//console.log(name);
+	// console.log(name);
 	return name;
 }
 function setCookie(value1,value2,value3,value4,value5,value6,value7){
-	//alert(name+value);
+	// alert(name+value);
 	var cookie_name1="userName";
 	var cookie_name2="trueName";
 	var cookie_name3="telphone";
@@ -89,7 +91,7 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	var cookie_name5="roleName";
 	var cookie_name6="userId";
 	var cookie_name7="passWord";
-	var Days = 1; //此 cookie 将被保存 1 天
+	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
@@ -103,7 +105,9 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 }
 /**
  * 根据页码加载数据
- * @param {整型} page 页码
+ * 
+ * @param {整型}
+ *            page 页码
  */
 var search_click;
 function setViewForPage(page){
@@ -127,7 +131,9 @@ function setPageChangeView(){
 }
 /**
  * 更新页码数据
- * @param {Object} base_num
+ * 
+ * @param {Object}
+ *            base_num
  */
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
@@ -140,17 +146,19 @@ function updatePageValue(base_num){
 }
 /**
  * 页码点击
- * @param {Object} p_id 页码
+ * 
+ * @param {Object}
+ *            p_id 页码
  */
 function pageNumClick(p_id){
-	//background: #0e63ab;
-    //color: #fff;
+	// background: #0e63ab;
+    // color: #fff;
 	var button=document.getElementById(p_id);
 	var page=button.value;
 	if(page!=undefined&&page.length>0){
 		setViewForPage(page);
 		updateNowPage(page);
-		//$(this).addClass("cur").siblings().removeClass("cur");
+		// $(this).addClass("cur").siblings().removeClass("cur");
 		cleanAllSelected();
 		button.style.background='#0e63ab';
 		button.style.color='#FFFFFF';
@@ -187,7 +195,9 @@ function cleanAllSelected(){
 }
 /**
  * 上一页，下一页点击
- * @param {Object} action -1上一页，1下一页
+ * 
+ * @param {Object}
+ *            action -1上一页，1下一页
  */
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
@@ -210,15 +220,15 @@ function updateAllStyleAndData(page,action){
 	setViewForPage(page);
 	if((page-1)%3==0){// 位置：第一个按钮 123 456 789
 		setFirstSelected();
-		if(action==1||action==undefined){//点击下一页 
+		if(action==1||action==undefined){// 点击下一页
 			updatePageValue(page);
 		}
-	}else if(page%3==0){//位置：第三个按钮
+	}else if(page%3==0){// 位置：第三个按钮
 		setThirdSelected();
-		if (action==-1||action==undefined) {//点击上一页 
+		if (action==-1||action==undefined) {// 点击上一页
 			updatePageValue(page-2);
 		}
-	}else{//位置：第二个按钮
+	}else{// 位置：第二个按钮
 		setSecondSelected();
 		if(action==undefined){
 			updatePageValue(page-1);
@@ -227,7 +237,9 @@ function updateAllStyleAndData(page,action){
 }
 /**
  * 更新当前页码
- * @param {Object} page 当前页
+ * 
+ * @param {Object}
+ *            page 当前页
  */
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
@@ -235,7 +247,7 @@ function updateNowPage(page){
 
 
 
-//信息搜索
+// 信息搜索
 function userInforSearch(page){
 	search_click=true;
 	var obj1 = $('#user_uname').val();
@@ -258,10 +270,12 @@ function userInforSearch(page){
 			row:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
-				alert("success");
 				var items = msg.result.user ;
 				var array_userRole=msg.result.userRole;
 				var array_role=msg.result.role;
@@ -272,9 +286,8 @@ function userInforSearch(page){
 				var cookie_value5;
 				var cookie_value6;
 				var cookie_value7;
-				$('.infor_tab02 tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
+					// alert(msg.tagName);
 					cookie_value1="'"+item.userName+"'";
 					cookie_value2="'"+item.trueName+"'";
 					cookie_value3="'"+item.telphone+"'";
@@ -286,18 +299,18 @@ function userInforSearch(page){
 					$('.infor_tab02').append(row);
 				});
 			}else{
-				//alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+				 alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 
 
-//用户添加
+// 用户添加
 function userInforAdd(){
 	window.location.href = "user_add.html";
 }
@@ -314,17 +327,21 @@ function addUser(){
 			roleName:$("#roleName option:selected").val()
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("success");	
+				alert("添加成功");	
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 function clearUserInfor(){
@@ -336,7 +353,7 @@ function clearUserInfor(){
 	$("#roleName").val('');
 }
 
-//用户编辑
+// 用户编辑
 function getCookie(name) {
 	
 	console.log(document.cookie);
@@ -363,17 +380,21 @@ function userInforChange(){
 			roleName:newRole,
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("success");	
+				alert("更新成功");	
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 function clearChangeInfor(){
@@ -385,13 +406,12 @@ function clearChangeInfor(){
 }
 
 
-//用户删除
+// 用户删除
 $(function(){
 	$(".infor_tab02").on("click",".delUser",function(){
 		var user_id = $(this).attr("id");
 		console.log(user_id);
 		userInforDel(user_id);
-		
 		function userInforDel(user_id){
 	
 			$.ajax({
@@ -402,20 +422,19 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					//alert("lll");
+					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("success");
-						$('.infor_tab02 tr:not(:first)').html("");
+						alert("删除成功");
 						userInforShow(1)
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
 		
 				} ,
-				error:function(){
-					//���������
-				}
+				error: function(){
+		            alert("数据请求失败");
+		        },
 			});
 		}
 	})

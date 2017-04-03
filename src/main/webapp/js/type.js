@@ -10,39 +10,38 @@ function typeInforShow(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
-				//alert("success");	
 				var items = msg.result ;
-				//console.log(items);
 				var cookie_value1;
 				var cookie_value2;
-				$('.infor_tab02 tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
-				//alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+			    alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+			alert("数据请求失败");
+		},
 	})	
 }
 typeInforShow(1)
 
 function setCookie(value1,value2){
-	//alert(name+value);
+	// alert(name+value);
 	var cookie_name1="id";
 	var cookie_name2="typeName";
-	var Days = 1; //此 cookie 将被保存 1 天
+	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
@@ -52,7 +51,9 @@ function setCookie(value1,value2){
 
 /**
  * 根据页码加载数据
- * @param {整型} page 页码
+ * 
+ * @param {整型}
+ *            page 页码
  */
 var search_click;
 function setViewForPage(page){
@@ -76,7 +77,9 @@ function setPageChangeView(){
 }
 /**
  * 更新页码数据
- * @param {Object} base_num
+ * 
+ * @param {Object}
+ *            base_num
  */
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
@@ -89,17 +92,19 @@ function updatePageValue(base_num){
 }
 /**
  * 页码点击
- * @param {Object} p_id 页码
+ * 
+ * @param {Object}
+ *            p_id 页码
  */
 function pageNumClick(p_id){
-	//background: #0e63ab;
-    //color: #fff;
+	// background: #0e63ab;
+    // color: #fff;
 	var button=document.getElementById(p_id);
 	var page=button.value;
 	if(page!=undefined&&page.length>0){
 		setViewForPage(page);
 		updateNowPage(page);
-		//$(this).addClass("cur").siblings().removeClass("cur");
+		// $(this).addClass("cur").siblings().removeClass("cur");
 		cleanAllSelected();
 		button.style.background='#0e63ab';
 		button.style.color='#FFFFFF';
@@ -136,7 +141,9 @@ function cleanAllSelected(){
 }
 /**
  * 上一页，下一页点击
- * @param {Object} action -1上一页，1下一页
+ * 
+ * @param {Object}
+ *            action -1上一页，1下一页
  */
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
@@ -159,15 +166,15 @@ function updateAllStyleAndData(page,action){
 	setViewForPage(page);
 	if((page-1)%3==0){// 位置：第一个按钮 123 456 789
 		setFirstSelected();
-		if(action==1||action==undefined){//点击下一页 
+		if(action==1||action==undefined){// 点击下一页
 			updatePageValue(page);
 		}
-	}else if(page%3==0){//位置：第三个按钮
+	}else if(page%3==0){// 位置：第三个按钮
 		setThirdSelected();
-		if (action==-1||action==undefined) {//点击上一页 
+		if (action==-1||action==undefined) {// 点击上一页
 			updatePageValue(page-2);
 		}
-	}else{//位置：第二个按钮
+	}else{// 位置：第二个按钮
 		setSecondSelected();
 		if(action==undefined){
 			updatePageValue(page-1);
@@ -176,13 +183,15 @@ function updateAllStyleAndData(page,action){
 }
 /**
  * 更新当前页码
- * @param {Object} page 当前页
+ * 
+ * @param {Object}
+ *            page 当前页
  */
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
 
-//信息搜索
+// 信息搜索
 function typeInforSearch(page){
 	search_click=true;
 	console.log($("#type_search").val());
@@ -196,36 +205,36 @@ function typeInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
-				//alert("success");	
 				var items = msg.result ;
 				var cookie_value1;
 				var cookie_value2;
 				console.log(items);
-				$('.infor_tab02 tr:not(:first)').html("");
 				var cookie_name="'typeName'";
 				$.each(items,function(idx,item) {
-					//alert(msg.tagName);
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
-				//alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+				 alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 
 
-//用户添加
+// 用户添加
 function typeInforAdd() {
 	window.location.href = "type_add.html";
 }
@@ -239,17 +248,21 @@ function AddtypeInfor(){
 			name:submit
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("添加成功");
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 
@@ -259,7 +272,7 @@ function clearType(){
 }
 
 
-//用户编辑
+// 用户编辑
 function getCookie(name) {
 	
 	console.log(document.cookie);
@@ -280,25 +293,29 @@ function ChangetypeInfor(){
 			id:newId
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("类型信息修改成功");	
-				//window.location.href = "type_infor.html";
+				alert("修改成功");	
+				// window.location.href = "type_infor.html";
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 function clearNewtype(){
 	$("#new_name_type").val('');
 }
 
-//用户删除
+// 用户删除
 
 $(function(){
 	$(".infor_tab02").on("click",".delType",function(){
@@ -307,7 +324,6 @@ $(function(){
 		typeInforDel(typeId);
 		
 		function typeInforDel(typeId){
-	
 			$.ajax({
 				type:"post",
 				url:"/sourceType/deleteSourceTypeById",
@@ -316,19 +332,18 @@ $(function(){
 				} ,
 				dataType:"json",
 				success:function(msg){
-					//alert("lll");
+					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("类型信息删除成功");
-						$('.infor_tab02 tr:not(:first)').html("");
+						alert("删除成功");
 						typeInforShow(1)
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
 				} ,
-				error:function(){
-					//���������
-				}
+				error: function(){
+		            alert("数据请求失败");
+		        },
 			});
 		}
 	})

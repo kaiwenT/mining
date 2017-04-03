@@ -9,6 +9,9 @@ function creatInt() {
             issueName : $("#chuangjian").val(),
         },
         dataType : "json",
+        beforeSend : function(){
+		    begin();
+		},
         success : function(msg) {
             console.log(msg);
             if (msg.status == "OK") {
@@ -18,8 +21,10 @@ function creatInt() {
             }
 
         },
+        complete:function(){
+		    stop();
+		},
         error : function() {
-            // ���������
             alert("fail");
         }
     });

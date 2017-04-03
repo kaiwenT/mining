@@ -107,8 +107,8 @@ function parseAmount(json) {
 
     var iavalue = getPieData(typeJson);
     var lavalue = getPieData(levelJson);
-    paintbt('pie_chart01',iavalue.legend,iavalue.series);
-    paintbt('pie_chart02',lavalue.legend,lavalue.series);
+    paintbt('pie_chart01', iavalue.legend, iavalue.series);
+    paintbt('pie_chart02', lavalue.legend, lavalue.series);
 }
 function convertData(json) {
     if (json === undefined) {

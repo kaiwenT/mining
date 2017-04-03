@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>用户管理——编辑用户</title>
-	<link rel="stylesheet" href="css/style.css">
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/user.js"></script>
+<meta charset="UTF-8">
+<title>用户管理——编辑用户</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/loading.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/loading.js"></script>
+<script type="text/javascript" src="js/waiting.js"></script>
+<script type="text/javascript" src="js/user.js"></script>
 </head>
 <body>
 	<div class="main">
@@ -13,79 +16,99 @@
 		<div class="content">
 			<iframe src="g_left.html" width="200px" height="740px"></iframe>
 			<div class="right float_r">
-				<div class="s_nav">当前位置：<a href="#">用户管理</a>>>编辑用户</div>
+				<div class="s_nav">
+					当前位置：
+					<a href="#">用户管理</a>
+					>>编辑用户
+				</div>
 				<div class="user_infor">
-                	<form>
-                      <table width="450" border="0" class="change_tab">
-                          <tr>
-                            <td width="100" height="50">用户名：</td>
-                            <td width="200" height="50"><input type="text" id="new_user_type"  /></td>
-                            <td width="140" height="50">&nbsp;</td>
-                        </tr>
-                          <tr>
-                            <td width="100" height="50">真实姓名：</td>
-                            <td width="200" height="50"><input type="text" id="new_true_type" /></td>
-                            <td width="140" height="50">&nbsp;</td>
-                        </tr>
-                          <tr>
-                            <td width="100" height="50">电话：</td>
-                            <td width="200" height="50"><input type="text" id="new_telphone_type" /></td>
-                            <td width="140" height="50" class="user_warn ">电话号码必须为11位</td>
-                        </tr>
-                          <tr>
-                            <td width="100" height="50">邮箱：</td>
-                            <td width="200" height="50"><input type="email" id="new_email_type" /></td>
-                            <td width="140" height="50" class="user_warn ">邮箱必须符合邮箱规范</td>
-                        </tr>
-                          <tr>
-                            <td width="100" height="50">角色：</td>
-                            <!--<td width="200" height="50">
+					<form>
+						<table width="450" border="0" class="change_tab">
+							<tr>
+								<td width="100" height="50">用户名：</td>
+								<td width="200" height="50">
+									<input type="text" id="new_user_type" />
+								</td>
+								<td width="140" height="50">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="100" height="50">真实姓名：</td>
+								<td width="200" height="50">
+									<input type="text" id="new_true_type" />
+								</td>
+								<td width="140" height="50">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="100" height="50">电话：</td>
+								<td width="200" height="50">
+									<input type="text" id="new_telphone_type" />
+								</td>
+								<td width="140" height="50" class="user_warn ">电话号码必须为11位</td>
+							</tr>
+							<tr>
+								<td width="100" height="50">邮箱：</td>
+								<td width="200" height="50">
+									<input type="email" id="new_email_type" />
+								</td>
+								<td width="140" height="50" class="user_warn ">邮箱必须符合邮箱规范</td>
+							</tr>
+							<tr>
+								<td width="100" height="50">角色：</td>
+								<!--<td width="200" height="50">
                             	<select>
                                 	<option>超级管理员</option>
                                 	<option>管理员</option>
                                 </select>
                             </td>-->
-                            <td width="200" height="50"><input type="email" id="new_role_type" /></td>
-                            <td width="140" height="50">&nbsp;</td>
-                        </tr>
-                          <tr>
-                            <td width="100" height="70"><img src="images/change_submit.png"  class="float_r" onclick="userInforChange()" /></td>
-                            <td width="200" height="70"><img src="images/change_again.png" class="user_tijiao float_l"  onclick="clearChangeInfor()"/></td>
-                            <td width="140" height="50">&nbsp;</td>
-                        </tr>
-                      </table>
-                  </form>
-		  	  </div>
+								<td width="200" height="50">
+									<input type="email" id="new_role_type" />
+								</td>
+								<td width="140" height="50">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="100" height="70">
+									<img src="images/change_submit.png" class="float_r"
+										onclick="userInforChange()" />
+								</td>
+								<td width="200" height="70">
+									<img src="images/change_again.png" class="user_tijiao float_l"
+										onclick="clearChangeInfor()" />
+								</td>
+								<td width="140" height="50">&nbsp;</td>
+							</tr>
+						</table>
+					</form>
+				</div>
 			</div>
-            <div class="clear"></div>
+			<div class="clear"></div>
 		</div>
-        <iframe src="g_footer.html" width="1000px" height="80px"></iframe>
+		<iframe src="g_footer.html" width="1000px" height="80px"></iframe>
 	</div>
 </body>
 <script>
-	var newuserName=getCookie("userName");
-	var newtrueName=getCookie("trueName");
-	var newtelphone=getCookie("telphone");
-	var newemail=getCookie("email");
-	var newRole=getCookie("roleName");
-	console.log(newuserName);
-	console.log(newtrueName);
-	console.log(newtelphone);
-	console.log(newemail);
-	var a_cookie=document.getElementById("new_user_type");
-	var b_cookie=document.getElementById("new_true_type");
-	var c_cookie=document.getElementById("new_telphone_type");
-	var d_cookie=document.getElementById("new_email_type");
-	var e_cookie=document.getElementById("new_role_type");
-	a_cookie.value=newuserName;
-	b_cookie.value=newtrueName;
-	c_cookie.value=newtelphone;
-	d_cookie.value=newemail;
-	e_cookie.value=newRole;
-	a_cookie.style.color="#999999";
-	b_cookie.style.color="#999999";
-	c_cookie.style.color="#999999";
-	d_cookie.style.color="#999999";
-	e_cookie.style.color="#999999";
+    var newuserName = getCookie("userName");
+    var newtrueName = getCookie("trueName");
+    var newtelphone = getCookie("telphone");
+    var newemail = getCookie("email");
+    var newRole = getCookie("roleName");
+    console.log(newuserName);
+    console.log(newtrueName);
+    console.log(newtelphone);
+    console.log(newemail);
+    var a_cookie = document.getElementById("new_user_type");
+    var b_cookie = document.getElementById("new_true_type");
+    var c_cookie = document.getElementById("new_telphone_type");
+    var d_cookie = document.getElementById("new_email_type");
+    var e_cookie = document.getElementById("new_role_type");
+    a_cookie.value = newuserName;
+    b_cookie.value = newtrueName;
+    c_cookie.value = newtelphone;
+    d_cookie.value = newemail;
+    e_cookie.value = newRole;
+    a_cookie.style.color = "#999999";
+    b_cookie.style.color = "#999999";
+    c_cookie.style.color = "#999999";
+    d_cookie.style.color = "#999999";
+    e_cookie.style.color = "#999999";
 </script>
 </html>

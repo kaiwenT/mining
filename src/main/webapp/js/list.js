@@ -9,6 +9,9 @@ function allData (page){
 		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
 		contentType:"application/json",
+		beforeSend : function(){
+		    begin();
+		},
         success:function(msg){
             // console.log(msg);
             if(msg.status=="OK"){
@@ -34,7 +37,10 @@ function allData (page){
                 alert("fail");
             }
 
-        } ,
+        },
+        complete:function(){
+		    stop();
+		} ,
         error:function(){
             // ���������
         }
@@ -230,6 +236,9 @@ function searchData(page){
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         contentType:"application/json",
+        beforeSend : function(){
+		    begin();
+		},
         success:function(msg){
             // console.log(msg);
             if(msg.status=="OK"){
@@ -256,6 +265,9 @@ function searchData(page){
             }
 
         } ,
+        complete:function(){
+		    stop();
+		},
         error:function(){
             
         }

@@ -10,6 +10,9 @@ function dataShow(){
             issueId:newId
         },
         dataType:"json",
+        beforeSend : function(){
+		    begin();
+		},
         success:function(msg){
             console.log(msg);
             if(msg.status=="OK"){
@@ -42,6 +45,9 @@ function dataShow(){
             }
 
         } ,
+        complete:function(){
+		    stop();
+		},
         error:function(){
             // ���������
         }
@@ -59,6 +65,9 @@ function localRefresh(){
             issueId:newId
         },
         dataType:"json",
+        beforeSend : function(){
+		    begin();
+		},
         success:function(msg){
             console.log(msg);
             if(msg.status=="OK"){
@@ -77,6 +86,9 @@ function localRefresh(){
             }
 
         } ,
+        complete:function(){
+		    stop();
+		},
         error:function(){
             // ���������
         }
@@ -91,7 +103,7 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	//window.location.href = "summary.html";
+	// window.location.href = "summary.html";
 }
 
 function getCookie(name) {
@@ -112,6 +124,9 @@ function clusterSingleFile(id){
 			fileId:id
 		},
 		dataType:"json",
+		beforeSend : function(){
+		    begin();
+		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -122,6 +137,9 @@ function clusterSingleFile(id){
 		},
 		error: function(){
 			alert("请求失败");
+		},
+		complete : function(){
+		  stop();  
 		}
 	})	
 }

@@ -10,6 +10,9 @@ function powerInforShow(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+		    begin();
+		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -32,6 +35,9 @@ function powerInforShow(page){
 				///alert("fail");
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
+		},
+		complete:function(){
+		    stop();
 		},
 		error: function(){
 			
@@ -199,6 +205,9 @@ function powerInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+		    begin();
+		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -223,6 +232,9 @@ function powerInforSearch(page){
 				powerInforShow();
 			}
 		},
+		complete:function(){
+		    stop();
+		},
 		error: function(){
 			
 		}
@@ -242,6 +254,9 @@ function addPower(){
 			powerUrl:$("#urlPower").val()
 		},
 		dataType:"json",
+		beforeSend : function(){
+		    begin();
+		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -249,6 +264,9 @@ function addPower(){
 			}else{
 				alert("fail");
 			}
+		},
+		complete:function(){
+		    stop();
 		},
 		error: function(){
 			
@@ -283,6 +301,9 @@ function powerInforChange(){
 			powerUrl:$("#new_url_power").val()	
 		},
 		dataType:"json",
+		beforeSend : function(){
+		    begin();
+		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -290,6 +311,9 @@ function powerInforChange(){
 			}else{
 				alert("fail");
 			}
+		},
+		complete:function(){
+		    stop();
 		},
 		error: function(){
 			
@@ -329,6 +353,7 @@ $(function(){
 				error:function(){
 					//���������
 				}
+
 			});
 		}
 	})

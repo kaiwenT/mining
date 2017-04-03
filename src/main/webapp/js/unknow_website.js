@@ -10,8 +10,11 @@ function websiteInforShow(page){
 			limit:10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
 				// alert("success");
 				var items = msg.result ;
@@ -20,7 +23,6 @@ function websiteInforShow(page){
 				var cookie_value3;
 				var cookie_value4;
 				var cookie_value5;
-				$('.infor_tab02 tr:not(:first)').html("");
 				$.each(items,function(idx,item) {
 					// alert(msg.tagName);
 					cookie_value1="'"+item.id+"'";
@@ -32,13 +34,13 @@ function websiteInforShow(page){
 					$('.infor_tab02').append(row);
 				});
 			}else{
-				// alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+				 alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 websiteInforShow(1)
@@ -222,11 +224,13 @@ function websiteInforSearch(page){
 			limit: 10
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
-			console.log(msg);
+			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
 				// alert("success");
-				$('.infor_tab02 tr:not(:first)').html("");
 				var items = msg.result ;
 				var cookie_value1;
 				var cookie_value2;
@@ -245,13 +249,13 @@ function websiteInforSearch(page){
 					$('.infor_tab02').append(row);
 				});	
 			}else{
-				// alert("fail");
-				$('.infor_tab02 tr:not(:first)').html("");
+				 alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 
@@ -272,17 +276,21 @@ function addWebsite(){
 			type:$("#typeWebsite").val()
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("success");	
+				alert("添加成功");	
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
 	})	
 }
 
@@ -318,17 +326,24 @@ function websiteInforChange(){
 			type:$("#new_type_website").val()
 		},
 		dataType:"json",
+		beforeSend : function(){
+            begin();
+        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("success");	
+				alert("更新成功");	
 			}else{
-				alert("fail");
+				alert(msg.result);
 			}
+			stop();
 		},
 		error: function(){
-			
-		}
+            alert("数据请求失败");
+        },
+        complete:function(){
+            stop();
+        }
 	})	
 }
 function clearNewWebsite(){
@@ -343,7 +358,6 @@ function clearNewWebsite(){
 $(function(){
 	$(".infor_tab02").on("click",".delWebsite",function(){
 		var website_id = $(this).attr("id");
-		console.log(website_id);
 		websiteInforDel(website_id);
 		function websiteInforDel(website_id){
 			$.ajax({
@@ -357,16 +371,15 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						alert("success");
-						$('.infor_tab02 tr:not(:first)').html("");
+						alert("删除成功");
 						websiteInforShow(1)
 					}else{
-						alert("fail");
+						alert(msg.result);
 					}
 				} ,
-				error:function(){
-					// ���������
-				}
+				error: function(){
+		            alert("数据请求失败");
+		        }
 			});
 		}
 	})
