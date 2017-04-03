@@ -124,7 +124,7 @@ function fileSummary() {
                                                     + item[2]
                                                     + '</a></td><td height="32" align="center">'
                                                     + item[3]
-                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint(\''
+                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
                                                     + ',\''
                                                     + item[2].replace(/\"/g," ").replace(/\'/g," ")
@@ -209,7 +209,7 @@ function freshData() {
                                                     + item[2]
                                                     + '</a></td><td height="32" align="center">'
                                                     + item[3]
-                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint(\''
+                                                    + '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
                                                     + i
                                                     + ',\''
                                                     + item[2].replace(/\"/g," ").replace(/\'/g," ")
