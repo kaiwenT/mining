@@ -45,9 +45,16 @@ $(function() {
                     "mimeType" : "multipart/form-data",
                     "data" : fd
                 };
-                $.ajax(settings).done(function(response) {
+                begin();
+                var ajax = $.ajax(settings);
+                ajax.done(function(response) {
                     reSetView(response, filename, fileArray.length);
+                    stop();
                 });
+                ajax.fail(function(){
+                    alert("预览失败");
+                    stop();
+                })
                 fileArray.push(file);
             } else {
                 alert(filename + " 不是Excel文件");
@@ -185,7 +192,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         "mimeType" : "multipart/form-data",
         "data" : form
     }
-
+    begin();
     $.ajax(settings).done(function(response) {
         console.log(response);
         var msg = JSON.parse(response);
@@ -197,6 +204,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
             alert("上传失败");
         }
     });
+    stop();
 }
 function allDel() {
     $(".up_del li").remove();
