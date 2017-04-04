@@ -225,6 +225,6 @@ function border() {
     if ($("#file_ul li").length == 0) {
         $("#file_ul").css("border", "none");
     } else {
-        $("#file_ul").css("border", "4px solid blue");
+        $("#file_ul").css("border", "2px solid blue");
     }
 }
