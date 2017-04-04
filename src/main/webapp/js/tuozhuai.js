@@ -27,6 +27,7 @@ $(function() {
             return false;
         }
         // 检测文件是不是excel文件
+        begin();
         for (var index = 0; index < fileList.length; index++) {
             // file_array[file_array.length] = fileList[index];
             var filename = fileList[index].name;
@@ -35,31 +36,35 @@ $(function() {
                 var file = fileList[index];
                 var fd = new FormData();
                 fd.append("file", file);
-                var settings = {
-                    "async" : false,
-                    "crossDomain" : true,
-                    "url" : "/file/getColumnTitle",
-                    "method" : "POST",
-                    "processData" : false,
-                    "contentType" : false,
-                    "mimeType" : "multipart/form-data",
-                    "data" : fd
-                };
-                begin();
-                var ajax = $.ajax(settings);
-                ajax.done(function(response) {
-                    reSetView(response, filename, fileArray.length);
-                    stop();
+                $.ajax({
+                    async : false,
+                    crossDomain : true,
+                    url : "/file/getColumnTitle",
+                    method : "POST",
+                    processData : false,
+                    contentType : false,
+                    mimeType : "multipart/form-data",
+                    data : fd,
+                    beforeSend : function() {
+                        
+                    },
+                    success : function(response) {
+                        reSetView(response, filename, fileArray.length);
+                    },
+                    complete : function() {
+//                        stop();
+                    },
+                    error : function() {
+                        alert("预览失败");
+//                        stop();
+                    }
                 });
-                ajax.fail(function(){
-                    alert("预览失败");
-                    stop();
-                })
                 fileArray.push(file);
             } else {
                 alert(filename + " 不是Excel文件");
             }
         }
+        stop();
     }, false);
 });
 function reSetView(response, filename, index) {
@@ -182,29 +187,36 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("timeIndex", time);
     form.append("sourceType", sourceType);
 
-    var settings = {
-        "async" : false,
-        "crossDomain" : true,
-        "url" : "/file/upload",
-        "method" : "POST",
-        "processData" : false,
-        "contentType" : false,
-        "mimeType" : "multipart/form-data",
-        "data" : form
-    }
-    begin();
-    $.ajax(settings).done(function(response) {
-        console.log(response);
-        var msg = JSON.parse(response);
-        if (msg.status == "OK") {
-            // alert(msg.tagName);
-            // cookie_value1="'"+item.fileId+"'";
+    $.ajax({
+        async : true,
+        crossDomain : true,
+        url : "/file/upload",
+        method : "POST",
+        processData : false,
+        contentType : false,
+        mimeType : "multipart/form-data",
+        data : form,
+        beforeSend : function() {
+            begin();
+        },
+        success : function(response) {
+            var msg = JSON.parse(response);
+            if (msg.status == "OK") {
+                // alert(msg.tagName);
+                // cookie_value1="'"+item.fileId+"'";
 
-        } else {
-            alert("上传失败");
+            } else {
+                alert("上传失败");
+            }
+        },
+        complete : function() {
+            stop();
+        },
+        error : function() {
+            alert("预览失败");
+            stop();
         }
     });
-    stop();
 }
 function allDel() {
     $(".up_del li").remove();

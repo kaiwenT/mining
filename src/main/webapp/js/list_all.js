@@ -49,9 +49,8 @@ function allData (page){
 allData (1)
 function GetJsonData(page) {
     var myDate=new Date();
-    end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
-    myDate.setMonth(myDate.getMonth()-1);
-    start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
+    end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate()+1);
+    start=myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
     console.log(end)
     console.log(start)
 
