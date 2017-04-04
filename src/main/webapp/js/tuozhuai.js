@@ -27,7 +27,6 @@ $(function() {
             return false;
         }
         // 检测文件是不是excel文件
-        begin();
         for (var index = 0; index < fileList.length; index++) {
             // file_array[file_array.length] = fileList[index];
             var filename = fileList[index].name;
@@ -46,17 +45,17 @@ $(function() {
                     mimeType : "multipart/form-data",
                     data : fd,
                     beforeSend : function() {
-                        
+                        begin();
                     },
                     success : function(response) {
                         reSetView(response, filename, fileArray.length);
                     },
                     complete : function() {
-//                        stop();
+                        stop();
                     },
                     error : function() {
                         alert("预览失败");
-//                        stop();
+                        stop();
                     }
                 });
                 fileArray.push(file);
@@ -64,7 +63,6 @@ $(function() {
                 alert(filename + " 不是Excel文件");
             }
         }
-        stop();
     }, false);
 });
 function reSetView(response, filename, index) {
@@ -188,7 +186,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("sourceType", sourceType);
 
     $.ajax({
-        async : true,
+        async : false,
         crossDomain : true,
         url : "/file/upload",
         method : "POST",
