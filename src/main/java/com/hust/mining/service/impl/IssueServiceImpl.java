@@ -260,30 +260,15 @@ public class IssueServiceImpl implements IssueService {
         if (content == null || content.size() == 0) {
             return null;
         }
-        // 去重开始
-        List<String[]> list = new ArrayList<String[]>();
-        List<String> urllist = new ArrayList<String>();
-        for (String[] row : content) {
-            int exitIndex = urllist.indexOf(row[Index.URL_INDEX]);
-            if (exitIndex != -1) {
-                if (row[Index.TIME_INDEX].compareTo(list.get(exitIndex)[Index.TIME_INDEX]) < 0) {
-                    list.set(exitIndex, row);
-                }
-            } else {
-                list.add(row);
-                urllist.add(row[Index.URL_INDEX]);
-            }
-        }
-        // 去重结束
         // 聚类
-        List<List<Integer>> clusterResult = miningService.cluster(list);
+        List<List<Integer>> clusterResult = miningService.cluster(content);
         // 统计
         List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);
-        List<int[]> countResult = miningService.count(list, cluster);
+        List<int[]> countResult = miningService.count(content, cluster);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("clusterResult", clusterResult);
         result.put("countResult", countResult);
-        result.put("content", list);
+        result.put("content", content);
         return result;
     }
 

@@ -211,7 +211,7 @@ public class FileController {
             return ResultUtil.errorWithMsg("文件是空的");
         }
         try {
-            List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 0);
+            List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 0, 1);
             return ResultUtil.success(list.get(0));
         } catch (Exception e) {
             logger.warn("read column title fail" + e.toString());
@@ -230,7 +230,7 @@ public class FileController {
         List<IssueFile> list = fileService.searchFilesByTime(issueId, startTime, endTime);
         return ResultUtil.success(list);
     }
-    
+
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

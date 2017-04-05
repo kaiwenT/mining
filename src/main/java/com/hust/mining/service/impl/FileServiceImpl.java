@@ -23,6 +23,7 @@ import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
+import com.hust.mining.util.WeiboUtil;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -54,7 +55,9 @@ public class FileServiceImpl implements FileService {
             logger.error("读取文件出现异常\t" + e.toString());
             return 0;
         }
-
+        if(con.getSourceType().equals("微博")){
+            WeiboUtil.filter(list);
+        }
         String user = userService.getCurrentUser(request);
         String issueId = issueService.getCurrentIssueId(request);
         Issue issue = new Issue();

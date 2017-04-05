@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.hust.mining.constant.Constant.Index;
+
 public class ExcelUtil {
 
     public static List<String[]> read(String filename) throws IOException {
@@ -27,6 +29,14 @@ public class ExcelUtil {
             throw new IllegalArgumentException("inputStream is null");
         }
         return read(filename, inputStream, startRow, -1, null);
+    }
+
+    public static List<String[]> read(String filename, InputStream inputStream, int startRow, int rowNum)
+            throws IOException {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null");
+        }
+        return read(filename, inputStream, startRow, rowNum, null);
     }
 
     public static List<String[]> read(String filename, InputStream inputStream, int start, int rows, Integer...indexes)
@@ -52,6 +62,7 @@ public class ExcelUtil {
             rowNum = rows > rowNum ? rowNum : rows;
         }
         start = start > rowNum ? rowNum : start;
+        List<String> exitUrls = new ArrayList<String>();
         for (int i = start, x = 1; x <= rowNum; i++, x++) {
             String[] rowStr = new String[indexes.length];
             for (int j = 0; j < indexes.length; j++) {
@@ -65,8 +76,18 @@ public class ExcelUtil {
                 } catch (Exception e) {
                     rowStr[j] = "";
                 }
+                rowStr[j] = rowStr[j].replaceAll("\n", "");
+                rowStr[j] = rowStr[j].replaceAll("\t", "");
             }
-            list.add(rowStr);
+            int exitIndex = exitUrls.indexOf(rowStr[Index.URL_INDEX]);
+            if (exitIndex != -1) {
+                if (rowStr[Index.TIME_INDEX].compareTo(list.get(exitIndex)[Index.TIME_INDEX]) < 0) {
+                    list.set(exitIndex, rowStr);
+                }
+            } else {
+                list.add(rowStr);
+                exitUrls.add(rowStr[Index.URL_INDEX]);
+            }
         }
         workbook.close();
         return list;
