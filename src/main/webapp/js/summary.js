@@ -166,18 +166,12 @@ function addLayData() {
         data : JSON.stringify(sets),
         dataType : "json",
         contentType : "application/json",
-        beforeSend : function() {
-            begin();
-        },
         success : function(msg) {
             if (msg.status == "OK") {
                 freshData();
             } else {
                 alert(msg.result);
             }
-        },
-        complete : function() {
-            stop();
         },
         error : function() {
             alert("数据请求失败");
@@ -246,18 +240,12 @@ function deleteLayData() {
         data : JSON.stringify(sets),
         dataType : "json",
         contentType : "application/json",
-        beforeSend : function() {
-            begin();
-        },
         success : function(msg) {
             if (msg.status == "OK") {
                 freshData();
             } else {
                 alert(msg.result);
             }
-        },
-        complete : function() {
-            stop();
         },
         error : function() {
             alert("数据请求失败");
