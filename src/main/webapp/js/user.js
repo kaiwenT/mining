@@ -329,13 +329,25 @@ function addUser(){
 		$("#userTel").focus(); 
 		return false; 
 	} 
-	//     /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+	// /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
 	if (!$("#userEmail").val().match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) { 
-		//alert("邮箱格式不正确"); 
+		// alert("邮箱格式不正确");
 		$("#warnEmail").html("邮箱必须符合邮箱规范！"); 
 		$("#userEmail").focus(); 
 		return false; 
 	}
+	
+	var name = $("#userName").val().replace(' ','');
+	if(name===undefined||name==''){
+        alert('请输入正确信息');
+        return;
+    }
+	var trueName = $("#trueName").val().replace(' ','');
+	if(trueName===undefined||trueName==''){
+        alert('请输入正确信息');
+        return;
+    }
+	
 	$.ajax({
 		type:"post",
 		url:"/user/insertUserInfo",
@@ -392,9 +404,9 @@ function userInforChange(){
 		$("#new_telphone_type").focus(); 
 		return false; 
 	} 
-	//     /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
+	// /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
 	if (!$("#new_email_type").val().match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) { 
-		//alert("邮箱格式不正确"); 
+		// alert("邮箱格式不正确");
 		$("#email_warn").html("邮箱必须符合邮箱规范！"); 
 		$("#new_email_type").focus(); 
 		return false; 
@@ -422,7 +434,7 @@ function userInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				// alert("更新成功");	
+				// alert("更新成功");
 			}else{
 				alert(msg.result);
 			}

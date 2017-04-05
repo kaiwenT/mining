@@ -1,5 +1,8 @@
 package com.hust.mining.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,10 @@ import com.hust.mining.service.SegmentService;
 
 @Service
 public class SegmentServiceImpl implements SegmentService {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LoggerFactory.getLogger(SegmentServiceImpl.class);
 
     private static FilterRecognition filter = new FilterRecognition();
     static {
@@ -86,9 +93,13 @@ public class SegmentServiceImpl implements SegmentService {
         }
         List<String[]> relist = new ArrayList<String[]>();
         for (int i = start; i < list.size(); i++) {
-            String[] array = list.get(i);
-            String[] temparray = getSegresult(array[index]);
-            relist.add(temparray);
+            try {
+                String[] array = list.get(i);
+                String[] temparray = getSegresult(array[index]);
+                relist.add(temparray);
+            } catch (Exception e) {
+                logger.info("segment error:{}", i);
+            }
         }
         return relist;
     }

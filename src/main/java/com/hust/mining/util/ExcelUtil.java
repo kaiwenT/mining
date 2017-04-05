@@ -78,6 +78,12 @@ public class ExcelUtil {
                 }
                 rowStr[j] = rowStr[j].replaceAll("\n", "");
                 rowStr[j] = rowStr[j].replaceAll("\t", "");
+                rowStr[j] = rowStr[j].replaceAll("\r", "");
+                rowStr[j] = rowStr[j].replaceAll("\b", "");
+                rowStr[j] = rowStr[j].replaceAll("\f", "");
+            }
+            if (CommonUtil.hasEmptyArray(rowStr)) {
+                continue;
             }
             int exitIndex = exitUrls.indexOf(rowStr[Index.URL_INDEX]);
             if (exitIndex != -1) {

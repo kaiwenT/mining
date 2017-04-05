@@ -243,8 +243,11 @@ function typeInforAdd() {
 	window.location.href = "type_add.html";
 }
 function AddtypeInfor(){
-	var submit=$("#addType").val();
-	console.log(submit);
+	var submit=$("#addType").val().replace(' ','');
+	if(submit===undefined||submit==''){
+	    alert('请输入正确信息');
+	    return;
+	}
 	$.ajax({
 		type:"post",
 		url:"/sourceType/insertSourceType",
@@ -290,12 +293,16 @@ function getCookie(name) {
 
 function ChangetypeInfor(){
 	var newId=getCookie("id");
-	console.log(newId);
+	var name = $("#new_name_type").val().replace(' ','');
+	if(name===undefined||name==''){
+	    alert('请输入正确信息');
+	    return;
+	}
 	$.ajax({
 		type:"post",
 		url:"/sourceType/updateSourceType",
 		data:{
-			name:$("#new_name_type").val(),
+			name:name,
 			id:newId
 		},
 		dataType:"json",
@@ -328,9 +335,7 @@ function clearNewtype(){
 $(function(){
 	$(".infor_tab02").on("click",".delType",function(){
 		var typeId = $(this).attr("id");
-		console.log(typeId);
 		typeInforDel(typeId);
-		
 		function typeInforDel(typeId){
 			$.ajax({
 				type:"post",

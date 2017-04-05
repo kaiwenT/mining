@@ -1,6 +1,7 @@
 package com.hust.mining.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,9 +14,10 @@ public class WeiboUtil {
         }
         str = str.replaceAll("//", "");
         // 替换
-        str = str.replaceAll("#\\S+#", "");
+        str = str.replaceAll("#", "");
         // 替换标题
-        str = str.replaceAll("【\\S+】", "");
+        str = str.replaceAll("【", "");
+        str = str.replaceAll("】", "");
         // 替换地址
         str = str.replaceAll("\\|\\s*\\S+", "");
         // 替换地址
@@ -90,5 +92,9 @@ public class WeiboUtil {
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i)[0]);
         }
+        
+        String[] row = new String[2];
+        row[1] = "dfdf";
+        System.out.println(Arrays.toString(row));
     }
 }

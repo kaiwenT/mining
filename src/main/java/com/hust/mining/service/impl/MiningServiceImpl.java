@@ -6,8 +6,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.hust.datamining.algorithm.cluster.Canopy;
 import com.hust.datamining.convertor.Convertor;
 import com.hust.datamining.convertor.DigitalConvertor;
-import com.hust.datamining.distance.AcrossDistance;
+import com.hust.datamining.simcal.AcrossSimilarity;
 import com.hust.mining.constant.Config;
 import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.Index;
@@ -54,7 +54,7 @@ public class MiningServiceImpl implements MiningService {
         List<double[]> vectors = convertor.getVector();
         Canopy canopy = new Canopy();
         canopy.setVectors(vectors);
-        canopy.setDis(new AcrossDistance(vectors));
+        canopy.setSimi(new AcrossSimilarity(vectors));
         canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
         try {
             canopy.clustering();
@@ -86,9 +86,13 @@ public class MiningServiceImpl implements MiningService {
             String origTime = "9999-12-12 23:59:59";
             for (int j = 0; j < tmpList.length; j++) {
                 String[] row = content.get(tmpList[j]);
-                if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
-                    origTime = row[Index.TIME_INDEX];
-                    origIndex = tmpList[j];
+                try{
+                    if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
+                        origTime = row[Index.TIME_INDEX];
+                        origIndex = tmpList[j];
+                    }
+                }catch(Exception e){
+                    logger.error("sth error when count:{}",tmpList[j]);
                 }
             }
             if (origIndex == -1) {

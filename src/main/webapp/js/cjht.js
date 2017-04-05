@@ -2,6 +2,11 @@
  * Created by Administrator on 2016/12/18.
  */
 function creatInt() {
+    var title = $("#chuangjian").val().replace(" ","");
+    if(title===undefined || title ==''){
+        alert("请输入任务名称");
+        return;
+    }
     $.ajax({
         type : "post",
         url : "/issue/create",
@@ -19,13 +24,12 @@ function creatInt() {
             } else {
                 alert("fail");
             }
-
         },
         complete:function(){
 		    stop();
 		},
         error : function() {
-            alert("fail");
+            alert("数据请求失败");
         }
     });
 }
