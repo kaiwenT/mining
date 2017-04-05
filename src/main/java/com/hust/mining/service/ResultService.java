@@ -27,4 +27,6 @@ public interface ResultService {
     public List<Result> queryResultsByIssueId(String issueId);
 
     public Map<String, List<String[]>> exportService(String issueId, String resultId,HttpServletRequest request);
+    
+    public String exportAbstract(List<String[]> count);
 }

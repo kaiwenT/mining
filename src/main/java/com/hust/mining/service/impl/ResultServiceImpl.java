@@ -23,15 +23,18 @@ import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
+import com.hust.mining.dao.WebsiteDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
+import com.hust.mining.model.Website;
 import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
 
 @Service
@@ -45,6 +48,8 @@ public class ResultServiceImpl implements ResultService {
     private ResultDao resultDao;
     @Autowired
     private IssueDao issueDao;
+    @Autowired
+    private WebsiteDao websiteDao;
     @Autowired
     private MiningService miningService;
     @Autowired
@@ -291,6 +296,30 @@ public class ResultServiceImpl implements ResultService {
             logger.error("exception occur when get export result:{}", e.toString());
             return null;
         }
+    }
+
+    @Override
+    public String exportAbstract(List<String[]> count) {
+        // TODO Auto-generated method stub
+        if (null == count || count.size() == 0) {
+            return null;
+        }
+        String[] firstData = count.get(0);
+        Website firstSite = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(firstData[1]));
+        String line = "本次信息挖掘结果中，总共涉及 " + count.size() + " 个话题。";
+        line += "其中，\"" + firstData[2] + "\" 话题的数量最多，总计 " + firstData[0] + "条,最早发布于 " + firstData[3] + ",来自 "
+                + firstSite.getName() + " ,属于 " + firstSite.getType() + " 类型。\n";
+        line += "其余排名前五的话题信息分别是：\n";
+        for (int i = 1; i < count.size() && i < 5; i++) {
+            String[] data = count.get(i);
+            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(data[1]));
+            line += "话题名称：" + data[2] + "\n";
+            line += "信息数量：" + data[0] + "\n";
+            line += "最早发布时间：" + data[3] + "\n";
+            line += "最早发布网站：" + website.getName() + "\n";
+            line += "信息类型为:" + website.getLevel() + "\n\n\n";
+        }
+        return line;
     }
 
 }

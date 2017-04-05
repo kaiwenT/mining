@@ -231,10 +231,50 @@ public class FileController {
         return ResultUtil.success(list);
     }
 
+    @RequestMapping("/exportAbstract")
+    public void exportAbstract(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
+            logger.info("从session中无法s获得任务的任务id");
+            return;
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isBlank(resultId)) {
+            response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
+            logger.info("从session中无法s获得记录的记录id");
+            return;
+        }
+        OutputStream outputStream = null;
+        try {
+            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId, request);
+            if (map == null) {
+                response.sendError(404, "导出错误");
+                return;
+            }
+            List<String[]> count = map.get("count");
+            outputStream = response.getOutputStream();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName=abstrct.txt");
+            String content = resultService.exportAbstract(count);
+            outputStream.write(content.getBytes());
+        } catch (Exception e) {
+            logger.info("excel 导出失败\t" + e.toString());
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+                logger.info("导出excel时，关闭outputstream失败");
+            }
+        }
+    }
+
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         CustomDateEditor editor = new CustomDateEditor(df, false);
         binder.registerCustomEditor(Date.class, editor);
     }
+
 }
