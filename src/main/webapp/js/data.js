@@ -137,10 +137,13 @@ function getTableData(table) {
             label : {
                 normal : {
                     show : true,
-                    position : 'top'
+                    position : 'top',
+                    textStyle : {
+                        color : '#000000',
+                        fontSize : 14,
+                    }
                 }
-            }
-
+            },
         };
         for (var i = 0; i < table.rows.length; i++) {
             if (j == 0 && i == 0) {
@@ -179,7 +182,8 @@ function getPieData(data) {
             label : {
                 normal : {
                     show : true,
-                    position : 'top'
+                    position : 'top',
+                    
                 }
             }
         }
