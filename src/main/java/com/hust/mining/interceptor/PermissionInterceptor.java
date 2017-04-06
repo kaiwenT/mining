@@ -44,6 +44,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             // 现在解决办法就是 在拦截器里面 可以重新获取权限信息
             // 先判断
             if ("/".equals(url) || "/index.html".equals(url)) {
+                System.out.println("=========" + url);
                 if (null != redisService.getString(KEY.USER_NAME, request)) {
                     response.sendRedirect("/topic_list.html");
                 } else {
@@ -67,7 +68,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                         fail(response);
                     }
                 } else {
-                    LOG.warn("{} did not login, please login",request.getRequestedSessionId());
+                    LOG.warn("{} did not login, please login", request.getRequestedSessionId());
                     response.sendRedirect("/index.html");
                 }
             }

@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,14 +59,15 @@ public class MiningServiceImpl implements MiningService {
         canopy.setVectors(vectors);
         canopy.setSimi(new AcrossSimilarity(vectors));
         canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
+        ExecutorService exec = Executors.newSingleThreadExecutor();
+        Future<List<List<Integer>>> future = exec.submit(canopy);
+        List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
         try {
-            canopy.clustering();
+            resultIndexSetList = future.get();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             logger.error("error occur during clustering" + e.toString());
             return null;
         }
-        List<List<Integer>> resultIndexSetList = canopy.getResultIndex();
         Collections.sort(resultIndexSetList, new Comparator<List<Integer>>() {
 
             @Override
