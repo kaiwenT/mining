@@ -28,20 +28,18 @@ public class AuthController {
     @Autowired
     private RedisService redisService;
 
+    @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestParam(value = "form-username", required = true) String userName,
-            @RequestParam(value = "form-password", required = true) String passwd, HttpServletResponse response,
+    public Object login(@RequestParam(value = "username", required = true) String userName,
+            @RequestParam(value = "password", required = true) String passwd, HttpServletResponse response,
             HttpServletRequest request) {
         // request.getSession().setAttribute(KEY.USER_NAME, userName);
         // return "redirect:page/infoManager.html";
         if (userService.login(userName, passwd)) {
-            Cookie username = new Cookie(KEY.USER_NAME, userName);
-            username.setPath("/");
-            response.addCookie(username);
             redisService.setString(KEY.USER_NAME, userName, request);
-            return "redirect:/topic_list.html";
+            return ResultUtil.successWithoutMsg();
         }
-        return "redirect:/error.jsp";
+        return ResultUtil.errorWithMsg("用户名密码错误");
     }
 
     @ResponseBody
