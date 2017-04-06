@@ -23,7 +23,7 @@ function paint() {
         data : JSON.stringify(json),
         dataType : "json",
         contentType : "application/json",
-        beforeSend : function(){
+        beforeSend : function() {
             begin();
         },
         success : function(msg) {
@@ -131,9 +131,16 @@ function getTableData(table) {
     var series = new Array();
     for (var j = 0; j < table.rows[0].cells.length; j++) {
         var json = {
-            "name" : "",
-            "type" : "bar",
-            "data" : []
+            name : "",
+            type : "bar",
+            data : [],
+            label : {
+                normal : {
+                    show : true,
+                    position : 'top'
+                }
+            }
+
         };
         for (var i = 0; i < table.rows.length; i++) {
             if (j == 0 && i == 0) {
@@ -168,7 +175,13 @@ function getPieData(data) {
     for ( var ele in data) {
         var json = {
             value : data[ele],
-            name : ele
+            name : ele,
+            label : {
+                normal : {
+                    show : true,
+                    position : 'top'
+                }
+            }
         }
         series.push(json);
         legend.push(ele);
