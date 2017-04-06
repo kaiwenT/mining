@@ -184,6 +184,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
+        String user = userService.getCurrentUser(request);
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         QueryFileCondition con = new QueryFileCondition();
         con.setIssueId(issueId);
@@ -202,7 +203,6 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         // 开始插入数据库
-        String user = userService.getCurrentUser(request);
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
